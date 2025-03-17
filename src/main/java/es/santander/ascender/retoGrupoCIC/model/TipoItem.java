@@ -11,7 +11,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class TipoItem {
-      @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -20,6 +20,14 @@ public class TipoItem {
 
     @OneToMany(mappedBy = "tipo")  
     private Set<Item> items;
+
+    public TipoItem() {
+    }
+
+    public TipoItem(Long id, String nombre) {
+      this.id = id;
+      this.nombre = nombre;
+    }
 
     public Long getId() {
       return id;

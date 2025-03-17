@@ -24,6 +24,11 @@ public class Formato {
     public Formato() {
     }
 
+    public Formato(Long id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     public Formato(Long id, String nombre, Set<Item> items) {
         this.id = id;
         this.nombre = nombre;
