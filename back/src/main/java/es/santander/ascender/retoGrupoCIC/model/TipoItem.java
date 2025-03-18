@@ -11,72 +11,74 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class TipoItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String nombre;
+  @Column(nullable = false)
+  private String nombre;
 
-    @OneToMany(mappedBy = "tipo")  
-    private Set<Item> items;
+  @OneToMany(mappedBy = "tipo")
+  private Set<Item> items;
 
-    public TipoItem() {
-    }
+  @OneToMany(mappedBy = "tipoItem")
+  private Set<TipoItemFormato> tipoItemFormatos;
 
-    public TipoItem(Long id, String nombre) {
-      this.id = id;
-      this.nombre = nombre;
-    }
+  public TipoItem() {
+  }
 
-    public Long getId() {
-      return id;
-    }
+  public TipoItem(Long id, String nombre) {
+    this.id = id;
+    this.nombre = nombre;
+  }
 
-    public void setId(Long id) {
-      this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getNombre() {
-      return nombre;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setNombre(String nombre) {
-      this.nombre = nombre;
-    }
+  public String getNombre() {
+    return nombre;
+  }
 
-    public Set<Item> getItems() {
-      return items;
-    }
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
 
-    public void setItems(Set<Item> items) {
-      this.items = items;
-    }
+  public Set<Item> getItems() {
+    return items;
+  }
 
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((id == null) ? 0 : id.hashCode());
-      return result;
-    }
+  public void setItems(Set<Item> items) {
+    this.items = items;
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      TipoItem other = (TipoItem) obj;
-      if (id == null) {
-        if (other.id != null)
-          return false;
-      } else if (!id.equals(other.id))
-        return false;
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
       return true;
-    }
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    TipoItem other = (TipoItem) obj;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    return true;
+  }
 
-    
 }

@@ -18,8 +18,11 @@ public class Formato {
     @Column(nullable = false)
     private String nombre;
 
-    @OneToMany(mappedBy = "formato")  
+    @OneToMany(mappedBy = "formato")
     private Set<Item> items;
+
+    @OneToMany(mappedBy = "formato")
+    private Set<TipoItemFormato> tipoItemFormatos;
 
     public Formato() {
     }
@@ -84,5 +87,4 @@ public class Formato {
         return true;
     }
 
-    
 }
