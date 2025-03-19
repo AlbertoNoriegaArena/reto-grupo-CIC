@@ -10,9 +10,10 @@ public class Musica {
     @Id
     private Long itemId;
 
-    private String isbn;
-    private String editorial;
-    private Integer numeroPaginas;
+    private String genero;
+    private String cantante;
+    private String album;
+    private String duracion;
 
     @OneToOne
     @MapsId
@@ -21,11 +22,12 @@ public class Musica {
     public Musica() {
     }
 
-    public Musica(Long itemId, String isbn, String editorial, Integer numeroPaginas, Item item) {
+    public Musica(Long itemId, String genero, String cantante, String album, String duracion, Item item) {
         this.itemId = itemId;
-        this.isbn = isbn;
-        this.editorial = editorial;
-        this.numeroPaginas = numeroPaginas;
+        this.genero = genero;
+        this.cantante = cantante;
+        this.album = album;
+        this.duracion = duracion;
         this.item = item;
     }
 
@@ -37,28 +39,36 @@ public class Musica {
         this.itemId = itemId;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getGenero() {
+        return genero;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setGenero(String genero) {
+        this.genero = genero;
     }
 
-    public String getEditorial() {
-        return editorial;
+    public String getCantante() {
+        return cantante;
     }
 
-    public void setEditorial(String editorial) {
-        this.editorial = editorial;
+    public void setCantante(String cantante) {
+        this.cantante = cantante;
     }
 
-    public Integer getNumeroPaginas() {
-        return numeroPaginas;
+    public String getAlbum() {
+        return album;
     }
 
-    public void setNumeroPaginas(Integer numeroPaginas) {
-        this.numeroPaginas = numeroPaginas;
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
+    public String getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(String duracion) {
+        this.duracion = duracion;
     }
 
     public Item getItem() {
