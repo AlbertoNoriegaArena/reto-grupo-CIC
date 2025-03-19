@@ -98,4 +98,22 @@ public class PrestamoService {
             prestamoRepository.deleteById(id);
         }
     }
+
+    // metodo para devolver un prestamo
+    public Prestamo devolverPrestamo(Long id) {
+        Optional<Prestamo> prestamoOptional = prestamoRepository.findById(id);
+        if (prestamoOptional.isPresent()) {
+            Prestamo prestamo = prestamoOptional.get();
+            if (prestamo.getFechaDevolucion() != null) {
+                throw new IllegalArgumentException("El item ya ha sido devuelto");
+            }
+            prestamo.setFechaDevolucion(LocalDate.now());
+            Item item = prestamo.getItem();
+            item.setEstado(EstadoItem.DISPONIBLE);
+            itemService.updateItem(item.getId(), item);
+            return prestamoRepository.save(prestamo);
+        }
+        throw new RuntimeException("No se ha encontrado el prestamo con id " + id);
+    }
+    
 }

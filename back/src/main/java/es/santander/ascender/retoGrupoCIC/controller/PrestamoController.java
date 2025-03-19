@@ -52,4 +52,16 @@ public class PrestamoController {
         prestamoService.deletePrestamo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/devolver/{id}")
+    public ResponseEntity<?> devolverPrestamo(@PathVariable Long id) {
+        try {
+            Prestamo prestamoDevuelto = prestamoService.devolverPrestamo(id);
+            return ResponseEntity.ok(prestamoDevuelto);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
