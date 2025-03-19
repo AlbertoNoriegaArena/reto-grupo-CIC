@@ -2,6 +2,8 @@ package es.santander.ascender.retoGrupoCIC.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,9 +17,11 @@ public class Persona {
     private Long id;
 
     private String nombre;
+    private String direccion;
     private String email;
     private String telefono;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "persona")  
     private Set<Prestamo> prestamos;
 
@@ -54,6 +58,14 @@ public class Persona {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public Set<Prestamo> getPrestamos() {
