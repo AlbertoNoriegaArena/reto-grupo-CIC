@@ -46,9 +46,21 @@ public class ItemService {
     }
 
     public Item updateItem(Long id, Item itemActualizado) {
-        if (itemRepository.existsById(id)) {
-            itemActualizado.setId(id);
-            return itemRepository.save(itemActualizado);
+        Optional<Item> itemOpcional = itemRepository.findById(id);
+        if (itemOpcional.isPresent()) {
+            Item itemExistente = itemOpcional.get();
+
+            // Primero validamos que el tipo y el formato cumplan
+            validateTipoItemFormato(itemActualizado.getTipo(), itemActualizado.getFormato());
+
+            // Actualizar los campos menos el estado
+            itemExistente.setNombre(itemActualizado.getNombre());
+            itemExistente.setTipo(itemActualizado.getTipo());
+            itemExistente.setFormato(itemActualizado.getFormato());
+            itemExistente.setUbicacion(itemActualizado.getUbicacion());
+            itemExistente.setFecha(itemActualizado.getFecha());
+
+            return itemRepository.save(itemExistente);
         }
         return null;
     }

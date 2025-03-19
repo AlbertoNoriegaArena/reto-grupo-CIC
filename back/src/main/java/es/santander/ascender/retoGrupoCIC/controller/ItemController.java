@@ -3,6 +3,7 @@ package es.santander.ascender.retoGrupoCIC.controller;
 import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +19,13 @@ public class ItemController {
 
     // Crear un nuevo ítem
     @PostMapping
-    public ResponseEntity<Item> crear(@RequestBody Item item) {
-        Item nuevoItem = itemService.createItem(item);
-        return ResponseEntity.ok(nuevoItem);
+    public ResponseEntity<?> crear(@RequestBody Item item) {
+        try {
+            Item nuevoItem = itemService.createItem(item);
+            return new ResponseEntity<>(nuevoItem, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     // Obtener todos los ítems
@@ -38,12 +43,16 @@ public class ItemController {
 
     // Actualizar un ítem existente
     @PutMapping("/{id}")
-    public ResponseEntity<Item> actualizar(@PathVariable Long id, @RequestBody Item item) {
-        Item itemActualizado = itemService.updateItem(id, item);
-        if (itemActualizado != null) {
-            return ResponseEntity.ok(itemActualizado);
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Item item) {
+        try {
+            Item itemActualizado = itemService.updateItem(id, item);
+            if (itemActualizado != null) {
+                return ResponseEntity.ok(itemActualizado);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.notFound().build();
     }
 
     // Eliminar un ítem
