@@ -23,7 +23,6 @@ public class Prestamo {
     private LocalDate fechaPrestamo;
     private LocalDate fechaDevolucion;
     private LocalDate fechaPrevistaDevolucion;
-    private Boolean devuelto = false;
 
     
     public Prestamo() {
@@ -31,14 +30,13 @@ public class Prestamo {
 
 
     public Prestamo(Long id, Item item, Persona persona, LocalDate fechaPrestamo, LocalDate fechaDevolucion,
-            LocalDate fechaPrevistaDevolucion, Boolean devuelto) {
+            LocalDate fechaPrevistaDevolucion) {
         this.id = id;
         this.item = item;
         this.persona = persona;
         this.fechaPrestamo = fechaPrestamo;
         this.fechaDevolucion = fechaDevolucion;
         this.fechaPrevistaDevolucion = fechaPrevistaDevolucion;
-        this.devuelto = devuelto;
     }
 
 
@@ -100,17 +98,6 @@ public class Prestamo {
     public void setFechaPrevistaDevolucion(LocalDate fechaPrevistaDevolucion) {
         this.fechaPrevistaDevolucion = fechaPrevistaDevolucion;
     }
-
-
-    public Boolean getDevuelto() {
-        return devuelto;
-    }
-
-
-    public void setDevuelto(Boolean devuelto) {
-        this.devuelto = devuelto;
-    }
-
 
     @Override
     public int hashCode() {
