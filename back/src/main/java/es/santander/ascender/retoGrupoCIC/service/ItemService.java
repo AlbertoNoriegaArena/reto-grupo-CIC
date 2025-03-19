@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.service;
 
+import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
@@ -66,12 +67,17 @@ public class ItemService {
     }
 
     public String deleteItem(Long id) {
-        Optional<Item> item = itemRepository.findById(id);
-        if (item.isPresent()) {
+        Optional<Item> itemOpcional = itemRepository.findById(id);
+        if (itemOpcional.isPresent()) {
+            Item item = itemOpcional.get();
+            // comprobar si el estado del item es prestado
+            if (item.getEstado() == EstadoItem.PRESTADO) {
+                return "No se puede eliminar el ítem porque está actualmente prestado";
+            }
             itemRepository.deleteById(id);
-            return "Item eliminado con éxito";
+            return "Ítem eliminado con éxito";
         }
-        return "El item no existe";
+        return "El ítem no existe";
     }
 
     // método que comprueba que la relación entre tipo y formato sea correcta

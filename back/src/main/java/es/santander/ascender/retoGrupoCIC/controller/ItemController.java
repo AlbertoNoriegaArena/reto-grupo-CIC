@@ -61,6 +61,8 @@ public class ItemController {
         String mensaje = itemService.deleteItem(id);
         if (mensaje.equals("Ítem eliminado con éxito")) {
             return ResponseEntity.ok(mensaje);
+        } else if (mensaje.equals("No se puede eliminar el ítem porque está actualmente prestado")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensaje);
         }
         return ResponseEntity.notFound().build();
     }
