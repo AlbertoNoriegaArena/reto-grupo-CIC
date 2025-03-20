@@ -1,6 +1,7 @@
 package es.santander.ascender.retoGrupoCIC.service;
 
 import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.ItemPrestadoException;
 import es.santander.ascender.retoGrupoCIC.config.PersonaNotFoundException;
 import es.santander.ascender.retoGrupoCIC.config.PrestamoNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
@@ -30,31 +31,36 @@ public class PrestamoService {
     private PersonaService personaService;
 
     public Prestamo createPrestamo(Prestamo prestamo) {
-        
-        if (prestamo.getItem() == null || prestamo.getPersona() == null) {
-            throw new IllegalArgumentException("El item y la persona son obligatorios");
+
+        if (prestamo.getItemId() == null ) {
+            throw new IllegalArgumentException("El item es obligatorio");
+        }
+        if (prestamo.getPersona() == null ) {
+            throw new IllegalArgumentException("La persona es obligatorio");
         }
         // Comprobar que exista Item
-        Optional<Item> itemOptional = itemService.obtenerItemPorId(prestamo.getItem().getId());
+        Optional<Item> itemOptional = itemService.obtenerItemPorId(prestamo.getItemId());
         if (!itemOptional.isPresent()) {
-            throw new ItemNotFoundException(itemOptional.get().getId());
+            throw new ItemNotFoundException(prestamo.getItemId());
         }
         // Comprobar que exista persona
         Persona persona = personaService.getPersonaById(prestamo.getPersona().getId());
         if (persona == null) {
             throw new PersonaNotFoundException(prestamo.getPersona().getId());
         }
-        // Comprobar que el item esté dispnible
+        // Comprobar que el item esté disponible
         Item item = itemOptional.get();
         if (item.getEstado() == EstadoItem.PRESTADO) {
-            throw new IllegalArgumentException("El item no está disponible");
+            throw new ItemPrestadoException(item.getNombre());
         }
 
         prestamo.setFechaPrestamo(LocalDate.now());
         prestamo.setFechaDevolucion(null);
-        
+
         item.setEstado(EstadoItem.PRESTADO);
         itemService.updateItem(item.getId(), item);
+
+        prestamo.setItem(item);
 
         return prestamoRepository.save(prestamo);
     }
@@ -73,32 +79,34 @@ public class PrestamoService {
         Optional<Prestamo> prestamoOptional = prestamoRepository.findById(id);
         if (prestamoOptional.isPresent()) {
             Prestamo prestamoExistente = prestamoOptional.get();
-            
+
             if (prestamo.getFechaPrevistaDevolucion() != null) {
                 prestamoExistente.setFechaPrevistaDevolucion(prestamo.getFechaPrevistaDevolucion());
             }
             if (prestamo.getFechaDevolucion() != null) {
                 prestamoExistente.setFechaDevolucion(prestamo.getFechaDevolucion());
-                
-                Item item = prestamoExistente.getItem();
+
+                Item item = itemService.obtenerItemPorId(prestamoExistente.getItemId()).get();
                 item.setEstado(EstadoItem.DISPONIBLE);
                 itemService.updateItem(item.getId(), item);
             }
 
             return prestamoRepository.save(prestamoExistente);
         }
-        return null;
+        throw new PrestamoNotFoundException(id);
     }
 
     public void deletePrestamo(Long id) {
         Optional<Prestamo> prestamoOptional = prestamoRepository.findById(id);
         if (prestamoOptional.isPresent()) {
             Prestamo prestamo = prestamoOptional.get();
-            
-            Item item = prestamo.getItem();
+
+            Item item = itemService.obtenerItemPorId(prestamo.getItemId()).get();
             item.setEstado(EstadoItem.DISPONIBLE);
             itemService.updateItem(item.getId(), item);
             prestamoRepository.deleteById(id);
+        } else {
+            throw new PrestamoNotFoundException(id);
         }
     }
 
@@ -111,12 +119,12 @@ public class PrestamoService {
                 throw new IllegalArgumentException("El item ya ha sido devuelto");
             }
             prestamo.setFechaDevolucion(LocalDate.now());
-            Item item = prestamo.getItem();
+            Item item = itemService.obtenerItemPorId(prestamo.getItemId()).get();
             item.setEstado(EstadoItem.DISPONIBLE);
             itemService.updateItem(item.getId(), item);
             return prestamoRepository.save(prestamo);
         }
         throw new PrestamoNotFoundException(id);
     }
-    
+
 }
