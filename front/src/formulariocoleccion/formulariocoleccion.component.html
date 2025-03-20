@@ -1,0 +1,88 @@
+<form (ngSubmit)="insertar()" #coleccionForm="ngForm">
+    <table class="table table-bordered mx-auto">
+        <thead>
+            <tr class="table-header">
+                <th colspan="2" class="text-center header-title">Colección Personal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-row">
+                <td class="table-label"><label for="tipo" class="form-label">Tipo</label></td>
+                <td class="table-input"><input type="text" class="form-control" id="tipo" name="tipo" [(ngModel)]="coleccion.tipo" placeholder="Ingrese el tipo" required></td>
+            </tr>
+            <tr class="table-row">
+                <td class="table-label"><label for="nombre" class="form-label">Nombre</label></td>
+                <td class="table-input"><input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="coleccion.nombre" placeholder="Ingrese el nombre" required></td>
+            </tr>
+            <tr class="table-row">
+                <td class="table-label"><label for="formato" class="form-label">Formato</label></td>
+                <td class="table-input"><input type="text" class="form-control" id="formato" name="formato" [(ngModel)]="coleccion.formato" placeholder="Ingrese el formato" required></td>
+            </tr>
+            <tr class="table-row">
+                <td class="table-label"><label for="ubicacion" class="form-label">Ubicación</label></td>
+                <td class="table-input"><input type="text" class="form-control" id="ubicacion" name="ubicacion" [(ngModel)]="coleccion.ubicacion" placeholder="Ubicacion" required></td>
+            </tr>
+            <tr class="table-row">
+                <td class="table-label"><label for="fecha" class="form-label">Fecha</label></td>
+                <td class="table-input"><input type="text" class="form-control" id="fecha" name="fecha" [(ngModel)]="coleccion.fecha" placeholder="Fecha" required></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center">
+                    <div class="d-flex justify-content-between mt-3">
+                        <button type="submit" class="btn btn-success btn-guardar">Guardar</button>
+                        <button type="reset" class="btn btn-secondary btn-limpiar">Limpiar</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<style>
+    .table {
+        width: 80%;
+        margin: 20px auto;
+        border: 1px solid black;
+        background-color: #e6f7ff;
+    }
+    .header-title {
+        background-color: #0d76df;
+        color: white;
+        font-weight: bold;
+    }
+    .table-header {
+        background-color: #d9e9ff;
+        transition: background-color 0.3s ease;
+    }
+    .table-header:hover {
+        background-color: #b3d1ff;
+    }
+    .table-row {
+        background-color: #e6f7ff;
+        transition: background-color 0.3s ease;
+    }
+    .table-row:hover {
+        background-color: #b3d1ff;
+    }
+    .table-label {
+        font-weight: normal;
+    }
+    .form-control {
+        border-radius: 0.25rem;
+    }
+    .btn-guardar {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+    }
+    .btn-limpiar {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+    .btn-guardar,
+    .btn-limpiar {
+        border-radius: 0.25rem;
+        padding: 10px 20px;
+    }
+</style>
