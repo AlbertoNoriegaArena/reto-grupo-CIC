@@ -14,7 +14,7 @@ public class PeliculaService {
     @Autowired
     private PeliculaRepository peliculaRepository;
 
-    public Pelicula createPelicula(Pelicula pelicula, Long itemId) {
+    public Pelicula createPelicula(Pelicula pelicula) {
         return peliculaRepository.save(pelicula);
     }
 
@@ -26,7 +26,7 @@ public class PeliculaService {
         return peliculaRepository.findById(id).orElse(null);
     }
 
-    public List<Pelicula> retriveAllLibros() {
+    public List<Pelicula> retriveAllPeliculas() {
         return peliculaRepository.findAll();
     }
 

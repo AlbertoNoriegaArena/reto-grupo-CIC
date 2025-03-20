@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.santander.ascender.retoGrupoCIC.model.Libro;
 import es.santander.ascender.retoGrupoCIC.model.Musica;
 import es.santander.ascender.retoGrupoCIC.repository.MusicaRepository;
 
@@ -15,7 +14,7 @@ public class MusicaService {
     @Autowired
     private MusicaRepository musicaRepository;
 
-    public Musica createMusica(Musica musica, Long itemId) {
+    public Musica createMusica(Musica musica) {
         return musicaRepository.save(musica);
     }
 
