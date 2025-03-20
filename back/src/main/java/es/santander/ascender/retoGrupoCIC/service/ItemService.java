@@ -1,16 +1,19 @@
 package es.santander.ascender.retoGrupoCIC.service;
 
+import es.santander.ascender.retoGrupoCIC.config.FormatoNoValidoException;
+import es.santander.ascender.retoGrupoCIC.config.FormatoNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.ItemPrestadoException;
+import es.santander.ascender.retoGrupoCIC.config.TipoItemNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
 import es.santander.ascender.retoGrupoCIC.repository.ItemRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -74,12 +77,12 @@ public class ItemService {
             Item item = itemOpcional.get();
             // comprobar si el estado del item es prestado
             if (item.getEstado() == EstadoItem.PRESTADO) {
-                return "No se puede eliminar el ítem porque está actualmente prestado";
+                throw new ItemPrestadoException(item.getNombre());
             }
             itemRepository.deleteById(id);
             return "Ítem eliminado con éxito";
         }
-        return "El ítem no existe";
+        throw new ItemNotFoundException(id);
     }
 
     // método que comprueba que la relación entre tipo y formato sea correcta
@@ -90,22 +93,26 @@ public class ItemService {
         // Comprobar que el tipoItem existe
         Optional<TipoItem> tipoItemOptional = tipoItemService.obtenerTipoItemPorId(tipoItem.getId());
         if (!tipoItemOptional.isPresent()) {
-            throw new IllegalArgumentException("El tipoItem no existe");
+            throw new TipoItemNotFoundException(tipoItem.getId());
         }
         // comprobar que el formato exista
         Optional<Formato> formatoOptional = formatoService.obtenerFormatoPorId(formato.getId());
         if (!formatoOptional.isPresent()) {
-            throw new IllegalArgumentException("El formato no existe");
+            throw new FormatoNotFoundException(formato.getId());
         }
+
+        
+        String itemNombre = tipoItemOptional.get().getNombre();
+        String formatoNombre = formatoOptional.get().getNombre();
 
         Set<TipoItemFormato> tipoItemFormatos = tipoItemFormatoService.obtenerTipoItemFormatosPorTipoItem(tipoItem);
         boolean isValid = tipoItemFormatos.stream()
                 .anyMatch(tif -> tif.getFormato().equals(formato));
 
         if (!isValid) {
-            throw new IllegalArgumentException(
-                    "El formato no es válido para el tipo seleccionado. Por favor, selecciona valores validos");
+            throw new FormatoNoValidoException(formatoNombre, itemNombre);
         }
+
     }
 
     public List<Item> searchItems(String nombre, String tipo, EstadoItem estado, String ubicacion) {

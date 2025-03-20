@@ -11,7 +11,7 @@ public class FormatoNoValidoException extends RuntimeException {
     }
 
     public FormatoNoValidoException(String formatoNombre, String tipoItemNombre) {
-        super("El formato con " + formatoNombre + " no es válido para el tipo de ítem con " + tipoItemNombre);
+        super("El formato " + formatoNombre + " no es válido para el tipo de ítem con " + tipoItemNombre);
         this.formatoNombre = formatoNombre;
         this.tipoItemNombre = tipoItemNombre;
     }

@@ -7,13 +7,18 @@ public class ItemPrestadoException extends RuntimeException {
     public ItemPrestadoException(){
     }
 
+    public ItemPrestadoException( Long itemId) {
+        super("El ítem " + itemId + " está actualmente prestado");
+        this.itemId = itemId;
+    }
+
     public ItemPrestadoException( String nombre) {
-        super("El ítem " + nombre + " no se puede eliminar porque está actualmente prestado");
+        super("El ítem " + nombre + " está actualmente prestado");
         this.nombre = nombre;
     }
 
     public ItemPrestadoException(Long itemId, String nombre) {
-        super("El ítem " + nombre + " con ID: " + itemId + " no se puede eliminar porque está actualmente prestado");
+        super("El ítem " + nombre + " con ID: " + itemId + " está actualmente prestado");
         this.itemId = itemId;
         this.nombre = nombre;
     }

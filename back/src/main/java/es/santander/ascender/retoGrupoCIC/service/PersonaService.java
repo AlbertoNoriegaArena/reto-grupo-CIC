@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.santander.ascender.retoGrupoCIC.config.PersonaNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.Persona;
 import es.santander.ascender.retoGrupoCIC.repository.PersonaRepository;
 
@@ -17,50 +18,55 @@ public class PersonaService {
     @Autowired
     private PersonaRepository personaRepository;
 
-    //Crear personas
+    // Crear personas
     public Persona createPersona(Persona persona) {
         return personaRepository.save(persona);
     }
 
-    //Listar personas
+    // Listar personas
     @Transactional(readOnly = true)
     public List<Persona> getAllPersonas() {
         return personaRepository.findAll();
     }
 
-    //Listar 1 persona por id
+    // Listar 1 persona por id
     @Transactional(readOnly = true)
     public Persona getPersonaById(Long id) {
-        return personaRepository.findById(id).orElse(null);
+        return personaRepository.findById(id).orElseThrow(() -> new PersonaNotFoundException(id));
     }
 
-    //Actuizar persona
+    // Actuizar persona
     public Persona updatePersona(Long id, Persona persona) {
         Optional<Persona> personaOptional = personaRepository.findById(id);
-        if (personaOptional.isPresent()) {
-            Persona personaExistente = personaOptional.get();
-            // Actualizar solo los campos que se han modificado
-            if (persona.getNombre() != null) {
-                personaExistente.setNombre(persona.getNombre());
-            }
-            if (persona.getDireccion() != null) {
-                personaExistente.setDireccion(persona.getDireccion());
-            }
-            if (persona.getEmail() != null) {
-                personaExistente.setEmail(persona.getEmail());
-            }
-            if (persona.getTelefono() != null) {
-                personaExistente.setTelefono(persona.getTelefono());
-            }
-            return personaRepository.save(personaExistente);
+
+        if (!personaOptional.isPresent()) {
+            throw new PersonaNotFoundException(id); 
         }
-        throw new RuntimeException("No pude encontrar la persona con id " + id);
+
+        Persona personaExistente = personaOptional.get(); 
+
+        if (persona.getNombre() != null) {
+            personaExistente.setNombre(persona.getNombre());
+        }
+        if (persona.getDireccion() != null) {
+            personaExistente.setDireccion(persona.getDireccion());
+        }
+        if (persona.getEmail() != null) {
+            personaExistente.setEmail(persona.getEmail());
+        }
+        if (persona.getTelefono() != null) {
+            personaExistente.setTelefono(persona.getTelefono());
+        }
+
+        return personaRepository.saveAndFlush(personaExistente);
     }
 
-    
-    //Eliminar personas
+    // Eliminar personas
     public void deletePersona(Long id) {
+        if (!personaRepository.existsById(id)) {
+            throw new PersonaNotFoundException(id);
+        }
         personaRepository.deleteById(id);
     }
-    
+
 }

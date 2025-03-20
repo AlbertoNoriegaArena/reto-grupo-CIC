@@ -40,12 +40,14 @@ public class PersonaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Persona> updatePersona(@PathVariable Long id, @RequestBody Persona persona) {
-        try {
+        System.out.println("Solicitud de actualización recibida para ID: " + id);
+        System.out.println("Datos recibidos: " + persona);
+       
             Persona personaActualizada = personaService.updatePersona(id, persona);
             return ResponseEntity.ok(personaActualizada);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+     
+           
+        
     }
     
     @DeleteMapping("/{id}")

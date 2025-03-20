@@ -1,5 +1,8 @@
 package es.santander.ascender.retoGrupoCIC.service;
 
+import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.PersonaNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.PrestamoNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.model.Persona;
@@ -34,12 +37,12 @@ public class PrestamoService {
         // Comprobar que exista Item
         Optional<Item> itemOptional = itemService.obtenerItemPorId(prestamo.getItem().getId());
         if (!itemOptional.isPresent()) {
-            throw new IllegalArgumentException("El item no existe");
+            throw new ItemNotFoundException(itemOptional.get().getId());
         }
         // Comprobar que exista persona
         Persona persona = personaService.getPersonaById(prestamo.getPersona().getId());
         if (persona == null) {
-            throw new IllegalArgumentException("La persona no existe");
+            throw new PersonaNotFoundException(prestamo.getPersona().getId());
         }
         // Comprobar que el item esté dispnible
         Item item = itemOptional.get();
@@ -113,7 +116,7 @@ public class PrestamoService {
             itemService.updateItem(item.getId(), item);
             return prestamoRepository.save(prestamo);
         }
-        throw new RuntimeException("No se ha encontrado el prestamo con id " + id);
+        throw new PrestamoNotFoundException(id);
     }
     
 }

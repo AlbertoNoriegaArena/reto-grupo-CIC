@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.service;
 
+import es.santander.ascender.retoGrupoCIC.config.FormatoNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
@@ -55,7 +56,7 @@ public class FormatoService {
             formatoRepository.deleteById(id);
             return "Formato eliminado con éxito";
         }
-        return "El formato no existe";
+        throw new FormatoNotFoundException(id);
     }
 
     // Método para obtener los formatos válidos para un TipoItem específico
