@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -35,7 +34,7 @@ public class Item {
     private Formato formato;
 
     private String ubicacion;
-    
+
     private LocalDate fecha;
 
     @Enumerated(EnumType.STRING)
@@ -148,7 +147,4 @@ public class Item {
         return true;
     }
 
-    
- 
 }
-

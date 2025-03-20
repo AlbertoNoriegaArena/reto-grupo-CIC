@@ -6,9 +6,11 @@ import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
 import es.santander.ascender.retoGrupoCIC.repository.ItemRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -104,5 +106,67 @@ public class ItemService {
             throw new IllegalArgumentException(
                     "El formato no es válido para el tipo seleccionado. Por favor, selecciona valores validos");
         }
+    }
+
+    public List<Item> searchItems(String nombre, String tipo, EstadoItem estado, String ubicacion) {
+        if (!isValidSearchParameters(nombre, tipo, estado, ubicacion)) {
+            return itemRepository.findAll();
+        }
+
+        if (nombre != null && !nombre.trim().isEmpty()) {
+            if (tipo != null) {
+                if (estado != null) {
+                    if (ubicacion != null && !ubicacion.trim().isEmpty()) {
+                        return itemRepository.findByNombreContainingIgnoreCaseAndTipo_NombreAndEstadoAndUbicacion(
+                                nombre, tipo, estado, ubicacion);
+                    } else {
+                        return itemRepository.findByNombreContainingIgnoreCaseAndTipo_NombreAndEstado(nombre,
+                                tipo, estado);
+                    }
+                } else if (ubicacion != null && !ubicacion.trim().isEmpty()) {
+                    return itemRepository.findByNombreContainingIgnoreCaseAndTipo_NombreAndUbicacion(nombre,
+                            tipo, ubicacion);
+                } else {
+                    return itemRepository.findByNombreContainingIgnoreCaseAndTipo_Nombre(nombre, tipo);
+                }
+            } else if (estado != null) {
+                if (ubicacion != null && !ubicacion.trim().isEmpty()) {
+                    return itemRepository.findByNombreContainingIgnoreCaseAndEstadoAndUbicacion(nombre, estado,
+                            ubicacion);
+                } else {
+                    return itemRepository.findByNombreContainingIgnoreCaseAndEstado(nombre, estado);
+                }
+            } else if (ubicacion != null && !ubicacion.trim().isEmpty()) {
+                return itemRepository.findByNombreContainingIgnoreCaseAndUbicacion(nombre, ubicacion);
+            } else {
+                return itemRepository.findByNombreContainingIgnoreCase(nombre);
+            }
+        } else if (tipo != null) {
+            if (estado != null) {
+                if (ubicacion != null && !ubicacion.trim().isEmpty()) {
+                    return itemRepository.findByTipo_NombreAndEstadoAndUbicacion(tipo, estado, ubicacion);
+                } else {
+                    return itemRepository.findByTipo_NombreAndEstado(tipo, estado);
+                }
+            } else if (ubicacion != null && !ubicacion.trim().isEmpty()) {
+                return itemRepository.findByTipo_NombreAndUbicacion(tipo, ubicacion);
+            } else {
+                return itemRepository.findByTipo_Nombre(tipo);
+            }
+        } else if (estado != null) {
+            if (ubicacion != null && !ubicacion.trim().isEmpty()) {
+                return itemRepository.findByEstadoAndUbicacion(estado, ubicacion);
+            } else {
+                return itemRepository.findByEstado(estado);
+            }
+        } else if (ubicacion != null && !ubicacion.trim().isEmpty()) {
+            return itemRepository.findByUbicacion(ubicacion);
+        } else {
+            return itemRepository.findAll();
+        }
+    }
+
+    private boolean isValidSearchParameters(String nombre, String tipo, EstadoItem estado, String ubicacion) {
+        return nombre != null || tipo != null || estado != null || ubicacion != null;
     }
 }

@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.controller;
 
+import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,5 +66,20 @@ public class ItemController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensaje);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Item>> searchItems(
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String tipo,
+            @RequestParam(required = false) EstadoItem estado,
+            @RequestParam(required = false) String ubicacion) {
+
+        try {
+            List<Item> items = itemService.searchItems(titulo, tipo, estado, ubicacion);
+            return new ResponseEntity<>(items, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

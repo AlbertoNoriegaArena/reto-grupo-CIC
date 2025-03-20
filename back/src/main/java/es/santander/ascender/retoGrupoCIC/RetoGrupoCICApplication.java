@@ -122,7 +122,7 @@ public class RetoGrupoCICApplication {
             // item1);
             // musicaRepository.save(musica1);
 
-            Item item2 = new Item(null, "Bohemian Rhapsody - Queen", tipoMusica, formatoVinilo, "Estante D",
+            Item item2 = new Item(null, "Bohemian Rhapsody - Queen", tipoMusica, formatoVinilo, "Estante C",
                     LocalDate.of(1975, 10, 31), EstadoItem.DISPONIBLE);
             itemRepository.save(item2);
             // Musica musica2 = new Musica(item2.getId(), "78910", "EMI Records", 15,
@@ -130,7 +130,7 @@ public class RetoGrupoCICApplication {
             // musicaRepository.save(musica2);
 
             Item item3 = new Item(null, "The Dark Side of the Moon - Pink Floyd", tipoMusica, formatoCassette,
-                    "Estante E", LocalDate.of(1973, 3, 1), EstadoItem.DISPONIBLE);
+                    "Estante C", LocalDate.of(1973, 3, 1), EstadoItem.DISPONIBLE);
             itemRepository.save(item3);
             // Musica musica3 = new Musica(item3.getId(), "111213", "Harvest Records", 10,
             // item3);
@@ -144,14 +144,14 @@ public class RetoGrupoCICApplication {
             // "Ciencia ficción", LocalDate.of(2014, 10, 26), item4);
             // peliculaRepository.save(pelicula1);
 
-            Item item5 = new Item(null, "Matrix", tipoPelicula, formatoBluRay, "Estante F", LocalDate.of(1999, 3, 31),
+            Item item5 = new Item(null, "Matrix", tipoPelicula, formatoBluRay, "Estante A", LocalDate.of(1999, 3, 31),
                     EstadoItem.DISPONIBLE);
             itemRepository.save(item5);
             // Pelicula pelicula2 = new Pelicula(item5.getId(), "Lana Wachowski", 136,
             // "Ciencia ficción", LocalDate.of(1999, 3, 31), item5);
             // peliculaRepository.save(pelicula2);
 
-            Item item6 = new Item(null, "El silencio de los corderos", tipoPelicula, formatoVHS, "Estante G",
+            Item item6 = new Item(null, "El silencio de los corderos", tipoPelicula, formatoVHS, "Estante A",
                     LocalDate.of(1991, 2, 14), EstadoItem.DISPONIBLE);
             itemRepository.save(item6);
             // Pelicula pelicula3 = new Pelicula(item6.getId(), "Jonathan Demme", 118,
@@ -173,14 +173,14 @@ public class RetoGrupoCICApplication {
             // Classics", 328, item8);
             // libroRepository.save(libro2);
 
-            Item item9 = new Item(null, "Cien años de soledad", tipoLibro, formatoFisico, "Estante H",
+            Item item9 = new Item(null, "Cien años de soledad", tipoLibro, formatoFisico, "Estante B",
                     LocalDate.of(1967, 5, 30), EstadoItem.DISPONIBLE);
             itemRepository.save(item9);
             // Libro libro3 = new Libro(item9.getId(), "978-0307350753", "Debolsillo", 417,
             // item9);
             // libroRepository.save(libro3);
 
-            Item item10 = new Item(null, "El Hobbit", tipoLibro, formatoFisico, "Estante I", LocalDate.of(1937, 9, 21),
+            Item item10 = new Item(null, "El Hobbit", tipoLibro, formatoFisico, "Estante B", LocalDate.of(1937, 9, 21),
                     EstadoItem.DISPONIBLE);
             itemRepository.save(item10);
             // Libro libro4 = new Libro(item10.getId(), "978-0547928227", "Houghton Mifflin
