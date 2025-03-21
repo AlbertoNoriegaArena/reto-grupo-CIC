@@ -5,6 +5,7 @@ import es.santander.ascender.retoGrupoCIC.config.FormatoNotFoundException;
 import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
 import es.santander.ascender.retoGrupoCIC.config.ItemPrestadoException;
 import es.santander.ascender.retoGrupoCIC.config.TipoItemNotFoundException;
+import es.santander.ascender.retoGrupoCIC.dto.ItemDTO;
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.Item;
@@ -34,9 +35,32 @@ public class ItemService {
     @Autowired
     private TipoItemService tipoItemService;
 
-    public Item createItem(Item item) {
+    public Item createItem(ItemDTO itemDTO) {
+        // Obtener TipoItem y Formato por sus IDs
+        Optional<TipoItem> tipoItemOptional = tipoItemService.obtenerTipoItemPorId(itemDTO.getTipoId());
+        Optional<Formato> formatoOptional = formatoService.obtenerFormatoPorId(itemDTO.getFormatoId());
+
+        if (!tipoItemOptional.isPresent()) {
+            throw new TipoItemNotFoundException(itemDTO.getTipoId());
+        }
+        if (!formatoOptional.isPresent()) {
+            throw new FormatoNotFoundException(itemDTO.getFormatoId());
+        }
+
+        TipoItem tipoItem = tipoItemOptional.get();
+        Formato formato = formatoOptional.get();
+
         // Validar que el tipo cuadra con el formato introducido
-        validateTipoItemFormato(item.getTipo(), item.getFormato());
+        validateTipoItemFormato(tipoItem, formato);
+
+        // Crear el Item
+        Item item = new Item();
+        item.setNombre(itemDTO.getNombre());
+        item.setTipo(tipoItem);
+        item.setFormato(formato);
+        item.setUbicacion(itemDTO.getUbicacion());
+        item.setFecha(itemDTO.getFecha());
+        item.setEstado(itemDTO.getEstado() != null ? itemDTO.getEstado() : EstadoItem.DISPONIBLE);
 
         return itemRepository.save(item);
     }
@@ -101,6 +125,7 @@ public class ItemService {
             throw new FormatoNotFoundException(formato.getId());
         }
 
+        
         String itemNombre = tipoItemOptional.get().getNombre();
         String formatoNombre = formatoOptional.get().getNombre();
 

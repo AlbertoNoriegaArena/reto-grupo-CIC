@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.service;
 
+import es.santander.ascender.retoGrupoCIC.dto.TipoItemDTO;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.repository.TipoItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,17 @@ public class TipoItemService {
         this.tipoItemRepository = tipoItemRepository;
     }
 
-    public TipoItem createTipoItem(TipoItem tipoItem) {
+    public TipoItem createTipoItem(TipoItemDTO tipoItemDTO) {
+        // Validar que el nombre no esté vacío
+        if (tipoItemDTO.getNombre() == null || tipoItemDTO.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del tipo de ítem no puede estar vacío");
+        }
+        // Validar que el nombre no exista ya
+        if (tipoItemRepository.findByNombre(tipoItemDTO.getNombre()).isPresent()) {
+            throw new IllegalArgumentException("Ya existe un tipo de ítem con ese nombre");
+        }
+        TipoItem tipoItem = new TipoItem();
+        tipoItem.setNombre(tipoItemDTO.getNombre());
         return tipoItemRepository.save(tipoItem);
     }
 
@@ -34,10 +45,21 @@ public class TipoItemService {
         return tipoItemRepository.findById(id);
     }
 
-    public TipoItem updateTipoItem(Long id, TipoItem tipoItemActualizado) {
-        if (tipoItemRepository.existsById(id)) {
-            tipoItemActualizado.setId(id);
-            return tipoItemRepository.save(tipoItemActualizado);
+    public TipoItem updateTipoItem(Long id, TipoItemDTO tipoItemDTO) {
+        Optional<TipoItem> tipoItemOptional = tipoItemRepository.findById(id);
+        if (tipoItemOptional.isPresent()) {
+            TipoItem tipoItemExistente = tipoItemOptional.get();
+            // Validar que el nombre no esté vacío
+            if (tipoItemDTO.getNombre() == null || tipoItemDTO.getNombre().trim().isEmpty()) {
+                throw new IllegalArgumentException("El nombre del tipo de ítem no puede estar vacío");
+            }
+            // Validar que el nombre no exista ya
+            Optional<TipoItem> tipoItemConMismoNombre = tipoItemRepository.findByNombre(tipoItemDTO.getNombre());
+            if (tipoItemConMismoNombre.isPresent() && !tipoItemConMismoNombre.get().getId().equals(id)) {
+                throw new IllegalArgumentException("Ya existe un tipo de ítem con ese nombre");
+            }
+            tipoItemExistente.setNombre(tipoItemDTO.getNombre());
+            return tipoItemRepository.save(tipoItemExistente);
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.controller;
 
+import es.santander.ascender.retoGrupoCIC.dto.TipoItemFormatoDTO;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
 import es.santander.ascender.retoGrupoCIC.service.TipoItemFormatoService;
 
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/TipoItemFormatos")
@@ -24,28 +24,14 @@ public class TipoItemFormatoController {
     @Autowired
     private TipoItemFormatoService tipoItemFormatoService;
 
-    @PostMapping
-    public ResponseEntity<?> createTipoItemFormato(@RequestBody Map<String, Map<String, Long>> requestBody) {
-        // Verificar si el cuerpo de la solicitud es válido
-        if (requestBody == null || !requestBody.containsKey("tipoItem") || !requestBody.containsKey("formato")) {
-            return new ResponseEntity<>("Cuerpo de la solicitud inválido. Debe contener los campos 'tipoItem' y 'formato'.", HttpStatus.BAD_REQUEST);
+     @PostMapping
+    public ResponseEntity<?> createTipoItemFormato(@RequestBody TipoItemFormatoDTO dto) {
+        if (dto.getTipoItemId() == null || dto.getFormatoId() == null) {
+            return new ResponseEntity<>("Los campos tipoItemId y formatoId son obligatorios.", HttpStatus.BAD_REQUEST);
         }
-
-        // Extraer los IDs del cuerpo de la solicitud
-        Map<String, Long> tipoItemMap = requestBody.get("tipoItem");
-        Map<String, Long> formatoMap = requestBody.get("formato");
-
-        // Verificar si los IDs son válidos
-        if (tipoItemMap == null || !tipoItemMap.containsKey("id") || formatoMap == null || !formatoMap.containsKey("id")) {
-            return new ResponseEntity<>("Cuerpo de la solicitud inválido. Debe contener los campos 'id' dentro de 'tipoItem' y 'formato'.", HttpStatus.BAD_REQUEST);
-        }
-
-        Long tipoItemId = tipoItemMap.get("id");
-        Long formatoId = formatoMap.get("id");
 
         try {
-            // Crear y guardar la asociación
-            TipoItemFormato savedTipoItemFormato = tipoItemFormatoService.createTipoItemFormato(tipoItemId, formatoId);
+            TipoItemFormato savedTipoItemFormato = tipoItemFormatoService.createTipoItemFormato(dto.getTipoItemId(), dto.getFormatoId());
             return new ResponseEntity<>(savedTipoItemFormato, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

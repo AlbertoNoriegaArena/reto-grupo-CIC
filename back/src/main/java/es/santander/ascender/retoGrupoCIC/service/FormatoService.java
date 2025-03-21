@@ -1,6 +1,7 @@
 package es.santander.ascender.retoGrupoCIC.service;
 
 import es.santander.ascender.retoGrupoCIC.config.FormatoNotFoundException;
+import es.santander.ascender.retoGrupoCIC.dto.FormatoDTO;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
@@ -28,7 +29,17 @@ public class FormatoService {
         this.tipoItemFormatoRepository = tipoItemFormatoRepository;
     }
 
-    public Formato createFormato(Formato formato) {
+    public Formato createFormato(FormatoDTO formatoDTO) {
+        // Validar que el nombre no esté vacío
+        if (formatoDTO.getNombre() == null || formatoDTO.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del formato no puede estar vacío");
+        }
+        // Validar que el nombre no exista ya
+        if (formatoRepository.findByNombre(formatoDTO.getNombre()).isPresent()) {
+            throw new IllegalArgumentException("Ya existe un formato con ese nombre");
+        }
+        Formato formato = new Formato();
+        formato.setNombre(formatoDTO.getNombre());
         return formatoRepository.save(formato);
     }
 
@@ -42,10 +53,21 @@ public class FormatoService {
         return formatoRepository.findById(id);
     }
 
-    public Formato updateFormato(Long id, Formato formatoActualizado) {
-        if (formatoRepository.existsById(id)) {
-            formatoActualizado.setId(id);
-            return formatoRepository.save(formatoActualizado);
+    public Formato updateFormato(Long id, FormatoDTO formatoDTO) {
+        Optional<Formato> formatoOptional = formatoRepository.findById(id);
+        if (formatoOptional.isPresent()) {
+            Formato formatoExistente = formatoOptional.get();
+            // Validar que el nombre no esté vacío
+            if (formatoDTO.getNombre() == null || formatoDTO.getNombre().trim().isEmpty()) {
+                throw new IllegalArgumentException("El nombre del formato no puede estar vacío");
+            }
+            // Validar que el nombre no exista ya
+            Optional<Formato> formatoConMismoNombre = formatoRepository.findByNombre(formatoDTO.getNombre());
+            if (formatoConMismoNombre.isPresent() && !formatoConMismoNombre.get().getId().equals(id)) {
+                throw new IllegalArgumentException("Ya existe un formato con ese nombre");
+            }
+            formatoExistente.setNombre(formatoDTO.getNombre());
+            return formatoRepository.save(formatoExistente);
         }
         return null;
     }

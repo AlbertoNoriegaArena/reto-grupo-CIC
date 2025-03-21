@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.controller;
 
+import es.santander.ascender.retoGrupoCIC.dto.FormatoDTO;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.service.FormatoService;
@@ -26,9 +27,13 @@ public class FormatoController {
     }
 
     @PostMapping
-    public ResponseEntity<Formato> createFormato(@RequestBody Formato formato) {
-        Formato nuevoFormato = formatoService.createFormato(formato);
-        return new ResponseEntity<>(nuevoFormato, HttpStatus.CREATED);
+    public ResponseEntity<?> crear(@RequestBody FormatoDTO formatoDTO) {
+        try {
+            Formato nuevoFormato = formatoService.createFormato(formatoDTO);
+            return new ResponseEntity<>(nuevoFormato, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping
@@ -44,12 +49,15 @@ public class FormatoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Formato> updateFormato(@PathVariable Long id, @RequestBody Formato formato) {
-        Formato formatoActualizado = formatoService.updateFormato(id, formato);
-        if (formatoActualizado != null) {
-            return ResponseEntity.ok(formatoActualizado);
-        } else {
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody FormatoDTO formatoDTO) {
+        try {
+            Formato formatoActualizado = formatoService.updateFormato(id, formatoDTO);
+            if (formatoActualizado != null) {
+                return ResponseEntity.ok(formatoActualizado);
+            }
             return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

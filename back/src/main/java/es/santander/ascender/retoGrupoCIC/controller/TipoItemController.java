@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.controller;
 
+import es.santander.ascender.retoGrupoCIC.dto.TipoItemDTO;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.service.TipoItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,13 @@ public class TipoItemController {
     }
 
     @PostMapping
-    public ResponseEntity<TipoItem> createTipoItem(@RequestBody TipoItem tipoItem) {
-        TipoItem nuevoTipoItem = tipoItemService.createTipoItem(tipoItem);
-        return new ResponseEntity<>(nuevoTipoItem, HttpStatus.CREATED);
+    public ResponseEntity<?> crear(@RequestBody TipoItemDTO tipoItemDTO) {
+        try {
+            TipoItem nuevoTipoItem = tipoItemService.createTipoItem(tipoItemDTO);
+            return new ResponseEntity<>(nuevoTipoItem, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping
@@ -40,12 +45,15 @@ public class TipoItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TipoItem> updateTipoItem(@PathVariable Long id, @RequestBody TipoItem tipoItem) {
-        TipoItem tipoItemActualizado = tipoItemService.updateTipoItem(id, tipoItem);
-        if (tipoItemActualizado != null) {
-            return ResponseEntity.ok(tipoItemActualizado);
-        } else {
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody TipoItemDTO tipoItemDTO) {
+        try {
+            TipoItem tipoItemActualizado = tipoItemService.updateTipoItem(id, tipoItemDTO);
+            if (tipoItemActualizado != null) {
+                return ResponseEntity.ok(tipoItemActualizado);
+            }
             return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

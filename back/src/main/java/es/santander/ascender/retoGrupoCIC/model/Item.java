@@ -21,7 +21,6 @@ import jakarta.persistence.OneToMany;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(access = Access.READ_ONLY)
     private Long id;
 
     @Column(nullable = false)

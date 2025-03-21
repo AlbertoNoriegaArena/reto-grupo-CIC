@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.controller;
 
+import es.santander.ascender.retoGrupoCIC.dto.ItemDTO;
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.service.ItemService;
@@ -20,12 +21,14 @@ public class ItemController {
 
     // Crear un nuevo ítem
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Item item) {
+    public ResponseEntity<?> crear(@RequestBody ItemDTO itemDTO) {
         try {
-            Item nuevoItem = itemService.createItem(item);
+            Item nuevoItem = itemService.createItem(itemDTO);
             return new ResponseEntity<>(nuevoItem, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -70,13 +73,13 @@ public class ItemController {
 
     @GetMapping("/buscar")
     public ResponseEntity<List<Item>> searchItems(
-            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String nombre,
             @RequestParam(required = false) String tipo,
             @RequestParam(required = false) EstadoItem estado,
             @RequestParam(required = false) String ubicacion) {
 
         try {
-            List<Item> items = itemService.searchItems(titulo, tipo, estado, ubicacion);
+            List<Item> items = itemService.searchItems(nombre, tipo, estado, ubicacion);
             return new ResponseEntity<>(items, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
