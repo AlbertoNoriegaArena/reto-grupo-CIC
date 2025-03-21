@@ -32,10 +32,10 @@ public class PrestamoService {
 
     public Prestamo createPrestamo(Prestamo prestamo) {
 
-        if (prestamo.getItemId() == null ) {
+        if (prestamo.getItemId() == null) {
             throw new IllegalArgumentException("El item es obligatorio");
         }
-        if (prestamo.getPersona() == null ) {
+        if (prestamo.getPersona() == null) {
             throw new IllegalArgumentException("La persona es obligatorio");
         }
         // Comprobar que exista Item
@@ -125,6 +125,14 @@ public class PrestamoService {
             return prestamoRepository.save(prestamo);
         }
         throw new PrestamoNotFoundException(id);
+    }
+
+    public List<Prestamo> getPrestamosByPersonaId(Long personaId) {
+        Persona persona = personaService.getPersonaById(personaId);
+        if (persona == null) {
+            throw new PersonaNotFoundException(personaId);
+        }
+        return prestamoRepository.findByPersona(persona);
     }
 
 }

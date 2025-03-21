@@ -101,7 +101,6 @@ public class ItemService {
             throw new FormatoNotFoundException(formato.getId());
         }
 
-        
         String itemNombre = tipoItemOptional.get().getNombre();
         String formatoNombre = formatoOptional.get().getNombre();
 
@@ -175,5 +174,13 @@ public class ItemService {
 
     private boolean isValidSearchParameters(String nombre, String tipo, EstadoItem estado, String ubicacion) {
         return nombre != null || tipo != null || estado != null || ubicacion != null;
+    }
+
+    public List<Item> getAvailableItems() {
+        return itemRepository.findByEstado(EstadoItem.DISPONIBLE);
+    }
+
+    public List<Item> getBorrowedItems() {
+        return itemRepository.findByEstado(EstadoItem.PRESTADO);
     }
 }

@@ -82,4 +82,14 @@ public class ItemController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/disponibles")
+    public List<Item> getAvailableItems() {
+        return itemService.getAvailableItems();
+    }
+
+    @GetMapping("/prestados")
+    public List<Item> getBorrowedItems() {
+        return itemService.getBorrowedItems();
+    }
 }

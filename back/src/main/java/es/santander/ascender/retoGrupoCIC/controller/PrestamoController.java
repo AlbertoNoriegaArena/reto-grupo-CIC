@@ -83,4 +83,16 @@ public class PrestamoController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/personas/{personaId}")
+    public ResponseEntity<?> getPrestamosByPersonaId(@PathVariable Long personaId) {
+        try {
+            List<Prestamo> prestamos = prestamoService.getPrestamosByPersonaId(personaId);
+            return ResponseEntity.ok(prestamos);
+        } catch (PersonaNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los prestamos");
+        }
+    }
 }
