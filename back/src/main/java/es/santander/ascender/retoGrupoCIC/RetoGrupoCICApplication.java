@@ -2,6 +2,9 @@ package es.santander.ascender.retoGrupoCIC;
 
 import es.santander.ascender.retoGrupoCIC.model.*;
 import es.santander.ascender.retoGrupoCIC.repository.*;
+import es.santander.ascender.retoGrupoCIC.service.ItemService;
+import es.santander.ascender.retoGrupoCIC.service.PrestamoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 public class RetoGrupoCICApplication {
@@ -25,14 +30,14 @@ public class RetoGrupoCICApplication {
     @Autowired
     private TipoItemFormatoRepository tipoItemFormatoRepository;
 
-    // @Autowired
-    // private LibroRepository libroRepository;
+    @Autowired
+    private PersonaRepository personaRepository;
 
-    // @Autowired
-    // private MusicaRepository musicaRepository;
+    @Autowired
+    private PrestamoRepository prestamoRepository;
 
-    // @Autowired
-    // private PeliculaRepository peliculaRepository;
+    @Autowired
+    private PrestamoService prestamoService;
 
     public static void main(String[] args) {
         SpringApplication.run(RetoGrupoCICApplication.class, args);
@@ -113,79 +118,86 @@ public class RetoGrupoCICApplication {
             createTipoItemFormatoIfNotExists(tipoLibro, formatoFisico);
             createTipoItemFormatoIfNotExists(tipoLibro, formatoDigital);
 
-            // Crear y guardar 10 Items
+            // Crear y guardar 12 Items
             // Musica
             Item item1 = new Item(null, "Thriller - Michael Jackson", tipoMusica, formatoCD, "Estante B",
-                    LocalDate.of(1982, 11, 30), EstadoItem.PRESTADO);
-            itemRepository.save(item1);
-            // Musica musica1 = new Musica(item1.getId(), "123456", "Epic Records", 12,
-            // item1);
-            // musicaRepository.save(musica1);
-
+                    LocalDate.of(1982, 11, 30), EstadoItem.DISPONIBLE);
             Item item2 = new Item(null, "Bohemian Rhapsody - Queen", tipoMusica, formatoVinilo, "Estante C",
                     LocalDate.of(1975, 10, 31), EstadoItem.DISPONIBLE);
-            itemRepository.save(item2);
-            // Musica musica2 = new Musica(item2.getId(), "78910", "EMI Records", 15,
-            // item2);
-            // musicaRepository.save(musica2);
-
             Item item3 = new Item(null, "The Dark Side of the Moon - Pink Floyd", tipoMusica, formatoCassette,
                     "Estante C", LocalDate.of(1973, 3, 1), EstadoItem.DISPONIBLE);
-            itemRepository.save(item3);
-            // Musica musica3 = new Musica(item3.getId(), "111213", "Harvest Records", 10,
-            // item3);
-            // musicaRepository.save(musica3);
 
             // Peliculas
             Item item4 = new Item(null, "Interstellar", tipoPelicula, formatoDVD, "Estante C",
                     LocalDate.of(2014, 10, 26), EstadoItem.DISPONIBLE);
-            itemRepository.save(item4);
-            // Pelicula pelicula1 = new Pelicula(item4.getId(), "Christopher Nolan", 169,
-            // "Ciencia ficción", LocalDate.of(2014, 10, 26), item4);
-            // peliculaRepository.save(pelicula1);
-
             Item item5 = new Item(null, "Matrix", tipoPelicula, formatoBluRay, "Estante A", LocalDate.of(1999, 3, 31),
                     EstadoItem.DISPONIBLE);
-            itemRepository.save(item5);
-            // Pelicula pelicula2 = new Pelicula(item5.getId(), "Lana Wachowski", 136,
-            // "Ciencia ficción", LocalDate.of(1999, 3, 31), item5);
-            // peliculaRepository.save(pelicula2);
-
             Item item6 = new Item(null, "El silencio de los corderos", tipoPelicula, formatoVHS, "Estante A",
                     LocalDate.of(1991, 2, 14), EstadoItem.DISPONIBLE);
-            itemRepository.save(item6);
-            // Pelicula pelicula3 = new Pelicula(item6.getId(), "Jonathan Demme", 118,
-            // "Thriller", LocalDate.of(1991, 2, 14), item6);
-            // peliculaRepository.save(pelicula3);
 
             // Libros
             Item item7 = new Item(null, "El Señor de los Anillos", tipoLibro, formatoFisico, "Estante A",
                     LocalDate.of(1954, 7, 29), EstadoItem.DISPONIBLE);
-            itemRepository.save(item7);
-            // Libro libro1 = new Libro(item7.getId(), "978-84-450-7179-3", "Minotauro",
-            // 1200, item7);
-            // libroRepository.save(libro1);
-
             Item item8 = new Item(null, "1984 - George Orwell", tipoLibro, formatoDigital, "Online",
-                    LocalDate.of(1949, 6, 8), EstadoItem.PERDIDO);
-            itemRepository.save(item8);
-            // Libro libro2 = new Libro(item8.getId(), "978-0-451-52493-5", "Signet
-            // Classics", 328, item8);
-            // libroRepository.save(libro2);
-
+                    LocalDate.of(1949, 6, 8), EstadoItem.DISPONIBLE);
             Item item9 = new Item(null, "Cien años de soledad", tipoLibro, formatoFisico, "Estante B",
                     LocalDate.of(1967, 5, 30), EstadoItem.DISPONIBLE);
-            itemRepository.save(item9);
-            // Libro libro3 = new Libro(item9.getId(), "978-0307350753", "Debolsillo", 417,
-            // item9);
-            // libroRepository.save(libro3);
-
             Item item10 = new Item(null, "El Hobbit", tipoLibro, formatoFisico, "Estante B", LocalDate.of(1937, 9, 21),
                     EstadoItem.DISPONIBLE);
-            itemRepository.save(item10);
-            // Libro libro4 = new Libro(item10.getId(), "978-0547928227", "Houghton Mifflin
-            // Harcourt", 310, item10);
-            // libroRepository.save(libro4);
+
+            List<Item> items = itemRepository
+                    .saveAll(Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10));
+
+            // Crear Personas
+            Persona persona1 = new Persona(null, "Juan Pérez", "Calle Mayor 1", "juan@example.com", "123456789");
+            Persona persona2 = new Persona(null, "María López", "Calle Sol 2", "maria@example.com", "987654321");
+            Persona persona3 = new Persona(null, "Carlos García", "Avenida del Sol 15", "carlos@example.com",
+                    "654987321");
+            Persona persona4 = new Persona(null, "Laura Martínez", "Plaza de la Luna 8", "laura@example.com",
+                    "963852741");
+            Persona persona5 = new Persona(null, "Pedro Rodríguez", "Calle Estrella 22", "pedro@example.com",
+                    "666555444");
+            personaRepository.saveAll(Arrays.asList(persona1, persona2, persona3, persona4, persona5));
+
+            List<Persona> personas = personaRepository
+                    .saveAll(Arrays.asList(persona1, persona2, persona3, persona4, persona5));
+
+            // Crear Prestamos
+            Prestamo prestamo1 = new Prestamo(null, items.get(0), personas.get(0), LocalDate.now(), null,
+                    LocalDate.now().plusDays(15));
+            prestamoService.createPrestamo(prestamo1);
+
+            Prestamo prestamo2 = new Prestamo(null, items.get(1), personas.get(1), LocalDate.now(), null,
+                    LocalDate.now().plusDays(7));
+            prestamoService.createPrestamo(prestamo2);
+            Prestamo prestamo3 = new Prestamo(null, items.get(2), personas.get(2), LocalDate.now(), null,
+                    LocalDate.now().plusDays(10));
+            prestamoService.createPrestamo(prestamo3);
+            Prestamo prestamo4 = new Prestamo(null, items.get(3), personas.get(3), LocalDate.now(), null,
+                    LocalDate.now().plusDays(14));
+            prestamoService.createPrestamo(prestamo4);
+            Prestamo prestamo5 = new Prestamo(null, items.get(4), personas.get(0), LocalDate.now(), null,
+                    LocalDate.now().plusDays(21));
+            prestamoService.createPrestamo(prestamo5);
+            Prestamo prestamo6 = new Prestamo(null, items.get(5), personas.get(0), LocalDate.now(), null,
+                    LocalDate.now().plusDays(7));
+            prestamoService.createPrestamo(prestamo6);
+            Prestamo prestamo7 = new Prestamo(null, items.get(6), personas.get(1), LocalDate.now(), null,
+                    LocalDate.now().plusDays(15));
+            prestamoService.createPrestamo(prestamo7);
+            Prestamo prestamo8 = new Prestamo(null, items.get(7), personas.get(1), LocalDate.now(), null,
+                    LocalDate.now().plusDays(10));
+            prestamoService.createPrestamo(prestamo8);
+            Prestamo prestamo9 = new Prestamo(null, items.get(8), personas.get(3), LocalDate.now(), null,
+                    LocalDate.now().plusDays(14));
+            prestamoService.createPrestamo(prestamo9);
+            // Prestamo prestamo10 = new Prestamo(null, items.get(9), personas.get(2),
+            // LocalDate.now(), null,
+            // LocalDate.now().plusDays(21));
+            // prestamoService.createPrestamo(prestamo10);
+
+            prestamoRepository.saveAll(Arrays.asList(prestamo1, prestamo2, prestamo3, prestamo4, prestamo5, prestamo6,
+                    prestamo7, prestamo8, prestamo9));
         };
     }
 
@@ -199,6 +211,5 @@ public class RetoGrupoCICApplication {
             tipoItemFormato.setFormato(formato);
             tipoItemFormatoRepository.save(tipoItemFormato);
         }
-
     }
 }

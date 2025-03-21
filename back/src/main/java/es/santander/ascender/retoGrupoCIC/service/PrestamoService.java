@@ -61,7 +61,7 @@ public class PrestamoService {
         itemService.updateItem(item.getId(), item);
 
         prestamo.setItem(item);
-
+        prestamo.setPersona(persona);
         return prestamoRepository.save(prestamo);
     }
 

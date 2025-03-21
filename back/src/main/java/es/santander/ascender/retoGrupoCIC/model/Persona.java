@@ -22,10 +22,18 @@ public class Persona {
     private String telefono;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "persona")  
+    @OneToMany(mappedBy = "persona")
     private Set<Prestamo> prestamos;
 
     public Persona() {
+    }
+
+    public Persona(Long id, String nombre, String direccion, String email, String telefono) {
+        this.id = id;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.email = email;
+        this.telefono = telefono;
     }
 
     public Long getId() {
@@ -100,7 +108,5 @@ public class Persona {
             return false;
         return true;
     }
-
-    
 
 }
