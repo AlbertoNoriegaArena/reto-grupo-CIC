@@ -2,8 +2,8 @@ package es.santander.ascender.retoGrupoCIC.model;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +27,8 @@ public class Prestamo {
 
     @Transient
     @JsonProperty("itemId")
-    // Si en el JSON de entrada se recibe un itemId, se crea una instancia de Item y se asigna el id, sin cargar toda la entidad desde la base de datos.
+    // Si en el JSON de entrada se recibe un itemId, se crea una instancia de Item y
+    // se asigna el id, sin cargar toda la entidad desde la base de datos.
     public void setItemId(Long itemId) {
         if (itemId != null) {
             this.item = new Item(); // Creamos solo una referencia con el ID
@@ -36,7 +37,7 @@ public class Prestamo {
     }
 
     @ManyToOne
-    @JsonIgnore
+    @JsonProperty(access = Access.READ_ONLY)
     private Item item;
 
     @ManyToOne
