@@ -1,7 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.config;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -75,12 +74,18 @@ public class ControllerAdviceConfig {
         return new ErrorInfo(9, "El item es obligotorio");
     }
     
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PersonaObligatoriaException.class)
     @ResponseBody
     public ErrorInfo handlePersonaObligatoriaException(HttpServletRequest req, PersonaObligatoriaException ex) {
         return new ErrorInfo(10, "La persona es obligotoria");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(FechaDevolucionInvalidaException.class)
+    @ResponseBody
+    public ErrorInfo handleFechaDevolucionInvalidaException(HttpServletRequest req, FechaDevolucionInvalidaException ex) {
+        return new ErrorInfo(11, ex.getMessage());
     }
    
 

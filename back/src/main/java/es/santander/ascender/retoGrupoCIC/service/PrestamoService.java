@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.service;
 
+import es.santander.ascender.retoGrupoCIC.config.FechaDevolucionInvalidaException;
 import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
 import es.santander.ascender.retoGrupoCIC.config.ItemObligatorioException;
 import es.santander.ascender.retoGrupoCIC.config.ItemPrestadoException;
@@ -40,6 +41,8 @@ public class PrestamoService {
         prestamo.setFechaPrestamo(LocalDate.now());
         prestamo.setFechaDevolucion(null);
 
+        validacionFechaPrevistaDevolucion(prestamo);
+
         Item item = itemService.obtenerItemPorId(prestamo.getItemId()).get();
         item.setEstado(EstadoItem.PRESTADO);
         itemService.updateItem(item.getId(), item);
@@ -69,6 +72,8 @@ public class PrestamoService {
 
             comprobacionesItemYPersona(prestamo);
 
+            validacionFechaPrevistaDevolucion(prestamo);
+
             if (prestamo.isBorrado()) {
                 throw new PrestamoBorradoException(id);
             }
@@ -76,6 +81,7 @@ public class PrestamoService {
             if (prestamo.getFechaPrevistaDevolucion() != null) {
                 prestamoExistente.setFechaPrevistaDevolucion(prestamo.getFechaPrevistaDevolucion());
             }
+            
             if (prestamo.getFechaDevolucion() != null) {
                 prestamoExistente.setFechaDevolucion(prestamo.getFechaDevolucion());
 
@@ -160,6 +166,16 @@ public class PrestamoService {
         Item item = itemOptional.get();
         if (item.getEstado() == EstadoItem.PRESTADO) {
             throw new ItemPrestadoException(item.getNombre());
+        }
+    }
+
+    private void validacionFechaPrevistaDevolucion(Prestamo prestamo) {
+        // Validar que la fecha prevista de devolución sea posterior a la fecha de
+        // préstamo
+        if (prestamo.getFechaPrevistaDevolucion() != null
+                && prestamo.getFechaPrevistaDevolucion().isBefore(prestamo.getFechaPrestamo())) {
+            throw new FechaDevolucionInvalidaException(
+                    "La fecha prevista de devolución no puede ser antes de la fecha de préstamo");
         }
     }
 
