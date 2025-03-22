@@ -3,6 +3,7 @@ package es.santander.ascender.retoGrupoCIC;
 import es.santander.ascender.retoGrupoCIC.model.*;
 import es.santander.ascender.retoGrupoCIC.repository.*;
 import es.santander.ascender.retoGrupoCIC.service.PrestamoService;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -170,120 +171,113 @@ public class RetoGrupoCICApplication {
                     itemLibro1, itemLibro2, itemLibro3, itemLibro4,itemLibro5
             );
 
-            itemRepository.saveAllAndFlush(items);
+            // Musica
+            Musica musica1 = new Musica();
+            musica1.setItem(itemMusica1);
+            musica1.setCantante("Michael Jackson");
+            musica1.setGenero("Pop");
+            musica1.setAlbum("Thriller");
+            musica1.setDuracion("42:19");
+
+            Musica musica2 = new Musica();
+            musica2.setItem(itemMusica2);
+            musica2.setCantante("Queen");
+            musica2.setGenero("Rock");
+            musica2.setAlbum("A Night at the Opera");
+            musica2.setDuracion("5:55");
+
+            Musica musica3 = new Musica();
+            musica3.setItem(itemMusica3);
+            musica3.setCantante("Pink Floyd");
+            musica3.setGenero("Rock Progresivo");
+            musica3.setAlbum("The Dark Side of the Moon");
+            musica3.setDuracion("42:50");
+
+            Musica musica4 = new Musica();
+            musica4.setItem(itemMusica4);
+            musica4.setCantante("AC/DC");
+            musica4.setGenero("Hard Rock");
+            musica4.setAlbum("Back in Black");
+            musica4.setDuracion("42:11");
+
+            Musica musica5 = new Musica();
+            musica5.setItem(itemMusica5);
+            musica5.setCantante("Nirvana");
+            musica5.setGenero("Grunge");
+            musica5.setAlbum("Nevermind");
+            musica5.setDuracion("49:20");
+
+            // Peliculas
+            Pelicula pelicula1 = new Pelicula();
+            pelicula1.setItem(itemPelicula1);
+            pelicula1.setDirector("Christopher Nolan");
+            pelicula1.setGenero("Ciencia Ficción");
+            pelicula1.setDuracion(169);
+            pelicula1.setFechaEstreno(LocalDate.of(2014, 11, 7));
+
+            Pelicula pelicula2 = new Pelicula();
+            pelicula2.setItem(itemPelicula2);
+            pelicula2.setDirector("Lana Wachowski, Lilly Wachowski");
+            pelicula2.setGenero("Ciencia Ficción");
+            pelicula2.setDuracion(136);
+            pelicula2.setFechaEstreno(LocalDate.of(1999, 3, 31));
+
+            Pelicula pelicula3 = new Pelicula();
+            pelicula3.setItem(itemPelicula3);
+            pelicula3.setDirector("Jonathan Demme");
+            pelicula3.setGenero("Thriller");
+            pelicula3.setDuracion(118);
+            pelicula3.setFechaEstreno(LocalDate.of(1991, 2, 14));
+
+            Pelicula pelicula4 = new Pelicula();
+            pelicula4.setItem(itemPelicula4);
+            pelicula4.setDirector("Francis Ford Coppola");
+            pelicula4.setGenero("Drama");
+            pelicula4.setDuracion(175);
+            pelicula4.setFechaEstreno(LocalDate.of(1972, 3, 24));
+
+            Pelicula pelicula5 = new Pelicula();
+            pelicula5.setItem(itemPelicula5);
+            pelicula5.setDirector("Quentin Tarantino");
+            pelicula5.setGenero("Crimen");
+            pelicula5.setDuracion(154);
+            pelicula5.setFechaEstreno(LocalDate.of(1994, 10, 14));
+
+            // Libros
+            Libro libro1 = new Libro();
+            libro1.setItem(itemLibro1);
+            libro1.setIsbn("978-84-450-7179-3");
+            libro1.setEditorial("Minotauro");
+            libro1.setNumeroPaginas(1200);
+
+            Libro libro2 = new Libro();
+            libro2.setItem(itemLibro2);
+            libro2.setIsbn("978-84-233-5070-0");
+            libro2.setEditorial("Destino");
+            libro2.setNumeroPaginas(328);
+
+            Libro libro3 = new Libro();
+            libro3.setItem(itemLibro3);
+            libro3.setIsbn("978-84-376-0494-7");
+            libro3.setEditorial("Cátedra");
+            libro3.setNumeroPaginas(471);
+
+            Libro libro4 = new Libro();
+            libro4.setItem(itemLibro4);
+            libro4.setIsbn("978-84-450-7149-6");
+            libro4.setEditorial("Minotauro");
+            libro4.setNumeroPaginas(310);
+
+            Libro libro5 = new Libro();
+            libro5.setItem(itemLibro5);
+            libro5.setIsbn("978-84-206-5727-2");
+            libro5.setEditorial("Alianza");
+            libro5.setNumeroPaginas(672);
             
-//  // Musica
-//  Musica musica1 = new Musica();
-//  musica1.setItem(itemMusica1);
-//  musica1.setCantante("Michael Jackson");
-//  musica1.setGenero("Pop");
-//  musica1.setAlbum("Thriller");
-//  musica1.setDuracion("42:19");
-
-//  Musica musica2 = new Musica();
-//  musica2.setItem(itemMusica2);
-//  musica2.setCantante("Queen");
-//  musica2.setGenero("Rock");
-//  musica2.setAlbum("A Night at the Opera");
-//  musica2.setDuracion("5:55");
-
-//  Musica musica3 = new Musica();
-//  musica3.setItem(itemMusica3);
-//  musica3.setCantante("Pink Floyd");
-//  musica3.setGenero("Rock Progresivo");
-//  musica3.setAlbum("The Dark Side of the Moon");
-//  musica3.setDuracion("42:50");
-
-//  Musica musica4 = new Musica();
-//  musica4.setItem(itemMusica4);
-//  musica4.setCantante("AC/DC");
-//  musica4.setGenero("Hard Rock");
-//  musica4.setAlbum("Back in Black");
-//  musica4.setDuracion("42:11");
-
-//  Musica musica5 = new Musica();
-//  musica5.setItem(itemMusica5);
-//  musica5.setCantante("Nirvana");
-//  musica5.setGenero("Grunge");
-//  musica5.setAlbum("Nevermind");
-//  musica5.setDuracion("49:20");
-
-//  // Peliculas
-//  Pelicula pelicula1 = new Pelicula();
-//  pelicula1.setItem(itemPelicula1);
-//  pelicula1.setDirector("Christopher Nolan");
-//  pelicula1.setGenero("Ciencia Ficción");
-//  pelicula1.setDuracion(169);
-//  pelicula1.setFechaEstreno(LocalDate.of(2014, 11, 7));
-
-//  Pelicula pelicula2 = new Pelicula();
-//  pelicula2.setItem(itemPelicula2);
-//  pelicula2.setDirector("Lana Wachowski, Lilly Wachowski");
-//  pelicula2.setGenero("Ciencia Ficción");
-//  pelicula2.setDuracion(136);
-//  pelicula2.setFechaEstreno(LocalDate.of(1999, 3, 31));
-
-//  Pelicula pelicula3 = new Pelicula();
-//  pelicula3.setItem(itemPelicula3);
-//  pelicula3.setDirector("Jonathan Demme");
-//  pelicula3.setGenero("Thriller");
-//  pelicula3.setDuracion(118);
-//  pelicula3.setFechaEstreno(LocalDate.of(1991, 2, 14));
-
-//  Pelicula pelicula4 = new Pelicula();
-//  pelicula4.setItem(itemPelicula4);
-//  pelicula4.setDirector("Francis Ford Coppola");
-//  pelicula4.setGenero("Drama");
-//  pelicula4.setDuracion(175);
-//  pelicula4.setFechaEstreno(LocalDate.of(1972, 3, 24));
-
-//  Pelicula pelicula5 = new Pelicula();
-//  pelicula5.setItem(itemPelicula5);
-//  pelicula5.setDirector("Quentin Tarantino");
-//  pelicula5.setGenero("Crimen");
-//  pelicula5.setDuracion(154);
-//  pelicula5.setFechaEstreno(LocalDate.of(1994, 10, 14));
-
-//  // Libros
-//  Libro libro1 = new Libro();
-//  libro1.setItem(itemLibro1);
-//  libro1.setIsbn("978-84-450-7179-3");
-//  libro1.setEditorial("Minotauro");
-//  libro1.setNumeroPaginas(1200);
-
-//  Libro libro2 = new Libro();
-//  libro2.setItem(itemLibro2);
-//  libro2.setIsbn("978-84-233-5070-0");
-//  libro2.setEditorial("Destino");
-//  libro2.setNumeroPaginas(328);
-
-//  Libro libro3 = new Libro();
-//  libro3.setItem(itemLibro3);
-//  libro3.setIsbn("978-84-376-0494-7");
-//  libro3.setEditorial("Cátedra");
-//  libro3.setNumeroPaginas(471);
-
-//  Libro libro4 = new Libro();
-//  libro4.setItem(itemLibro4);
-//  libro4.setIsbn("978-84-450-7149-6");
-//  libro4.setEditorial("Minotauro");
-//  libro4.setNumeroPaginas(310);
-
-//  Libro libro5 = new Libro();
-//  libro5.setItem(itemLibro5);
-//  libro5.setIsbn("978-84-206-5727-2");
-//  libro5.setEditorial("Alianza");
-//  libro5.setNumeroPaginas(672);
- 
-//  //Guardamos las entidades especificas
-//  musicaRepository.saveAll(Arrays.asList(musica1,musica2,musica3,musica4,musica5));
-//  peliculaRepository.saveAll(Arrays.asList(pelicula1,pelicula2,pelicula3,pelicula4,pelicula5));
-//  libroRepository.saveAll(Arrays.asList(libro1,libro2,libro3,libro4,libro5));
-
-//  musicaRepository.flush();
-//  peliculaRepository.flush();
-//  libroRepository.flush();
-
+            //Guardamos las entidades especificas
+            musicaRepository.saveAll(Arrays.asList(musica1,musica2,musica3,musica4,musica5));
+            peliculaRepository.saveAll(Arrays.asList(pelicula1,pelicula2,pelicula3,pelicula4,pelicula5));
+            libroRepository.saveAll(Arrays.asList(libro1,libro2,libro3,libro4,libro5));
 
             // Crear Personas
             Persona persona1 = new Persona(null, "Juan Pérez", "Calle Mayor 1", "juan@example.com", "123456789");
