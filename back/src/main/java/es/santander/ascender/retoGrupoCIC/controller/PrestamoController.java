@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.ItemPrestadoException;
 import es.santander.ascender.retoGrupoCIC.config.PersonaNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.PrestamoBorradoException;
+import es.santander.ascender.retoGrupoCIC.config.PrestamoNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.Prestamo;
 import es.santander.ascender.retoGrupoCIC.service.PrestamoService;
 
@@ -57,18 +60,28 @@ public class PrestamoController {
         try {
             Prestamo prestamoActualizado = prestamoService.updatePrestamo(id, prestamo);
             return ResponseEntity.ok(prestamoActualizado);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+        } catch (PrestamoNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (ItemNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (PersonaNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (ItemPrestadoException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (PrestamoBorradoException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePrestamo(@PathVariable Long id) {
+    public ResponseEntity<?> deletePrestamo(@PathVariable Long id) {
         try {
             prestamoService.deletePrestamo(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+        } catch (PrestamoNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (PrestamoBorradoException | IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -77,10 +90,13 @@ public class PrestamoController {
         try {
             Prestamo prestamoDevuelto = prestamoService.devolverPrestamo(id);
             return ResponseEntity.ok(prestamoDevuelto);
+        } catch (PrestamoNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al procesar la devolución del préstamo.");
         }
     }
 

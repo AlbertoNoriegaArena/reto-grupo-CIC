@@ -1,6 +1,7 @@
 package es.santander.ascender.retoGrupoCIC.config;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -60,5 +61,27 @@ public class ControllerAdviceConfig {
         return new ErrorInfo(7, ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(PrestamoBorradoException.class)
+    @ResponseBody
+    public ErrorInfo handlePrestamoBorradoException(HttpServletRequest req, PrestamoBorradoException ex) {
+        return new ErrorInfo(8, "El préstamo con ID " + ex.getId() + " ya fue borrado");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ItemObligatorioException.class)
+    @ResponseBody
+    public ErrorInfo handleItemObligatorioException(HttpServletRequest req, ItemObligatorioException ex) {
+        return new ErrorInfo(9, "El item es obligotorio");
+    }
     
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(PersonaObligatoriaException.class)
+    @ResponseBody
+    public ErrorInfo handlePersonaObligatoriaException(HttpServletRequest req, PersonaObligatoriaException ex) {
+        return new ErrorInfo(10, "La persona es obligotoria");
+    }
+   
+
 }

@@ -8,5 +8,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PrestamoRepository extends JpaRepository<Prestamo, Long> {
-    List<Prestamo> findByPersona(Persona persona);
+    
+    // Prestamos activos de una persona
+    List<Prestamo> findByPersonaAndBorradoFalse(Persona persona); 
+
+    // prestamos NO borrados
+    List<Prestamo> findByBorradoFalse(); 
 }

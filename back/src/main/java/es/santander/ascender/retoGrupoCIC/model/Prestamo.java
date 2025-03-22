@@ -47,6 +47,8 @@ public class Prestamo {
     private LocalDate fechaDevolucion;
     private LocalDate fechaPrevistaDevolucion;
 
+    private boolean borrado = false; // campo para el borrado lógico
+
     public Prestamo() {
     }
 
@@ -106,6 +108,14 @@ public class Prestamo {
 
     public void setFechaPrevistaDevolucion(LocalDate fechaPrevistaDevolucion) {
         this.fechaPrevistaDevolucion = fechaPrevistaDevolucion;
+    }
+
+     public boolean isBorrado() {
+        return borrado;
+    }
+
+    public void setBorrado(boolean borrado) {
+        this.borrado = borrado;
     }
 
     @Override
