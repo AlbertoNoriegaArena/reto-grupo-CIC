@@ -2,6 +2,7 @@ package es.santander.ascender.retoGrupoCIC.service;
 
 import es.santander.ascender.retoGrupoCIC.config.FormatoNoValidoException;
 import es.santander.ascender.retoGrupoCIC.config.FormatoNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.ItemAsociadoAPrestamoException;
 import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
 import es.santander.ascender.retoGrupoCIC.config.ItemPrestadoException;
 import es.santander.ascender.retoGrupoCIC.config.TipoItemNotFoundException;
@@ -9,9 +10,12 @@ import es.santander.ascender.retoGrupoCIC.dto.ItemDTO;
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.Item;
+import es.santander.ascender.retoGrupoCIC.model.Prestamo;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
 import es.santander.ascender.retoGrupoCIC.repository.ItemRepository;
+import es.santander.ascender.retoGrupoCIC.repository.PrestamoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +29,9 @@ public class ItemService {
 
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private PrestamoRepository prestamoRepository;
 
     @Autowired
     private TipoItemFormatoService tipoItemFormatoService;
@@ -95,19 +102,29 @@ public class ItemService {
         return null;
     }
 
-    public String deleteItem(Long id) {
-        Optional<Item> itemOpcional = itemRepository.findById(id);
-        if (itemOpcional.isPresent()) {
-            Item item = itemOpcional.get();
-            // comprobar si el estado del item es prestado
-            if (item.getEstado() == EstadoItem.PRESTADO) {
-                throw new ItemPrestadoException(item.getNombre());
-            }
-            itemRepository.deleteById(id);
-            return "Ítem eliminado con éxito";
-        }
+    public void deleteItem(Long id) {
+    Optional<Item> itemOpcional = itemRepository.findById(id);
+    
+    // Si el ítem no existe, lanzamos una excepción
+    if (itemOpcional.isEmpty()) {
         throw new ItemNotFoundException(id);
     }
+
+    Item item = itemOpcional.get();
+
+    
+    Optional<Prestamo> prestamoOpcional = prestamoRepository.findByItem(item);
+    
+    if (item.getEstado() == EstadoItem.PRESTADO) {
+        throw new ItemPrestadoException(item.getNombre());
+    }
+
+    if (prestamoOpcional.isPresent()) {
+        throw new ItemAsociadoAPrestamoException(item.getNombre());
+    }
+
+    itemRepository.deleteById(id);
+}
 
     // método que comprueba que la relación entre tipo y formato sea correcta
     private void validateTipoItemFormato(TipoItem tipoItem, Formato formato) {

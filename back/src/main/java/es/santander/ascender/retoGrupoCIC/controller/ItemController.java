@@ -61,14 +61,9 @@ public class ItemController {
 
     // Eliminar un ítem
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Long id) {
-        String mensaje = itemService.deleteItem(id);
-        if (mensaje.equals("Ítem eliminado con éxito")) {
-            return ResponseEntity.ok(mensaje);
-        } else if (mensaje.equals("No se puede eliminar el ítem porque está actualmente prestado")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensaje);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        itemService.deleteItem(id);
+        return ResponseEntity.ok("Ítem borrado con éxito");
     }
 
     @GetMapping("/buscar")

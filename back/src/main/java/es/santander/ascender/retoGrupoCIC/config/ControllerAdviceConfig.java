@@ -87,6 +87,13 @@ public class ControllerAdviceConfig {
     public ErrorInfo handleFechaDevolucionInvalidaException(HttpServletRequest req, FechaDevolucionInvalidaException ex) {
         return new ErrorInfo(11, ex.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ItemAsociadoAPrestamoException.class)
+    @ResponseBody
+    public ErrorInfo handleItemAsociadoAPrestamoException(HttpServletRequest req, ItemAsociadoAPrestamoException ex) {
+        return new ErrorInfo(12, ex.getMessage());
+    }
    
 
 }
