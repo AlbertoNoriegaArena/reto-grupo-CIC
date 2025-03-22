@@ -2,7 +2,6 @@ package es.santander.ascender.retoGrupoCIC.model;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -21,6 +20,7 @@ public class Formato {
     private Long id;
 
     @Column(nullable = false)
+    @JsonProperty(access = Access.READ_ONLY)
     private String nombre;
 
     @JsonIgnore

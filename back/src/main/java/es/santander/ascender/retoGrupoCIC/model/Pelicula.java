@@ -2,6 +2,9 @@ package es.santander.ascender.retoGrupoCIC.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.MapsId;
@@ -10,6 +13,7 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Pelicula {
     @Id
+    @JsonProperty(access = Access.READ_ONLY)
     private Long itemId;
 
     private String director;

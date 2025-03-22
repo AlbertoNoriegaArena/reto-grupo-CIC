@@ -1,6 +1,7 @@
 package es.santander.ascender.retoGrupoCIC.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,11 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.santander.ascender.retoGrupoCIC.config.TipoItemNotFoundException;
+import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.Pelicula;
+import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormatoId;
+import es.santander.ascender.retoGrupoCIC.service.FormatoService;
 import es.santander.ascender.retoGrupoCIC.service.PeliculaService;
 import es.santander.ascender.retoGrupoCIC.service.TipoItemFormatoService;
+import es.santander.ascender.retoGrupoCIC.service.TipoItemService;
 
 @RestController
 @RequestMapping("/api/pelicula")
@@ -28,15 +34,52 @@ public class PeliculaController {
     private PeliculaService peliculaService;
 
     @Autowired
-    private TipoItemFormatoService tipoItemFormatoService;
+    private FormatoService formatoService;
+
+    @Autowired
+    private TipoItemService tipoItemService;
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Pelicula pelicula) {
-        TipoItemFormatoId tipoItemFormatoId = new TipoItemFormatoId(pelicula.getItem().getFormato().getId(), pelicula.getItem().getTipo().getId());
-        TipoItemFormato tipoItemFormat = tipoItemFormatoService.obtenerTipoItemFormatoPorId(tipoItemFormatoId).orElse(null);
-        if (tipoItemFormat == null) {
-            return new ResponseEntity<>("Tipo y formato ilegal.", HttpStatus.NOT_FOUND);
+        // Buscar el tipo "Película"
+        Optional<TipoItem> tipoPeliculaOpt = tipoItemService.obtenerPorNombre("Pelicula");
+
+        if (tipoPeliculaOpt.isEmpty()) {
+            return new ResponseEntity<>("Error: Tipo Pelicula no encontrado", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        TipoItem tipoPelicula = tipoPeliculaOpt.get();
+
+        // Obtener el tipo del item asociado a la película
+        TipoItem tipoItemRecibido = pelicula.getItem().getTipo();
+
+        // Verificar si el tipoItem es null
+        if (tipoItemRecibido == null || tipoItemRecibido.getId() == null) {
+            return new ResponseEntity<>("Error: No se ha proporcionado un tipo de ítem válido", HttpStatus.BAD_REQUEST);
+        }
+
+        // Coger el tipoItem en la DDBB
+        Optional<TipoItem> tipoItemBD = tipoItemService.obtenerTipoItemPorId(tipoItemRecibido.getId());
+
+        if (tipoItemBD.isEmpty()) {
+            throw new TipoItemNotFoundException(tipoItemRecibido.getId());
+        }
+
+        // Validar el tipo
+        if (!tipoItemBD.get().getId().equals(tipoPelicula.getId())) {
+            return new ResponseEntity<>(
+                    "Error: Solo se pueden crear películas. Has seleccionado: " + tipoItemBD.get().getNombre(),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        // Validar formato
+        List<Formato> formatosValidos = formatoService.obtenerFormatosPorTipoItem(tipoPelicula);
+
+        if (!formatosValidos.contains(pelicula.getItem().getFormato())) {
+            return new ResponseEntity<>("Formato inválido para películas. Formatos válidos: "
+                    + formatosValidos.stream().map(Formato::getNombre).toList(), HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(peliculaService.createPelicula(pelicula), HttpStatus.CREATED);
     }
 
@@ -60,6 +103,5 @@ public class PeliculaController {
     public List<Pelicula> pelicula() {
         return peliculaService.retriveAllPeliculas();
     }
-
 
 }

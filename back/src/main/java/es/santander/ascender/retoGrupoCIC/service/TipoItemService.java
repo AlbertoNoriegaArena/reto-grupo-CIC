@@ -72,4 +72,8 @@ public class TipoItemService {
         }
         return "El TipoItem no existe";
     }
+    
+    public Optional<TipoItem> obtenerPorNombre(String nombre) {
+        return tipoItemRepository.findByNombre(nombre);
+    }
 }

@@ -1,5 +1,8 @@
 package es.santander.ascender.retoGrupoCIC.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.MapsId;
@@ -8,6 +11,7 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Musica {
     @Id
+    @JsonProperty(access = Access.READ_ONLY)
     private Long itemId;
 
     private String genero;
