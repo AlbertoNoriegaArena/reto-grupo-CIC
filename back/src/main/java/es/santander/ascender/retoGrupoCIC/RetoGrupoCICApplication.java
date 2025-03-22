@@ -3,7 +3,6 @@ package es.santander.ascender.retoGrupoCIC;
 import es.santander.ascender.retoGrupoCIC.model.*;
 import es.santander.ascender.retoGrupoCIC.repository.*;
 import es.santander.ascender.retoGrupoCIC.service.PrestamoService;
-import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
