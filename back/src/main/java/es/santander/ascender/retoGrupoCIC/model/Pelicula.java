@@ -24,6 +24,14 @@ public class Pelicula {
     public Pelicula() {
     }
 
+    public Pelicula(Long itemId, String director, Integer duracion, String genero, LocalDate fechaEstreno) {
+        this.itemId = itemId;
+        this.director = director;
+        this.duracion = duracion;
+        this.genero = genero;
+        this.fechaEstreno = fechaEstreno;
+    }
+
     public Pelicula(Long itemId, String director, Integer duracion, String genero, LocalDate fechaEstreno, Item item) {
         this.itemId = itemId;
         this.director = director;

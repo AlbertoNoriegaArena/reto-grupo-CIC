@@ -2,7 +2,6 @@ package es.santander.ascender.retoGrupoCIC;
 
 import es.santander.ascender.retoGrupoCIC.model.*;
 import es.santander.ascender.retoGrupoCIC.repository.*;
-import es.santander.ascender.retoGrupoCIC.service.ItemService;
 import es.santander.ascender.retoGrupoCIC.service.PrestamoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +37,16 @@ public class RetoGrupoCICApplication {
 
     @Autowired
     private PrestamoService prestamoService;
+
+    @Autowired
+    private LibroRepository libroRepository;
+
+    @Autowired
+    private MusicaRepository musicaRepository;
+
+    @Autowired
+    private PeliculaRepository peliculaRepository;
+      
 
     public static void main(String[] args) {
         SpringApplication.run(RetoGrupoCICApplication.class, args);
@@ -118,35 +127,51 @@ public class RetoGrupoCICApplication {
             createTipoItemFormatoIfNotExists(tipoLibro, formatoFisico);
             createTipoItemFormatoIfNotExists(tipoLibro, formatoDigital);
 
-            // Crear y guardar 12 Items
             // Musica
-            Item item1 = new Item(null, "Thriller - Michael Jackson", tipoMusica, formatoCD, "Estante B",
+            Item itemMusica1 = new Item(null, "Thriller - Michael Jackson", tipoMusica, formatoCD, "Estante B",
                     LocalDate.of(1982, 11, 30), EstadoItem.DISPONIBLE);
-            Item item2 = new Item(null, "Bohemian Rhapsody - Queen", tipoMusica, formatoVinilo, "Estante C",
+            Item itemMusica2 = new Item(null, "Bohemian Rhapsody - Queen", tipoMusica, formatoVinilo, "Estante C",
                     LocalDate.of(1975, 10, 31), EstadoItem.DISPONIBLE);
-            Item item3 = new Item(null, "The Dark Side of the Moon - Pink Floyd", tipoMusica, formatoCassette,
+            Item itemMusica3 = new Item(null, "The Dark Side of the Moon - Pink Floyd", tipoMusica, formatoCassette,
                     "Estante C", LocalDate.of(1973, 3, 1), EstadoItem.DISPONIBLE);
+            Item itemMusica4 = new Item(null, "Back in Black - AC/DC", tipoMusica, formatoVinilo, "Estante A",
+                    LocalDate.of(1980, 7, 25), EstadoItem.DISPONIBLE);
+            Item itemMusica5 = new Item(null, "Nevermind - Nirvana", tipoMusica, formatoCD, "Estante B",
+                    LocalDate.of(1991, 9, 24), EstadoItem.DISPONIBLE);
 
             // Peliculas
-            Item item4 = new Item(null, "Interstellar", tipoPelicula, formatoDVD, "Estante C",
+            Item itemPelicula1 = new Item(null, "Interstellar", tipoPelicula, formatoDVD, "Estante C",
                     LocalDate.of(2014, 10, 26), EstadoItem.DISPONIBLE);
-            Item item5 = new Item(null, "Matrix", tipoPelicula, formatoBluRay, "Estante A", LocalDate.of(1999, 3, 31),
+            Item itemPelicula2 = new Item(null, "Matrix", tipoPelicula, formatoBluRay, "Estante A", LocalDate.of(1999, 3, 31),
                     EstadoItem.DISPONIBLE);
-            Item item6 = new Item(null, "El silencio de los corderos", tipoPelicula, formatoVHS, "Estante A",
+            Item itemPelicula3 = new Item(null, "El silencio de los corderos", tipoPelicula, formatoVHS, "Estante A",
                     LocalDate.of(1991, 2, 14), EstadoItem.DISPONIBLE);
+            Item itemPelicula4 = new Item(null, "El Padrino", tipoPelicula, formatoDVD, "Estante B",
+                    LocalDate.of(1972, 3, 24), EstadoItem.DISPONIBLE);
+            Item itemPelicula5 = new Item(null, "Pulp Fiction", tipoPelicula, formatoBluRay, "Estante C",
+                    LocalDate.of(1994, 10, 14), EstadoItem.DISPONIBLE);
 
             // Libros
-            Item item7 = new Item(null, "El Señor de los Anillos", tipoLibro, formatoFisico, "Estante A",
+            Item itemLibro1 = new Item(null, "El Señor de los Anillos", tipoLibro, formatoFisico, "Estante A",
                     LocalDate.of(1954, 7, 29), EstadoItem.DISPONIBLE);
-            Item item8 = new Item(null, "1984 - George Orwell", tipoLibro, formatoDigital, "Online",
+            Item itemLibro2 = new Item(null, "1984 - George Orwell", tipoLibro, formatoDigital, "Online",
                     LocalDate.of(1949, 6, 8), EstadoItem.DISPONIBLE);
-            Item item9 = new Item(null, "Cien años de soledad", tipoLibro, formatoFisico, "Estante B",
+            Item itemLibro3 = new Item(null, "Cien años de soledad", tipoLibro, formatoFisico, "Estante B",
                     LocalDate.of(1967, 5, 30), EstadoItem.DISPONIBLE);
-            Item item10 = new Item(null, "El Hobbit", tipoLibro, formatoFisico, "Estante B", LocalDate.of(1937, 9, 21),
+            Item itemLibro4 = new Item(null, "El Hobbit", tipoLibro, formatoFisico, "Estante B", LocalDate.of(1937, 9, 21),
                     EstadoItem.DISPONIBLE);
+            Item itemLibro5 = new Item(null, "Crimen y Castigo", tipoLibro, formatoFisico, "Estante C",
+                    LocalDate.of(1866, 1, 1), EstadoItem.DISPONIBLE);
 
-            List<Item> items = itemRepository
-                    .saveAll(Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10));
+            //Guardamos los items
+            List<Item> items = Arrays.asList(
+                    itemMusica1, itemMusica2, itemMusica3,itemMusica4,itemMusica5,
+                    itemPelicula1, itemPelicula2, itemPelicula3,itemPelicula4,itemPelicula5,
+                    itemLibro1, itemLibro2, itemLibro3, itemLibro4,itemLibro5
+            );
+
+            itemRepository.saveAllAndFlush(items);
+            
 
             // Crear Personas
             Persona persona1 = new Persona(null, "Juan Pérez", "Calle Mayor 1", "juan@example.com", "123456789");

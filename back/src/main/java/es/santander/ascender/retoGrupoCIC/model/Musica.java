@@ -21,6 +21,14 @@ public class Musica {
 
     public Musica() {
     }
+   
+    public Musica(Long itemId, String genero, String cantante, String album, String duracion) {
+        this.itemId = itemId;
+        this.genero = genero;
+        this.cantante = cantante;
+        this.album = album;
+        this.duracion = duracion;
+    }
 
     public Musica(Long itemId, String genero, String cantante, String album, String duracion, Item item) {
         this.itemId = itemId;

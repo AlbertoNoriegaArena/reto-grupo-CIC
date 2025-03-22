@@ -25,6 +25,13 @@ public class Libro {
     public Libro() {
     }
 
+    public Libro(Long itemId, String isbn, String editorial, Integer numeroPaginas) {
+        this.itemId = itemId;
+        this.isbn = isbn;
+        this.editorial = editorial;
+        this.numeroPaginas = numeroPaginas;
+    }
+
     public Libro(Long itemId, String isbn, String editorial, Integer numeroPaginas, Item item) {
         this.itemId = itemId;
         this.isbn = isbn;
