@@ -21,7 +21,7 @@ public class ItemController {
 
     // Crear un nuevo ítem
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<?> crearItem(@RequestBody ItemDTO itemDTO) {
         try {
             Item nuevoItem = itemService.createItem(itemDTO);
             return new ResponseEntity<>(nuevoItem, HttpStatus.CREATED);
@@ -47,7 +47,7 @@ public class ItemController {
 
     // Actualizar un ítem existente
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Item item) {
+    public ResponseEntity<?> updateItem(@PathVariable Long id, @RequestBody Item item) {
         try {
             Item itemActualizado = itemService.updateItem(id, item);
             if (itemActualizado != null) {
@@ -61,7 +61,7 @@ public class ItemController {
 
     // Eliminar un ítem
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> deleteItem(@PathVariable Long id) {
         itemService.deleteItem(id);
         return ResponseEntity.ok("Ítem borrado con éxito");
     }

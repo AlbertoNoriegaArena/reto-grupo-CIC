@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.santander.ascender.retoGrupoCIC.config.PersonaAsociadaAPrestamoException;
 import es.santander.ascender.retoGrupoCIC.config.PersonaNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.Persona;
 import es.santander.ascender.retoGrupoCIC.repository.PersonaRepository;
+import es.santander.ascender.retoGrupoCIC.repository.PrestamoRepository;
 
 @Service
 @Transactional
@@ -17,6 +19,9 @@ public class PersonaService {
 
     @Autowired
     private PersonaRepository personaRepository;
+
+    @Autowired
+    private PrestamoRepository prestamoRepository;
 
     // Crear personas
     public Persona createPersona(Persona persona) {
@@ -40,10 +45,10 @@ public class PersonaService {
         Optional<Persona> personaOptional = personaRepository.findById(id);
 
         if (!personaOptional.isPresent()) {
-            throw new PersonaNotFoundException(id); 
+            throw new PersonaNotFoundException(id);
         }
 
-        Persona personaExistente = personaOptional.get(); 
+        Persona personaExistente = personaOptional.get();
 
         if (persona.getNombre() != null) {
             personaExistente.setNombre(persona.getNombre());
@@ -63,8 +68,18 @@ public class PersonaService {
 
     // Eliminar personas
     public void deletePersona(Long id) {
+
+        Optional<Persona> personaOpcional = personaRepository.findById(id);
+
         if (!personaRepository.existsById(id)) {
             throw new PersonaNotFoundException(id);
+        }
+
+        Persona persona = personaOpcional.get();
+
+        // Verificar si la persona está o ha estado asociada a un préstamo
+        if (prestamoRepository.existsByPersonaId(id)) {
+            throw new PersonaAsociadaAPrestamoException(persona.getNombre());
         }
         personaRepository.deleteById(id);
     }

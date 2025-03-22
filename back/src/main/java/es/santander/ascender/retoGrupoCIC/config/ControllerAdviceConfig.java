@@ -94,6 +94,13 @@ public class ControllerAdviceConfig {
     public ErrorInfo handleItemAsociadoAPrestamoException(HttpServletRequest req, ItemAsociadoAPrestamoException ex) {
         return new ErrorInfo(12, ex.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(PersonaAsociadaAPrestamoException.class)
+    @ResponseBody
+    public ErrorInfo handlePersonaAsociadaAPrestamoException(HttpServletRequest req, PersonaAsociadaAPrestamoException ex) {
+        return new ErrorInfo(13, ex.getMessage());
+    }
    
 
 }

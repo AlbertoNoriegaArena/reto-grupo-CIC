@@ -47,7 +47,8 @@ public class PersonaController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletePersona(Long id) {
+    public ResponseEntity<?> deletePersona(@PathVariable Long id) {
         personaService.deletePersona(id);
+        return ResponseEntity.ok("Persona borrada con éxito");
     }
 }
