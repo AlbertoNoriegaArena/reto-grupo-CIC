@@ -4,6 +4,8 @@ import es.santander.ascender.retoGrupoCIC.dto.ItemDTO;
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.service.ItemService;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,7 @@ public class ItemController {
 
     // Crear un nuevo ítem
     @PostMapping
-    public ResponseEntity<?> crearItem(@RequestBody ItemDTO itemDTO) {
+    public ResponseEntity<?> crearItem(@Valid @RequestBody ItemDTO itemDTO) {
         try {
             Item nuevoItem = itemService.createItem(itemDTO);
             return new ResponseEntity<>(nuevoItem, HttpStatus.CREATED);
@@ -47,7 +49,7 @@ public class ItemController {
 
     // Actualizar un ítem existente
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateItem(@PathVariable Long id, @RequestBody Item item) {
+    public ResponseEntity<?> updateItem(@PathVariable Long id, @Valid @RequestBody Item item) {
         try {
             Item itemActualizado = itemService.updateItem(id, item);
             if (itemActualizado != null) {

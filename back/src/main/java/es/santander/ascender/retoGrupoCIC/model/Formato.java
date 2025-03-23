@@ -12,6 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Formato {
@@ -21,6 +23,8 @@ public class Formato {
 
     @Column(nullable = false)
     @JsonProperty(access = Access.READ_ONLY)
+    @NotNull(message = "El nombre no puede ser nulo")
+    @Size(max = 30, message = "El nombre del formato no puede tener más de 30 caracteres")
     private String nombre;
 
     @JsonIgnore

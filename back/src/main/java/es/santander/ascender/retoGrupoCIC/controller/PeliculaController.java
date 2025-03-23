@@ -22,6 +22,7 @@ import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.service.FormatoService;
 import es.santander.ascender.retoGrupoCIC.service.PeliculaService;
 import es.santander.ascender.retoGrupoCIC.service.TipoItemService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/pelicula")
@@ -37,7 +38,7 @@ public class PeliculaController {
     private TipoItemService tipoItemService;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Pelicula pelicula) {
+    public ResponseEntity<?> create( @Valid @RequestBody Pelicula pelicula) {
         // Buscar el tipo "Película"
         Optional<TipoItem> tipoPeliculaOpt = tipoItemService.obtenerPorNombre("Pelicula");
 
@@ -92,7 +93,7 @@ public class PeliculaController {
 
     // Método para actualizar la película
     @PutMapping("/{itemId}")
-    public ResponseEntity<Pelicula> update(@PathVariable("itemId") Long itemId, @RequestBody Pelicula pelicula) {
+    public ResponseEntity<Pelicula> update(@PathVariable("itemId") Long itemId, @Valid @RequestBody Pelicula pelicula) {
     
         Pelicula updatedPelicula = peliculaService.updatePelicula(itemId, pelicula);
 

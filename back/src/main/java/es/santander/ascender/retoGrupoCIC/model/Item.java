@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,6 +14,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Item {
@@ -24,6 +24,8 @@ public class Item {
     private Long id;
 
     @Column(nullable = false)
+    @NotNull(message = "El nombre no puede ser nulo")
+    @Size(min = 1, max = 50, message = "El nombre debe tener entre 1 y 50 caracteres")
     private String nombre;
 
     @ManyToOne
@@ -32,6 +34,7 @@ public class Item {
     @ManyToOne
     private Formato formato;
 
+    @Size(max = 100, message = "La ubicación no puede exceder los 100 caracteres")
     private String ubicacion;
 
     private LocalDate fecha;

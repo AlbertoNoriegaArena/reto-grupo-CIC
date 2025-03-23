@@ -9,6 +9,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Persona {
@@ -16,8 +19,13 @@ public class Persona {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 30, message = "El nombre no puede tener más de 30 caracteres")
     private String nombre;
+    @Size(max = 100, message = "La dirección no puede tener más de 100 caracteres")
     private String direccion;
+    @Email(message = "El email debe tener un formato válido")
+    @NotBlank(message = "El email no puede estar vacío")
     private String email;
     private String telefono;
 

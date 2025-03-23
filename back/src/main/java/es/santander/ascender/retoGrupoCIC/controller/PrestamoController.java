@@ -22,6 +22,7 @@ import es.santander.ascender.retoGrupoCIC.config.PrestamoBorradoException;
 import es.santander.ascender.retoGrupoCIC.config.PrestamoNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.Prestamo;
 import es.santander.ascender.retoGrupoCIC.service.PrestamoService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/prestamos")
@@ -31,7 +32,7 @@ public class PrestamoController {
     private PrestamoService prestamoService;
 
     @PostMapping
-    public ResponseEntity<?> createPrestamo(@RequestBody Prestamo prestamo) {
+    public ResponseEntity<?> createPrestamo(@Valid @RequestBody Prestamo prestamo) {
         try {
             Prestamo newPrestamo = prestamoService.createPrestamo(prestamo);
             return new ResponseEntity<>(newPrestamo, HttpStatus.CREATED);
@@ -56,7 +57,7 @@ public class PrestamoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePrestamo(@PathVariable Long id, @RequestBody Prestamo prestamo) {
+    public ResponseEntity<?> updatePrestamo(@PathVariable Long id,@Valid @RequestBody Prestamo prestamo) {
         try {
             Prestamo prestamoActualizado = prestamoService.updatePrestamo(id, prestamo);
             return ResponseEntity.ok(prestamoActualizado);

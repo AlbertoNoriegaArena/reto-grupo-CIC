@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.FutureOrPresent;
 
 @Entity
 public class Prestamo {
@@ -45,6 +46,7 @@ public class Prestamo {
 
     private LocalDate fechaPrestamo;
     private LocalDate fechaDevolucion;
+    @FutureOrPresent(message = "La fecha de devolución prevista debe ser hoy o en el futuro")
     private LocalDate fechaPrevistaDevolucion;
 
     private boolean borrado = false; // campo para el borrado lógico

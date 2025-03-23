@@ -5,6 +5,8 @@ import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.service.FormatoService;
 import es.santander.ascender.retoGrupoCIC.service.TipoItemService;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,7 @@ public class FormatoController {
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody FormatoDTO formatoDTO) {
+    public ResponseEntity<?> create(@Valid @RequestBody FormatoDTO formatoDTO) {
         try {
             Formato nuevoFormato = formatoService.createFormato(formatoDTO);
             return new ResponseEntity<>(nuevoFormato, HttpStatus.CREATED);
@@ -49,7 +51,7 @@ public class FormatoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody FormatoDTO formatoDTO) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody FormatoDTO formatoDTO) {
         try {
             Formato formatoActualizado = formatoService.updateFormato(id, formatoDTO);
             if (formatoActualizado != null) {

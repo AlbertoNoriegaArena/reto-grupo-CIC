@@ -3,6 +3,8 @@ package es.santander.ascender.retoGrupoCIC.controller;
 import es.santander.ascender.retoGrupoCIC.dto.TipoItemDTO;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.service.TipoItemService;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,7 @@ public class TipoItemController {
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody TipoItemDTO tipoItemDTO) {
+    public ResponseEntity<?> create(@Valid @RequestBody TipoItemDTO tipoItemDTO) {
         try {
             TipoItem nuevoTipoItem = tipoItemService.createTipoItem(tipoItemDTO);
             return new ResponseEntity<>(nuevoTipoItem, HttpStatus.CREATED);
@@ -45,7 +47,7 @@ public class TipoItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody TipoItemDTO tipoItemDTO) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody TipoItemDTO tipoItemDTO) {
         try {
             TipoItem tipoItemActualizado = tipoItemService.updateTipoItem(id, tipoItemDTO);
             if (tipoItemActualizado != null) {

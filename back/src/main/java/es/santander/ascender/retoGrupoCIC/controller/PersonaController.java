@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.santander.ascender.retoGrupoCIC.model.Persona;
 import es.santander.ascender.retoGrupoCIC.service.PersonaService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/personas")
@@ -24,7 +25,7 @@ public class PersonaController {
     private PersonaService personaService;
 
     @PostMapping
-    public Persona createPersona(Persona persona) {
+    public Persona createPersona(@Valid @RequestBody Persona persona) {
         return personaService.createPersona(persona);
     }
 
@@ -34,12 +35,12 @@ public class PersonaController {
     }
 
     @GetMapping("/{id}")
-    public Persona getPersonaById(Long id) {
+    public Persona getPersonaById(@PathVariable Long id) {
         return personaService.getPersonaById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Persona> updatePersona(@PathVariable Long id, @RequestBody Persona persona) {
+    public ResponseEntity<Persona> updatePersona(@PathVariable Long id, @Valid @RequestBody Persona persona) {
 
         Persona personaActualizada = personaService.updatePersona(id, persona);
         return ResponseEntity.ok(personaActualizada);
