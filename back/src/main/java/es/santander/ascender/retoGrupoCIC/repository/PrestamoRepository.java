@@ -22,4 +22,6 @@ public interface PrestamoRepository extends JpaRepository<Prestamo, Long> {
 
     // Devuelve un préstamo si existe una relación con la persona
     boolean existsByPersonaId(Long id);  
+
+    boolean existsByItem(Item item);
 }

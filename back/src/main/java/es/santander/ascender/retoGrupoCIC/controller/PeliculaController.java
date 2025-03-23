@@ -19,11 +19,8 @@ import es.santander.ascender.retoGrupoCIC.config.TipoItemNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.Pelicula;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
-import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
-import es.santander.ascender.retoGrupoCIC.model.TipoItemFormatoId;
 import es.santander.ascender.retoGrupoCIC.service.FormatoService;
 import es.santander.ascender.retoGrupoCIC.service.PeliculaService;
-import es.santander.ascender.retoGrupoCIC.service.TipoItemFormatoService;
 import es.santander.ascender.retoGrupoCIC.service.TipoItemService;
 
 @RestController
@@ -88,20 +85,29 @@ public class PeliculaController {
         return peliculaService.retrivePelicula(id);
     }
 
-    @PutMapping("/{id}")
-    public Pelicula update(@PathVariable("id") Long id, @RequestBody Pelicula pelicula) {
-        return peliculaService.updatePelicula(id, pelicula);
-    }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id) {
-        peliculaService.deletePelicula(id);
-        return "delete";
-    }
-
     @GetMapping
     public List<Pelicula> pelicula() {
         return peliculaService.retriveAllPeliculas();
     }
 
+    // Método para actualizar la película
+    @PutMapping("/{itemId}")
+    public ResponseEntity<Pelicula> update(@PathVariable("itemId") Long itemId, @RequestBody Pelicula pelicula) {
+    
+        Pelicula updatedPelicula = peliculaService.updatePelicula(itemId, pelicula);
+
+        return new ResponseEntity<>(updatedPelicula, HttpStatus.OK);
+    }
+
+    // Método para eliminar la película
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<String> delete(@PathVariable("itemId") Long itemId) {
+        try {
+            peliculaService.deletePelicula(itemId);
+            return new ResponseEntity<>("Película eliminada", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

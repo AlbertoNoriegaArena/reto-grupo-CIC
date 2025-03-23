@@ -12,6 +12,7 @@ import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.model.Persona;
 import es.santander.ascender.retoGrupoCIC.model.Prestamo;
+import es.santander.ascender.retoGrupoCIC.repository.ItemRepository;
 import es.santander.ascender.retoGrupoCIC.repository.PrestamoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ public class PrestamoService {
 
     @Autowired
     private PersonaService personaService;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     public Prestamo createPrestamo(Prestamo prestamo) {
 
@@ -177,6 +181,15 @@ public class PrestamoService {
             throw new FechaDevolucionInvalidaException(
                     "La fecha prevista de devolución no puede ser antes de la fecha de préstamo");
         }
+    }
+
+    public boolean tienePrestamosAsociados(Long itemId) {
+        // Buscar el Item por su ID
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró el item con el id: " + itemId));
+        
+        // Verificar si existen préstamos asociados a ese item
+        return prestamoRepository.existsByItem(item);
     }
 
 }
