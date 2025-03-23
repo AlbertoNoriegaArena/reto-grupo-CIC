@@ -111,4 +111,11 @@ public class PrestamoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los prestamos");
         }
     }
+
+    // Endpoint para obtener los préstamos vencidos
+    @GetMapping("/vencidos")
+    public ResponseEntity<List<Prestamo>> obtenerPrestamosVencidos() {
+        List<Prestamo> prestamosVencidos = prestamoService.listarPrestamosVencidos();
+        return new ResponseEntity<>(prestamosVencidos, HttpStatus.OK);
+    }
 }

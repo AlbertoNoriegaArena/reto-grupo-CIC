@@ -85,7 +85,7 @@ public class PrestamoService {
             if (prestamo.getFechaPrevistaDevolucion() != null) {
                 prestamoExistente.setFechaPrevistaDevolucion(prestamo.getFechaPrevistaDevolucion());
             }
-            
+
             if (prestamo.getFechaDevolucion() != null) {
                 prestamoExistente.setFechaDevolucion(prestamo.getFechaDevolucion());
 
@@ -187,9 +187,16 @@ public class PrestamoService {
         // Buscar el Item por su ID
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("No se encontró el item con el id: " + itemId));
-        
+
         // Verificar si existen préstamos asociados a ese item
         return prestamoRepository.existsByItem(item);
+    }
+
+    // Listado de libros que deberían haberse devuelto y no se ha hecho
+    @Transactional(readOnly = true)
+    public List<Prestamo> listarPrestamosVencidos() {
+        LocalDate fechaHoy = LocalDate.now();
+        return prestamoRepository.findByFechaPrevistaDevolucionBeforeAndFechaDevolucionIsNull(fechaHoy);
     }
 
 }

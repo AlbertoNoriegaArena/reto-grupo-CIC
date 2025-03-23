@@ -4,6 +4,7 @@ import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.model.Persona;
 import es.santander.ascender.retoGrupoCIC.model.Prestamo;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +25,7 @@ public interface PrestamoRepository extends JpaRepository<Prestamo, Long> {
     boolean existsByPersonaId(Long id);  
 
     boolean existsByItem(Item item);
+
+     // Buscar los préstamos vencidos
+     List<Prestamo> findByFechaPrevistaDevolucionBeforeAndFechaDevolucionIsNull(LocalDate fechaActual);
 }
