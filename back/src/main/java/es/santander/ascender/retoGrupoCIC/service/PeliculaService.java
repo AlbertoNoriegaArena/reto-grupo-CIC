@@ -45,7 +45,7 @@ public class PeliculaService {
             pelicula.setItemId(id);
             return peliculaRepository.save(pelicula);
         }
-        throw new RuntimeException("No pude encontrar el pelicula con id" + id);
+        throw new RuntimeException("No pude encontrar la pelicula con id" + id);
     }
 
     // Método para eliminar la película y el item asociado

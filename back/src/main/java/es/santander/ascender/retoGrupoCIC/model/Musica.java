@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Musica {
@@ -14,8 +15,11 @@ public class Musica {
     @JsonProperty(access = Access.READ_ONLY)
     private Long itemId;
 
+    @Size(max = 20, message = "El género no puede tener más de 20 caracteres")
     private String genero;
+    @Size(max = 30, message = "El cantante no puede tener más de 30 caracteres")
     private String cantante;
+    @Size(max = 30, message = "El album no puede tener más de 30 caracteres")
     private String album;
     private String duracion;
 

@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Libro {
@@ -15,7 +17,9 @@ public class Libro {
     private Long itemId;
 
     private String isbn;
+    @Size(max=30 , message = "La editorial no puede superar los 30 caracteres")
     private String editorial;
+    @Min(value = 1)
     private Integer numeroPaginas;
 
     @OneToOne
