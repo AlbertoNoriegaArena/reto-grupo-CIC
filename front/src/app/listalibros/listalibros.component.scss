@@ -1,0 +1,82 @@
+/* src/app/listalibros/listalibros.component.scss */
+
+.movie-list-header {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    width: 100%; /* Take full width */
+    padding: 20px;
+    box-sizing: border-box; /* Include padding in the width */
+  }
+  
+  .movie-list-header h1 {
+    margin-bottom: 20px; /* Add space below the title */
+  }
+  
+  .movie-emoji {
+    font-size: 1.2em;
+  }
+  
+  .table {
+    width: 80%; /* Adjust as needed */
+    max-width: 1000px; /* Set a maximum width */
+    border-collapse: collapse;
+    border-spacing: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px; /* Add space below the table */
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .table tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .movie-list-header button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .movie-list-header > * {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .movie-list-header > table {
+    display: table;
+  }
+  
+  .movie-list-header > button {
+    display: inline-block;
+  }
+  
+  .movie-list-header > button:first-of-type {
+    margin-right: 10px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .table {
+      width: 95%;
+    }
+  }
+  

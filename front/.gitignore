@@ -1,0 +1,17 @@
+# Dependencias y compilación
+node_modules/
+dist/
+out-tsc/
+
+# Angular y configuración
+/.angular/
+.vscode/
+.idea/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+
+# Variables de entorno
+.env
+

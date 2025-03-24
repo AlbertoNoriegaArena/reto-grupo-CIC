@@ -1,0 +1,25 @@
+<!-- src/app/listamusica/listamusica.component.html -->
+<div class="movie-list-header">
+    <h1>Lista de Música <span class="movie-emoji">🎵</span></h1>
+    <table class="movie-list-header table"> <!-- Added movie-list-header -->
+        <thead>
+                  <tr>
+                    <th>Cantante</th>
+                    <th>Album</th>
+                    <th>Genero</th>
+                    <th>Duracion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of musica">
+                    <td>{{ item.cantante }}</td>
+                    <td>{{ item.album }}</td>
+                    <td>{{ item.genero }}</td>
+                    <td>{{ item.duracion }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+    <button (click)="goToFormularioMusica()">Añadir Música</button>
+    <button (click)="goToMainPage()">Volver a la pagina principal</button>
+</div>

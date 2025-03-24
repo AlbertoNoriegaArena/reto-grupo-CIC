@@ -1,0 +1,42 @@
+<!-- src/app/listapeliculas/listapeliculas.component.html -->
+<div class="movie-list-header">
+    <h1>Lista de peliculas <span class="movie-emoji">🎬</span></h1>
+    <div class="botones">
+        <button class= "boton botonAgregar" (click)="goToFormularioPeliculas()">Añadir Película</button>
+        <button class= "boton botonVolver" (click)="goToMainPage()">Volver a la pagina principal</button>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Director</th>
+                <th>Duración</th>
+                <th>Fecha de Estreno</th>
+                <th>Ubicación</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let pelicula of peliculas">
+                <td>{{ pelicula.item.nombre }}</td>
+                <td>{{ pelicula.director }}</td>
+                <td>{{ pelicula.duracion }}</td>
+                <td>{{ pelicula.fechaEstreno }}</td>
+                <td>{{ pelicula.item.ubicacion }}</td>
+                <td>{{ pelicula.item.estado }}</td>
+                <td>
+                    <!-- Botón Ver -->
+                    <button (click)="goToDetalles(pelicula)">Ver</button>
+
+                    <!-- Botón Actualizar -->
+                    <button (click)="goToActualizar(pelicula)">Actualizar</button>
+
+                    <!-- Botón Eliminar -->
+                    <button (click)="eliminarPelicula(pelicula)">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

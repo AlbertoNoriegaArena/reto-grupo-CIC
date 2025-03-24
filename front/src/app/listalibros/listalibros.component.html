@@ -1,0 +1,23 @@
+<!-- src/app/listalibros/listalibros.component.html -->
+<div class="movie-list-header">
+    <h1>Lista de Libros <span class="movie-emoji">📚</span></h1>
+    <table class="table">
+            <thead>
+              <tr>
+                <th>Isbn</th>
+                <th>Editorial</th>
+                <th>Numero de paginas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of libros">
+                <td>{{ item.isbn }}</td>
+                <td>{{ item.editorial }}</td>
+                <td>{{ item.numeroPaginas }}</td>
+              </tr>
+            </tbody>
+          </table>
+          
+    <button (click)="goToFormularioLibros()">Añadir Libro</button>
+    <button (click)="goToMainPage()">Volver a la pagina principal</button>
+</div>

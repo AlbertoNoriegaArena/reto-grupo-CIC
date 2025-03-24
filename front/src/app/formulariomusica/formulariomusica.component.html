@@ -1,0 +1,42 @@
+<!-- src/app/formulariomusica/formulariomusica.component.html -->
+<div class="container">
+  <h2>Añadir Música</h2>
+  <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+          <label for="nombrePersona">Nombre de la Persona:</label>
+          <input type="text" id="nombrePersona" name="nombrePersona" [(ngModel)]="musica.nombrePersona" required>
+      </div>
+      <div class="form-group">
+          <label for="albumIngresado">Álbum Ingresado:</label>
+          <input type="text" id="albumIngresado" name="albumIngresado" [(ngModel)]="musica.albumIngresado" required>
+      </div>
+      <div class="form-group">
+          <label for="fechaRecogida">Fecha de Recogida:</label>
+          <input type="date" id="fechaRecogida" name="fechaRecogida" [(ngModel)]="musica.fechaRecogida" required>
+      </div>
+      <div class="form-group">
+          <label for="fechaDevolucion">Fecha de Devolución:</label>
+          <input type="date" id="fechaDevolucion" name="fechaDevolucion" [(ngModel)]="musica.fechaDevolucion" required>
+      </div>
+      <div class="form-group">
+          <label for="genero">Género:</label>
+          <input type="text" id="genero" name="genero" [(ngModel)]="musica.genero" required>
+      </div>
+      <div class="form-group">
+          <label for="cantante">Cantante:</label>
+          <input type="text" id="cantante" name="cantante" [(ngModel)]="musica.cantante" required>
+      </div>
+      <div class="form-group">
+          <label for="album">Álbum:</label>
+          <input type="text" id="album" name="album" [(ngModel)]="musica.album" required>
+      </div>
+      <div class="form-group">
+          <label for="duracion">Duración (segundos):</label>
+          <input type="number" id="duracion" name="duracion" [(ngModel)]="musica.duracion" required>
+      </div>
+      <div class="buttons-container">
+        <button type="submit">Guardar</button>
+        <button type="button" (click)="goToMainPage()">Volver a la página principal</button>
+    </div>
+</form>
+</div>
