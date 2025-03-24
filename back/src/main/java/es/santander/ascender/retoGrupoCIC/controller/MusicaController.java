@@ -64,7 +64,7 @@ public class MusicaController {
         }
 
         // Validar el tipo
-        if (tipoItemBD.get().getId().equals(tipoMusica.getId())) {
+        if (!tipoItemBD.get().getId().equals(tipoMusica.getId())) {
             return new ResponseEntity<>(
                 "Error: Solo se pueden crear musica. Has seleccionado: " + tipoItemBD.get().getNombre(),
                  HttpStatus.BAD_REQUEST);
