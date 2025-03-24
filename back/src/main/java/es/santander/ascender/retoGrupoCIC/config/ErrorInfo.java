@@ -1,12 +1,13 @@
 package es.santander.ascender.retoGrupoCIC.config;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ErrorInfo {
 
     private int codigo;
     private String mensaje;
-    private Map<String, String> parametros;
+    private Map<String, String> parametros =  new HashMap<>();
 
     public ErrorInfo(int codigo, String mensaje) {
         this.codigo = codigo;

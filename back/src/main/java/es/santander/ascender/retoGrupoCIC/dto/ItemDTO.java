@@ -1,8 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.dto;
 
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
-import es.santander.ascender.retoGrupoCIC.model.Formato;
-import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 
 import java.time.LocalDate;
 

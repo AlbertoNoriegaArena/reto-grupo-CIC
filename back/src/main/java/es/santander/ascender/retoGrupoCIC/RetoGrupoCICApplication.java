@@ -18,9 +18,6 @@ import java.util.List;
 public class RetoGrupoCICApplication {
 
     @Autowired
-    private ItemRepository itemRepository;
-
-    @Autowired
     private TipoItemRepository tipoItemRepository;
 
     @Autowired
