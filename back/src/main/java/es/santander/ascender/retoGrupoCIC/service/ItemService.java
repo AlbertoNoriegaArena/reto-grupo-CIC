@@ -1,5 +1,6 @@
 package es.santander.ascender.retoGrupoCIC.service;
 
+import es.santander.ascender.retoGrupoCIC.config.CustomValidationException;
 import es.santander.ascender.retoGrupoCIC.config.FormatoNoValidoException;
 import es.santander.ascender.retoGrupoCIC.config.FormatoNotFoundException;
 import es.santander.ascender.retoGrupoCIC.config.ItemAsociadoAPrestamoException;
@@ -15,6 +16,8 @@ import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
 import es.santander.ascender.retoGrupoCIC.repository.ItemRepository;
 import es.santander.ascender.retoGrupoCIC.repository.PrestamoRepository;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import jakarta.validation.Validator;
 
 @Service
 @Transactional
@@ -41,6 +46,9 @@ public class ItemService {
 
     @Autowired
     private TipoItemService tipoItemService;
+
+    @Autowired
+    private Validator validator;
 
     public Item createItem(ItemDTO itemDTO) {
         // Obtener TipoItem y Formato por sus IDs
@@ -68,6 +76,11 @@ public class ItemService {
         item.setUbicacion(itemDTO.getUbicacion());
         item.setFecha(itemDTO.getFecha());
         item.setEstado(itemDTO.getEstado() != null ? itemDTO.getEstado() : EstadoItem.DISPONIBLE);
+
+        Set<ConstraintViolation<Item>> violations = validator.validate(item);
+        if (!violations.isEmpty()) {
+            throw new CustomValidationException(violations);
+        }
 
         return itemRepository.save(item);
     }
@@ -103,28 +116,27 @@ public class ItemService {
     }
 
     public void deleteItem(Long id) {
-    Optional<Item> itemOpcional = itemRepository.findById(id);
-    
-    // Si el ítem no existe, lanzamos una excepción
-    if (itemOpcional.isEmpty()) {
-        throw new ItemNotFoundException(id);
+        Optional<Item> itemOpcional = itemRepository.findById(id);
+
+        // Si el ítem no existe, lanzamos una excepción
+        if (itemOpcional.isEmpty()) {
+            throw new ItemNotFoundException(id);
+        }
+
+        Item item = itemOpcional.get();
+
+        Optional<Prestamo> prestamoOpcional = prestamoRepository.findByItem(item);
+
+        if (item.getEstado() == EstadoItem.PRESTADO) {
+            throw new ItemPrestadoException(item.getNombre());
+        }
+
+        if (prestamoOpcional.isPresent()) {
+            throw new ItemAsociadoAPrestamoException(item.getNombre());
+        }
+
+        itemRepository.deleteById(id);
     }
-
-    Item item = itemOpcional.get();
-
-    
-    Optional<Prestamo> prestamoOpcional = prestamoRepository.findByItem(item);
-    
-    if (item.getEstado() == EstadoItem.PRESTADO) {
-        throw new ItemPrestadoException(item.getNombre());
-    }
-
-    if (prestamoOpcional.isPresent()) {
-        throw new ItemAsociadoAPrestamoException(item.getNombre());
-    }
-
-    itemRepository.deleteById(id);
-}
 
     // método que comprueba que la relación entre tipo y formato sea correcta
     private void validateTipoItemFormato(TipoItem tipoItem, Formato formato) {
@@ -142,7 +154,6 @@ public class ItemService {
             throw new FormatoNotFoundException(formato.getId());
         }
 
-        
         String itemNombre = tipoItemOptional.get().getNombre();
         String formatoNombre = formatoOptional.get().getNombre();
 

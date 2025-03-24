@@ -1,12 +1,21 @@
 package es.santander.ascender.retoGrupoCIC.config;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class ControllerAdviceConfig {
@@ -73,7 +82,7 @@ public class ControllerAdviceConfig {
     public ErrorInfo handleItemObligatorioException(HttpServletRequest req, ItemObligatorioException ex) {
         return new ErrorInfo(9, "El item es obligotorio");
     }
-    
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PersonaObligatoriaException.class)
     @ResponseBody
@@ -84,7 +93,8 @@ public class ControllerAdviceConfig {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(FechaDevolucionInvalidaException.class)
     @ResponseBody
-    public ErrorInfo handleFechaDevolucionInvalidaException(HttpServletRequest req, FechaDevolucionInvalidaException ex) {
+    public ErrorInfo handleFechaDevolucionInvalidaException(HttpServletRequest req,
+            FechaDevolucionInvalidaException ex) {
         return new ErrorInfo(11, ex.getMessage());
     }
 
@@ -98,9 +108,17 @@ public class ControllerAdviceConfig {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PersonaAsociadaAPrestamoException.class)
     @ResponseBody
-    public ErrorInfo handlePersonaAsociadaAPrestamoException(HttpServletRequest req, PersonaAsociadaAPrestamoException ex) {
+    public ErrorInfo handlePersonaAsociadaAPrestamoException(HttpServletRequest req,
+            PersonaAsociadaAPrestamoException ex) {
         return new ErrorInfo(13, ex.getMessage());
     }
-   
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(CustomValidationException.class)
+    @ResponseBody
+    public ErrorInfo handleCustomValidationException(HttpServletRequest req, CustomValidationException ex) {
+
+        return new ErrorInfo(14, "Error de validación", ex.getViolations());
+    }
 
 }
