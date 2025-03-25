@@ -5,8 +5,9 @@ import { FormulariocoleccionComponent } from './formulariocoleccion/formularioco
 import { ListacoleccionComponent } from './listacoleccion/listacoleccion.component';
 import { DetallecoleccionComponent } from "./detallecoleccion/detallecoleccion.component";
 import { VistaprincipalComponent } from "./vistaprincipal/vistaprincipal.component";
-
-
+import { DetalleUsuarioComponent } from "./detalleusuario/detalleusuario.component";
+import { ListausuariosComponent } from "./listausuarios/listausuarios.component";
+import { PrestamosService } from '../prestamos.service';
 
 
 @Component({

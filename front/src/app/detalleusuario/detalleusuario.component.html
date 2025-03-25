@@ -1,0 +1,102 @@
+<div class="d-flex">
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <h4 class="text-white text-center mb-4">COLECCIÓN PERSONAL</h4>
+        <a href="#">Inicio</a>
+        <a href="#">Usuarios</a>
+        <a href="#">Préstamos</a>
+    </div>
+
+    <!-- Sección principal -->
+    <div class="main-content">
+        <!-- Información del Usuario -->
+        <div class="user-card">
+            <h3>{{ usuario.nombre }}</h3>
+            <div class="user-info">
+                <p><strong>Dirección:</strong> {{ usuario.direccion }}</p>
+                <p><strong>Email:</strong> {{ usuario.email }}</p>
+                <p><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+            </div>
+        </div>
+
+        <!-- Repositorios de Préstamos -->
+        <div class="repo-card">
+            <h4>Repositorios de Préstamos</h4>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <button class="btn btn-info w-100" (click)="verPrestamos('peliculas')">Películas</button>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <button class="btn btn-info w-100" (click)="verPrestamos('libros')">Libros</button>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <button class="btn btn-info w-100" (click)="verPrestamos('musica')">Música</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mostrar tabla de préstamos -->
+        <div *ngIf="mostrarTabla">
+            <h4>Préstamos de {{ tipoRepositorio }}</h4>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Formato</th>
+                        <th>Fecha de préstamo</th>
+                        <th>Fecha de devolución</th>
+                        <th>Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prestamo of prestamos">
+                        <td>{{ prestamo.nombre }}</td>
+                        <td>{{ prestamo.tipo }}</td>
+                        <td>{{ prestamo.formato }}</td>
+                        <td>{{ prestamo.fechaPrestamo }}</td>
+                        <td>{{ prestamo.fechaDevolucion }}</td>
+                        <td>
+                            <button class="btn btn-info" (click)="verDetallePrestamo(prestamo)">Ver Detalle</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mostrar todos los préstamos -->
+        <div *ngIf="verTodosTabla">
+            <h4>Todos los Préstamos</h4>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Formato</th>
+                        <th>Fecha de préstamo</th>
+                        <th>Fecha de devolución</th>
+                        <th>Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prestamo of todosPrestamos">
+                        <td>{{ prestamo.nombre }}</td>
+                        <td>{{ prestamo.tipo }}</td>
+                        <td>{{ prestamo.formato }}</td>
+                        <td>{{ prestamo.fechaPrestamo }}</td>
+                        <td>{{ prestamo.fechaDevolucion }}</td>
+                        <td>
+                            <button class="btn btn-info" (click)="verDetallePrestamo(prestamo)">Ver Detalle</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Botones Inferiores -->
+        <div class="bottom-buttons">
+            <button class="btn btn-secondary" (click)="volver()">Atrás</button>
+            <button class="btn btn-success" (click)="verTodosPrestamos()">Ver Todos</button>
+        </div>
+    </div>
+</div>

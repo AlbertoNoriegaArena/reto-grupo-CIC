@@ -33,4 +33,13 @@ export class VistaprincipalComponent {
     goToListaMusica() {
         this.router.navigate(['/listamusica']);
     }
+      // Navegación a la lista de usuarios
+      goToUsuarios() {
+        this.router.navigate(['/usuarios']);  // Asegúrate de tener configurada la ruta '/usuarios'
+    }
+
+    // Navegación a la lista de préstamos
+    goToPrestamos() {
+        this.router.navigate(['/prestamos']);  // Asegúrate de tener configurada la ruta '/prestamos'
+    }
 }
