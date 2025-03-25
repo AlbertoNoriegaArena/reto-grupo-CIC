@@ -7,13 +7,18 @@ import { Prestamo } from './prestamo.model';
   providedIn: 'root'
 })
 export class PrestamosService {
-  private apiUrl = 'http://localhost:8080/api/prestamos'; // Asegúrate de que esta sea la URL de tu backend
+  private apiUrl = 'http://localhost:4200/api/prestamos'; // Asegúrate de que esta sea la URL de tu backend
 
   constructor(private http: HttpClient) {}
 
   // Obtener todos los préstamos
   getAllPrestamos(): Observable<Prestamo[]> {
     return this.http.get<Prestamo[]>(this.apiUrl);
+  }
+
+  //Obtener préstamos por persona
+  getPrestamosPorPersona(personaId: number): Observable<Prestamo[]> {
+    return this.http.get<Prestamo[]>(`${this.apiUrl}/personas/${personaId}`);
   }
 
   // Crear un nuevo préstamo

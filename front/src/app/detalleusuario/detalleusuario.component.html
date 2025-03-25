@@ -24,10 +24,10 @@
             <h4>Repositorios de Préstamos</h4>
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <button class="btn btn-info w-100" (click)="verPrestamos('peliculas')">Películas</button>
+                    <button class="btn btn-info w-100" (click)="verPrestamos('pelicula')">Películas</button>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <button class="btn btn-info w-100" (click)="verPrestamos('libros')">Libros</button>
+                    <button class="btn btn-info w-100" (click)="verPrestamos('libro')">Libros</button>
                 </div>
                 <div class="col-md-4 mb-3">
                     <button class="btn btn-info w-100" (click)="verPrestamos('musica')">Música</button>
@@ -51,11 +51,11 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let prestamo of prestamos">
-                        <td>{{ prestamo.nombre }}</td>
-                        <td>{{ prestamo.tipo }}</td>
-                        <td>{{ prestamo.formato }}</td>
+                        <td>{{ prestamo.item.nombre }}</td>
+                        <td>{{ prestamo.item.tipo.nombre }}</td>
+                        <td>{{ prestamo.item.formato.nombre }}</td>
                         <td>{{ prestamo.fechaPrestamo }}</td>
-                        <td>{{ prestamo.fechaDevolucion }}</td>
+                        <td>{{ prestamo.fechaDevolucion ? prestamo.fechaDevolucion : 'Prestado actualmente' }}</td>
                         <td>
                             <button class="btn btn-info" (click)="verDetallePrestamo(prestamo)">Ver Detalle</button>
                         </td>
@@ -80,11 +80,11 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let prestamo of todosPrestamos">
-                        <td>{{ prestamo.nombre }}</td>
-                        <td>{{ prestamo.tipo }}</td>
-                        <td>{{ prestamo.formato }}</td>
+                        <td>{{ prestamo.item.nombre }}</td>
+                        <td>{{ prestamo.item.tipo.nombre }}</td>
+                        <td>{{ prestamo.item.formato.nombre }}</td>
                         <td>{{ prestamo.fechaPrestamo }}</td>
-                        <td>{{ prestamo.fechaDevolucion }}</td>
+                        <td>{{ prestamo.fechaDevolucion ? prestamo.fechaDevolucion : 'Prestado actualmente' }}</td>
                         <td>
                             <button class="btn btn-info" (click)="verDetallePrestamo(prestamo)">Ver Detalle</button>
                         </td>
