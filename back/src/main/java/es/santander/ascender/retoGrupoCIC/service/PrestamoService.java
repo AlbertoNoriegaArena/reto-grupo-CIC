@@ -199,4 +199,24 @@ public class PrestamoService {
         return prestamoRepository.findByFechaPrevistaDevolucionBeforeAndFechaDevolucionIsNull(fechaHoy);
     }
 
+    public List<Prestamo> listarPrestamosActivos(String nombrePersona, LocalDate fechaPrevistaDevolucion) {
+        List<Prestamo> prestamos = prestamoRepository.findByFechaDevolucionIsNull();
+    
+        if (nombrePersona != null && !nombrePersona.isEmpty()) {
+            prestamos = prestamos.stream()
+                    .filter(p -> p.getPersona().getNombre().equalsIgnoreCase(nombrePersona))
+                    .toList();
+        }
+    
+        if (fechaPrevistaDevolucion != null) {
+            prestamos = prestamos.stream()
+                    .filter(p -> p.getFechaPrevistaDevolucion() != null &&
+                            p.getFechaPrevistaDevolucion().equals(fechaPrevistaDevolucion))
+                    .toList();
+        }
+    
+        return prestamos;
+    }
+    
+
 }

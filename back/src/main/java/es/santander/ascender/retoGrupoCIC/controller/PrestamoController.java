@@ -2,6 +2,10 @@ package es.santander.ascender.retoGrupoCIC.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,7 +61,7 @@ public class PrestamoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePrestamo(@PathVariable Long id,@Valid @RequestBody Prestamo prestamo) {
+    public ResponseEntity<?> updatePrestamo(@PathVariable Long id, @Valid @RequestBody Prestamo prestamo) {
         try {
             Prestamo prestamoActualizado = prestamoService.updatePrestamo(id, prestamo);
             return ResponseEntity.ok(prestamoActualizado);
@@ -118,5 +122,14 @@ public class PrestamoController {
     public ResponseEntity<List<Prestamo>> obtenerPrestamosVencidos() {
         List<Prestamo> prestamosVencidos = prestamoService.listarPrestamosVencidos();
         return new ResponseEntity<>(prestamosVencidos, HttpStatus.OK);
+    }
+
+    @GetMapping("/activos")
+    public ResponseEntity<List<Prestamo>> obtenerPrestamosActivos(
+        @RequestParam(required = false, name= "nombre") String nombrePersona,
+            @RequestParam(required = false, name ="Fecha prevista de devolución") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate fechaPrevistaDevolucion) {
+
+        List<Prestamo> prestamos = prestamoService.listarPrestamosActivos(nombrePersona, fechaPrevistaDevolucion);
+        return ResponseEntity.ok(prestamos);
     }
 }
