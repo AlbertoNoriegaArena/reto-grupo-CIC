@@ -28,12 +28,12 @@ export class PeliculaService {
   }
 
   // Método para borrar una película por ID
-  borrar(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.url}/${id}`);
+  borrar(itemId: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.url}/${itemId}`);
   }
 
   getPeliculas(): Observable<Pelicula[]> {
     return this.httpClient.get<Pelicula[]>(this.url);
-}
+  }
 
 }

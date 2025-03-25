@@ -41,20 +41,20 @@ export class ListapeliculasComponent implements OnInit {
 
     // Método para redirigir a la página de detalles de la película
     goToDetalles(pelicula: Pelicula) {
-        this.router.navigate(['/detallespelicula', pelicula.id]); // Asumiendo que la película tiene un ID
+        this.router.navigate(['/detallespelicula', pelicula.item.id]); // Asumiendo que la película tiene un ID
     }
 
     // Método para redirigir a la página de actualización de la película
     goToActualizar(pelicula: Pelicula) {
-        this.router.navigate(['/actualizarpelicula', pelicula.id]); // Asumiendo que la película tiene un ID
+        this.router.navigate(['/actualizarpelicula', pelicula.item.id]); // Asumiendo que la película tiene un ID
     }
 
     // Método para eliminar una película
     eliminarPelicula(pelicula: Pelicula) {
         if (confirm('¿Estás seguro de que deseas eliminar esta película?')) {
-            this.peliculaService.borrar(pelicula.id).subscribe({
+            this.peliculaService.borrar(pelicula.item.id).subscribe({
                 next: () => {
-                    this.peliculas = this.peliculas.filter(p => p.id !== pelicula.id); // Actualiza la lista
+                    this.peliculas = this.peliculas.filter(p => p.item.id !== pelicula.item.id); // Actualiza la lista
                     alert('Película eliminada exitosamente.');
                 },
                 error: (error) => {
