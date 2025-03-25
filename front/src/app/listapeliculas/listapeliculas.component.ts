@@ -1,6 +1,6 @@
 // src/app/listapeliculas/listapeliculas.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { PeliculaService } from '../../pelicula.service';
 import { Pelicula } from '../../pelicula';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-listapeliculas',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, DatePipe],
     templateUrl: './listapeliculas.component.html',
     styleUrl: './listapeliculas.component.scss'
 })

@@ -23,7 +23,7 @@
                 <td>{{ pelicula.item.nombre }}</td>
                 <td>{{ pelicula.director }}</td>
                 <td>{{ pelicula.duracion }}</td>
-                <td>{{ pelicula.fechaEstreno }}</td>
+                <td>{{ pelicula.fechaEstreno | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ pelicula.item.formato.nombre }}</td>
                 <!-- <td>{{ pelicula.item.ubicacion }}</td>
                 <td>{{ pelicula.item.estado }}</td> -->
