@@ -1,0 +1,27 @@
+
+<div class="container">
+    <h2>Crear usuario</h2>
+    <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="nombrePersona">Nombre:</label>
+            <input type="text" id="nombrePersona" name="nombrePersona" [(ngModel)]="persona.nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="Direccion" name="Direccion" [(ngModel)]="persona.direccion" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" [(ngModel)]="persona.email" required>
+        </div>
+       
+        <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input type="number" id="telefono" name="telefono" [(ngModel)]="persona.telefono" required>
+        </div>
+        <div class="buttons-container">
+          <button type="submit">Guardar</button>
+          <button type="button" (click)="goToListausuarios()">Cancelar</button>
+      </div>
+  </form>
+  </div>

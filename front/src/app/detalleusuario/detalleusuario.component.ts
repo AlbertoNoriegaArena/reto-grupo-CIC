@@ -1,20 +1,19 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Persona } from '../../persona';
+import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
+import { PersonaService } from '../../persona.service'; // Import PersonaService
 
 @Component({
   selector: 'app-detalleusuario',
-  imports: [NgFor,NgIf],
+  imports: [NgFor, NgIf],
   templateUrl: './detalleusuario.component.html',
-  styleUrl: './detalleusuario.component.scss'
+  styleUrl: './detalleusuario.component.scss',
+  standalone: true, // Add this line
 })
 export class DetalleUsuarioComponent implements OnInit {
- 
-  usuario = {
-    nombre: 'Juan Pérez',
-    direccion: 'Calle Ficticia 123',
-    email: 'juan.perez@gmail.com',
-    telefono: '555-1234'
-  };
+
+  persona: Persona = {} as Persona; // Change this line
 
   // Variables de los préstamos
   mostrarTabla: boolean = false;
@@ -38,10 +37,18 @@ export class DetalleUsuarioComponent implements OnInit {
       { nombre: 'Back in Black - AC/DC', tipo: 'Música', formato: 'CD', fechaPrestamo: '12/03/2025', fechaDevolucion: '22/03/2025' }
     ]
   };
+usuario: any;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute, private personaService: PersonaService) { } // Inject ActivatedRoute and PersonaService
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id'); // Get the id from the URL
+    if (id) {
+      this.personaService.getPersonaById(Number(id)).subscribe(persona => {
+        this.persona = persona;
+      });
+    }
+  }
 
   // Función para mostrar los préstamos según el repositorio
   verPrestamos(tipo: string): void {

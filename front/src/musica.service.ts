@@ -11,7 +11,7 @@ export class MusicaService {
     getMusicas() {
         throw new Error('Method not implemented.');
     }
-    private url = 'http://localhost:8080/api/musica'; // Replace with your actual backend URL
+    private url = 'http://localhost:4200/api/musica'; // Replace with your actual backend URL
 
     constructor(private httpClient: HttpClient) { }
 

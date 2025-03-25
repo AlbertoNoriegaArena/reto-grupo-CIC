@@ -7,16 +7,15 @@ import { Libro } from './libro';
     providedIn: 'root'
 })
 export class LibroService {
-    private apiUrl = 'http://localhost:8080/api/libros'; // Replace with your actual API endpoint
-
+    private url = 'http://localhost:4200/api/libros'; 
     constructor(private http: HttpClient) { }
 
     getLibros(): Observable<Libro[]> {
-        return this.http.get<Libro[]>(this.apiUrl);
+        return this.http.get<Libro[]>(this.url);
     }
 
     insertar(libro: Libro): Observable<Libro> {
-        return this.http.post<Libro>(this.apiUrl, libro);
+        return this.http.post<Libro>(this.url, libro);
     }
-    // Add other methods as needed (update, delete, etc.)
+   
 }

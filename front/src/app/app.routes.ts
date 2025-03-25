@@ -1,4 +1,3 @@
-// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { FormulariopeliculasComponent } from './formulariopeliculas/formulariopeliculas.component';
 import { VistaprincipalComponent } from './vistaprincipal/vistaprincipal.component';
@@ -8,6 +7,10 @@ import { ListalibrosComponent } from './listalibros/listalibros.component';
 import { ListapeliculasComponent } from './listapeliculas/listapeliculas.component';
 import { FormulariomusicaComponent } from './formulariomusica/formulariomusica.component';
 import { ListamusicaComponent } from './listamusica/listamusica.component';
+import { ListapersonasComponent } from './listapersonas/listapersonas.component';
+import { FormulariopersonasComponent } from './formulariopersonas/formulariopersonas.component';
+import { DetalleUsuarioComponent } from './detalleusuario/detalleusuario.component'; 
+
 
 export const routes: Routes = [
     { path: '', component: VistaprincipalComponent },
@@ -18,4 +21,8 @@ export const routes: Routes = [
     { path: 'listapeliculas', component: ListapeliculasComponent },
     { path: 'formulariomusica', component: FormulariomusicaComponent },
     { path: 'listamusica', component: ListamusicaComponent },
+    { path: 'listausuarios', component: ListapersonasComponent },
+    { path: 'vistaprincipal', component: VistaprincipalComponent },
+    { path: 'formulariopersonas', component: FormulariopersonasComponent },
+    { path: 'detalleusuario/:id', component: DetalleUsuarioComponent},
 ];

@@ -6,7 +6,7 @@ import { ListacoleccionComponent } from './listacoleccion/listacoleccion.compone
 import { DetallecoleccionComponent } from "./detallecoleccion/detallecoleccion.component";
 import { VistaprincipalComponent } from "./vistaprincipal/vistaprincipal.component";
 import { DetalleUsuarioComponent } from "./detalleusuario/detalleusuario.component";
-import { ListausuariosComponent } from "./listausuarios/listausuarios.component";
+import { ListapersonasComponent } from "./listapersonas/listapersonas.component";
 import { PrestamosService } from '../prestamos.service';
 
 

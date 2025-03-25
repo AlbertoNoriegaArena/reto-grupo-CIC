@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- Metadatos básicos -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Título de la página -->
+    <title>Lista de personas</title>
+
+    <!-- Bootstrap CSS (v5) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons (para los iconos de los botones) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Cabecera -->
+    <header class="header">
+        <!-- Título centrado -->
+        <div class="title">
+            <strong>COLECCIÓN PERSONAL</strong>
+        </div>
+    </header>
+    <div class="container">
+        <!-- Contenedor para la tabla -->
+        <div class="table-wrapper">
+            <!-- Título de la sección -->
+            <h3 class="text-center mb-4">Lista de personas</h3>
+            <!-- Tabla para mostrar la lista de personas -->
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Usamos *ngFor para recorrer la lista de personas -->
+                    <tr *ngFor="let persona of personas">
+                        <td>{{ persona.id }}</td>
+                        <td>{{ persona.nombre }}</td>
+                        <td>{{ persona.direccion }}</td>
+                        <td>{{ persona.email }}</td>
+                        <td>{{ persona.telefono }}</td>
+                        <td>
+                            <!-- Botones de acciones -->
+                            <button class="btn btn-info btn-action" (click)="verPersona(persona)">Ver</button>
+                            <button class="btn btn-warning btn-action"
+                                (click)="editarPersona(persona)">Actualizar</button>
+                            <button class="btn btn-danger btn-action"
+                                (click)="eliminarPersona(persona)">Eliminar</button>
+                        </td>
+                    </tr>
+                    <!-- Si no hay personas, mostrar mensaje -->
+                    <tr *ngIf="personas.length === 0">
+                        <td colspan="6" class="table-empty">No hay personas disponibles</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Línea divisoria -->
+        <div class="divider"></div>
+
+        <!-- Contenedor de los botones alineados -->
+        <div class="action-buttons">
+            <!-- Botón "Regresar" alineado a la izquierda -->
+            <button (click)="goToMainPage()"class="btn btn-secondary">Regresar</button>  
+            <!-- Botón "Crear persona" alineado a la derecha -->
+            <button (click)="goToFormulariopersonas()"class="btn btn-primary">Crear persona</button> 
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <footer class="footer">
+        <div>
+            <a href="#">Contacto</a>
+            <a href="#">Aviso legal</a>
+            <a href="#">Política de privacidad</a>
+            <a href="#">Política de cookies</a>
+            <a href="#">Código ético</a>
+            <a href="#">Canal de denuncias</a>
+        </div>
+    </footer>
+
+    <!-- Scripts de Bootstrap (al final del body para mejorar el rendimiento) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

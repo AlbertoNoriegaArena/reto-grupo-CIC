@@ -1,42 +1,38 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Persona } from './persona.model';
+import { Persona } from './persona';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class PersonaService {
+  private url = 'http://localhost:4200/api/personas'; // Corrected URL
 
-  // URL de la API de Spring Boot (ajustar según tu configuración)
-  private apiUrl = 'http://localhost:8080/api/personas'; // Cambia esta URL si es necesario
-
-  // Constructor con inyección de HttpClient
   constructor(private http: HttpClient) { }
 
   // Obtener todas las personas
   getAllPersonas(): Observable<Persona[]> {
-    return this.http.get<Persona[]>(this.apiUrl);  // Realiza una solicitud GET para obtener la lista de personas
+    return this.http.get<Persona[]>(this.url);
   }
 
   // Obtener persona por ID
   getPersonaById(id: number): Observable<Persona> {
-    return this.http.get<Persona>(`${this.apiUrl}/${id}`);  // Realiza una solicitud GET con el ID
+    return this.http.get<Persona>(`${this.url}/${id}`);
   }
 
   // Crear una nueva persona
-  createPersona(persona: Persona): Observable<Persona> {
-    return this.http.post<Persona>(this.apiUrl, persona);  // Realiza una solicitud POST para crear una persona
+  insertar(persona: Persona): Observable<Persona> { // Corrected method name and return type
+    return this.http.post<Persona>(this.url, persona);
   }
 
   // Actualizar una persona existente
   updatePersona(id: number, persona: Persona): Observable<Persona> {
-    return this.http.put<Persona>(`${this.apiUrl}/${id}`, persona);  // Realiza una solicitud PUT para actualizar
+    return this.http.put<Persona>(`${this.url}/${id}`, persona);
   }
 
   // Eliminar una persona
   deletePersona(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);  // Realiza una solicitud DELETE para eliminar una persona
+    return this.http.delete<void>(`${this.url}/${id}`);
   }
 }

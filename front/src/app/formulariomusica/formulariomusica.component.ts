@@ -14,18 +14,8 @@ import { Router } from '@angular/router';
     styleUrl: './formulariomusica.component.scss'
 })
 export class FormulariomusicaComponent {
-    musica: Musica = {
-        id: 0,
-        nombrePersona: '',
-        albumIngresado: '',
-        fechaRecogida: '',
-        fechaDevolucion: '',
-        genero: '',
-        cantante: '',
-        album: '',
-        duracion: 0
-    };
-
+    musica = {} as Musica;
+   
     constructor(private musicaService: MusicaService, private router: Router) { }
 
     onSubmit() {
@@ -33,17 +23,7 @@ export class FormulariomusicaComponent {
         this.musicaService.insertar(this.musica).subscribe({
             next: (musica) => {
                 console.log('Musica insertada:', musica);
-                this.musica = {
-                    id: 0,
-                    nombrePersona: '',
-                    albumIngresado: '',
-                    fechaRecogida: '',
-                    fechaDevolucion: '',
-                    genero: '',
-                    cantante: '',
-                    album: '',
-                    duracion: 0
-                };
+              
                 this.router.navigate(['/listamusica']);
             },
             error: (error) => {
@@ -51,7 +31,9 @@ export class FormulariomusicaComponent {
             }
         });
     }
-    goToMainPage() {
-        this.router.navigate(['/']);
+    goToListamusica() { // Updated method name
+        this.router.navigate(['/listamusica']); // Navigate to listamusica
+      }
     }
-}
+    
+

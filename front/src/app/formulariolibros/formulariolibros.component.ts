@@ -14,16 +14,7 @@ import { Router } from '@angular/router';
     styleUrl: './formulariolibros.component.scss'
 })
 export class FormulariolibrosComponent {
-    libro: Libro = {
-        nombrePersona: '',
-        libroIngresado: '',
-        fechaRecogida: '',
-        fechaDevolucion: '',
-        isbn: '',
-        editorial: '',
-        numeroPaginas: 0,
-        id: 0
-    };
+   libro = {} as Libro
 
     constructor(private libroService: LibroService, private router: Router) { }
 
@@ -32,16 +23,7 @@ export class FormulariolibrosComponent {
         this.libroService.insertar(this.libro).subscribe({
             next: (libro) => {
                 console.log('Libro insertado:', libro);
-                this.libro = {
-                    id: 0,
-                    nombrePersona: '',
-                    libroIngresado: '',
-                    fechaRecogida: '',
-                    fechaDevolucion: '',
-                    isbn: '',
-                    editorial: '',
-                    numeroPaginas: 0
-                };
+             
                 this.router.navigate(['/listalibros']);
             },
             error: (error) => {
@@ -49,7 +31,7 @@ export class FormulariolibrosComponent {
             }
         });
     }
-    goToMainPage() {
-        this.router.navigate(['/']);
-    }
+    goToListalibros() { // Updated method name
+        this.router.navigate(['/listalibros']); // Navigate to listamusica
+      }
 }

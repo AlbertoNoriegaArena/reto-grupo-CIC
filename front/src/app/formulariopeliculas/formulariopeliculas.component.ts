@@ -31,7 +31,7 @@ export class FormulariopeliculasComponent {
             }
         });
     }
-    goToMainPage() {
-        this.router.navigate(['/']);
-    }
+    goToListapeliculas() { // Updated method name
+        this.router.navigate(['/listapeliculas']); // Navigate to listamusica
+      }
 }
