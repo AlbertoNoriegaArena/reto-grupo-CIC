@@ -1,25 +1,67 @@
-<!-- src/app/listamusica/listamusica.component.html -->
-<div class="movie-list-header">
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <!-- Metadatos básicos -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Título de la página -->
+  <title>Lista de música</title>
+
+  <!-- Bootstrap CSS (v5) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons (para los iconos de los botones) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+  <div class="movie-list-header">
     <h1>Lista de Música <span class="movie-emoji">🎵</span></h1>
-    <table class="table"> <!-- Added movie-list-header -->
-        <thead>
-                  <tr>
-                    <th>Cantante</th>
-                    <th>Album</th>
-                    <th>Genero</th>
-                    <th>Duracion</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of musica">
-                    <td>{{ item.cantante }}</td>
-                    <td>{{ item.album }}</td>
-                    <td>{{ item.genero }}</td>
-                    <td>{{ item.duracion }}</td>
-                  </tr>
-                </tbody>
-              </table>
-              
-    <button (click)="goToFormularioMusica()">Añadir Música</button>
-    <button (click)="goToMainPage()">Volver a la pagina principal</button>
-</div>
+    <div class="botones">
+      <button class="btn btn-success w-40 mx-5" (click)="goToFormularioMusica()">Añadir Música</button>
+      <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la pagina principal</button>
+    </div>
+
+    <table class="table bg-dark text-white mt-5">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Cantante</th>
+          <th>Album</th>
+          <th>Genero</th>
+          <th>Duracion</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of musica">
+          <td>{{ item.item.nombre }}</td>
+          <td>{{ item.cantante }}</td>
+          <td>{{ item.album }}</td>
+          <td>{{ item.genero }}</td>
+          <td>{{ item.duracion }}</td>
+          <td>
+            <!-- Botón Ver -->
+            <button type="button" class="btn btn-info mx-1" >Ver</button>
+
+            <!-- Botón Actualizar -->
+            <button class="btn btn-warning mx-1" >Editar</button>
+
+            <!-- Botón Eliminar -->
+            <button class="btn btn-danger mx-1" >Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+
+</html>

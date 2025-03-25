@@ -124,3 +124,22 @@
     margin-top: 10px;
     font-size: 10px;
 }
+
+.botones {
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+
+}
+
+.botones {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.botonAgregar {
+  background-color: #333 !important;
+  color: #fff;
+  ;
+}
