@@ -1,42 +1,42 @@
 <!-- src/app/formulariopeliculas/formulariopeliculas.component.html -->
 <div class="container">
-  <h2>Añadir Película</h2>
-  <form (ngSubmit)="onSubmit()">
-      <div class="form-group">
+    <h2>Añadir Película</h2>
+    <form (ngSubmit)="onSubmit()">
+        <!-- <div class="form-group">
           <label for="nombrePersona">Nombre de la Persona:</label>
           <input type="text" id="nombrePersona" name="itemId" [(ngModel)]="pelicula.itemId" required>
-      </div>
-      <div class="form-group">
-          <label for="peliculaIngresada">Película Ingresada:</label>
-          <input type="text" id="peliculaIngresada" name="director" [(ngModel)]="pelicula.director" required>
-      </div>
-      <div class="form-group">
-          <label for="fechaRecogida">Fecha de Recogida:</label>
-          <input type="date" id="fechaRecogida" name="duracion" [(ngModel)]="pelicula.duracion" required>
-      </div>
-      <div class="form-group">
-          <label for="fechaDevolucion">Fecha de Devolución:</label>
-          <input type="date" id="fechaDevolucion" name="fechaEstreno" [(ngModel)]="pelicula.fechaEstreno" required>
-      </div>
-      <div class="form-group">
-          <label for="director">Director:</label>
-          <input type="text" id="director" name="director" [(ngModel)]="pelicula.director" required>
-      </div>
-      <div class="form-group">
-          <label for="duracion">Duración (minutos):</label>
-          <input type="number" id="duracion" name="duracion" [(ngModel)]="pelicula.duracion" required>
-      </div>
-      <div class="form-group">
-          <label for="genero">Género:</label>
-          <input type="text" id="genero" name="genero" [(ngModel)]="pelicula.genero" required>
-      </div>
-      <div class="form-group">
-          <label for="fechaEstreno">Fecha de Estreno:</label>
-          <input type="date" id="fechaEstreno" name="fechaEstreno" [(ngModel)]="pelicula.fechaEstreno" required>
-      </div>
-      <div class="buttons-container">
-        <button type="submit">Guardar</button>
-        <button type="button" (click)="goToMainPage()">Volver a la página principal</button>
-    </div>
-</form>
+      </div> -->
+        <div class="form-group">
+            <label for="peliculaIngresada">Película Ingresada:</label>
+            <input type="text" id="peliculaIngresada" name="director" [(ngModel)]="pelicula.director" required>
+        </div>
+        <div class="form-group">
+            <label for="fechaRecogida">Fecha de Recogida:</label>
+            <input type="date" id="fechaRecogida" name="duracion" [(ngModel)]="pelicula.duracion" required>
+        </div>
+        <div class="form-group">
+            <label for="fechaDevolucion">Fecha de Devolución:</label>
+            <input type="date" id="fechaDevolucion" name="fechaEstreno" [(ngModel)]="pelicula.fechaEstreno" required>
+        </div>
+        <div class="form-group">
+            <label for="director">Director:</label>
+            <input type="text" id="director" name="director" [(ngModel)]="pelicula.director" required>
+        </div>
+        <div class="form-group">
+            <label for="duracion">Duración (minutos):</label>
+            <input type="number" id="duracion" name="duracion" [(ngModel)]="pelicula.duracion" required>
+        </div>
+        <div class="form-group">
+            <label for="genero">Género:</label>
+            <input type="text" id="genero" name="genero" [(ngModel)]="pelicula.genero" required>
+        </div>
+        <div class="form-group">
+            <label for="fechaEstreno">Fecha de Estreno:</label>
+            <input type="date" id="fechaEstreno" name="fechaEstreno" [(ngModel)]="pelicula.fechaEstreno" required>
+        </div>
+        <div class="buttons-container">
+            <button type="submit">Guardar</button>
+            <button type="button" (click)="goToMainPage()">Volver a la página principal</button>
+        </div>
+    </form>
 </div>
