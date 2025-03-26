@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.santander.ascender.retoGrupoCIC.config.TipoItemNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
+import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.model.Musica;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.service.FormatoService;
@@ -49,26 +50,13 @@ public class MusicaController {
         TipoItem tipoMusica = tipoMusicaOpt.get();
 
         // Obtener el tipo del item asociado a la musica
-        TipoItem tipoItemRecibido = musica.getItem().getTipo();
+        Item itemRecibido = musica.getItem();
 
-        // Verificar si el tipoItem es null
-        if (tipoItemRecibido == null || tipoItemRecibido.getId() == null) {
-            return new ResponseEntity<>("Error: No se ha proporcionado un tipo de ítem válido", HttpStatus.BAD_REQUEST);
+        if (itemRecibido == null) {
+            return new ResponseEntity<>("Error: No item asociado a la pelicula", HttpStatus.BAD_REQUEST);
         }
 
-        // Coger el tipoItem en la DDBB
-        Optional<TipoItem> tipoItemBD = tipoItemService.obtenerTipoItemPorId(tipoItemRecibido.getId());
-
-        if(tipoItemBD.isEmpty()) {
-            throw new TipoItemNotFoundException(tipoItemRecibido.getId());
-        }
-
-        // Validar el tipo
-        if (!tipoItemBD.get().getId().equals(tipoMusica.getId())) {
-            return new ResponseEntity<>(
-                "Error: Solo se pueden crear musica. Has seleccionado: " + tipoItemBD.get().getNombre(),
-                 HttpStatus.BAD_REQUEST);
-        }
+        itemRecibido.setTipo(tipoMusica);
 
         // Validar formato
         List<Formato> formatosValidos = formatoService.obtenerFormatosPorTipoItem(tipoMusica);
@@ -79,7 +67,8 @@ public class MusicaController {
         }
        
         return new ResponseEntity<>(musicaService.createMusica(musica), HttpStatus.CREATED);
-    }    
+    }
+
     @GetMapping("/{id}")
     public Musica retrive(@PathVariable("id") Long id) {
         return musicaService.retriveMusica(id);

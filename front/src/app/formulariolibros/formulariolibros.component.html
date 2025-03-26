@@ -2,21 +2,25 @@
 <div class="container">
   <h2>Añadir Libro</h2>
   <form (ngSubmit)="onSubmit()">
-      <div class="form-group">
+      <!-- <div class="form-group">
           <label for="nombrePersona">Nombre de la Persona:</label>
           <input type="text" id="nombrePersona" name="nombrePersona" [(ngModel)]="libro.nombrePersona" required>
-      </div>
-      <div class="form-group">
+      </div> -->
+      <!-- <div class="form-group">
           <label for="libroIngresado">Libro Ingresado:</label>
           <input type="text" id="libroIngresado" name="libroIngresado" [(ngModel)]="libro.libroIngresado" required>
-      </div>
-      <div class="form-group">
+      </div> -->
+      <!-- <div class="form-group">
           <label for="fechaRecogida">Fecha de Recogida:</label>
           <input type="date" id="fechaRecogida" name="fechaRecogida" [(ngModel)]="libro.fechaRecogida" required>
       </div>
       <div class="form-group">
           <label for="fechaDevolucion">Fecha de Devolución:</label>
           <input type="date" id="fechaDevolucion" name="fechaDevolucion" [(ngModel)]="libro.fechaDevolucion" required>
+      </div> -->
+      <div class="form-group">
+        <label for="isbn">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" [(ngModel)]="libro.item.nombre" required>
       </div>
       <div class="form-group">
           <label for="isbn">ISBN:</label>
@@ -29,6 +33,18 @@
       <div class="form-group">
           <label for="numeroPaginas">Número de Páginas:</label>
           <input type="number" id="numeroPaginas" name="numeroPaginas" [(ngModel)]="libro.numeroPaginas" required>
+      </div>
+      <div class="form-group">
+        <label for="formato">Formato:</label>
+        <select id="formato" name="formato" [(ngModel)]="libro.item.formato.id" required>
+          <option *ngFor="let formato of formatos" [value]="formato.id">
+            {{ formato.nombre }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="isbn">Ubicacion:</label>
+        <input type="text" id="ubicacion" name="ubicacion" [(ngModel)]="libro.item.ubicacion" required>
       </div>
       <div class="buttons-container">
         <button type="submit">Guardar</button>

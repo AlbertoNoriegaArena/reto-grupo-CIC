@@ -35,6 +35,7 @@
           <th>Album</th>
           <th>Genero</th>
           <th>Duracion</th>
+          <th>Formato</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -45,6 +46,7 @@
           <td>{{ item.album }}</td>
           <td>{{ item.genero }}</td>
           <td>{{ item.duracion }}</td>
+          <td>{{ item.item.formato.nombre }}</td>
           <td>
             <!-- Botón Ver -->
             <button type="button" class="btn btn-info mx-1" >Ver</button>
