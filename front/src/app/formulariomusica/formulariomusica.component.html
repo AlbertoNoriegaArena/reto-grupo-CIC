@@ -2,7 +2,7 @@
 <div class="container">
   <h2>Añadir Música</h2>
   <form (ngSubmit)="onSubmit()">
-      <div class="form-group">
+      <!-- <div class="form-group">
           <label for="nombrePersona">Nombre de la Persona:</label>
           <input type="text" id="nombrePersona" name="nombrePersona" [(ngModel)]="musica.nombrePersona" required>
       </div>
@@ -17,6 +17,10 @@
       <div class="form-group">
           <label for="fechaDevolucion">Fecha de Devolución:</label>
           <input type="date" id="fechaDevolucion" name="fechaDevolucion" [(ngModel)]="musica.fechaDevolucion" required>
+      </div> -->
+      <div class="form-group">
+        <label for="isbn">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" [(ngModel)]="musica.item.nombre" required>
       </div>
       <div class="form-group">
           <label for="genero">Género:</label>
@@ -33,6 +37,18 @@
       <div class="form-group">
           <label for="duracion">Duración (segundos):</label>
           <input type="number" id="duracion" name="duracion" [(ngModel)]="musica.duracion" required>
+      </div>
+      <div class="form-group">
+        <label for="formato">Formato:</label>
+        <select id="formato" name="formato" [(ngModel)]="musica.item.formato.id" required>
+          <option *ngFor="let formato of formatos" [value]="formato.id">
+            {{ formato.nombre }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="isbn">Ubicacion:</label>
+        <input type="text" id="ubicacion" name="ubicacion" [(ngModel)]="musica.item.ubicacion" required>
       </div>
       <div class="buttons-container">
         <button type="submit">Guardar</button>

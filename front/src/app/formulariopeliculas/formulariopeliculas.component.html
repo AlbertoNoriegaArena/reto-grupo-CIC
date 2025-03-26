@@ -6,17 +6,21 @@
           <label for="nombrePersona">Nombre de la Persona:</label>
           <input type="text" id="nombrePersona" name="itemId" [(ngModel)]="pelicula.itemId" required>
       </div> -->
-        <div class="form-group">
-            <label for="peliculaIngresada">Película Ingresada:</label>
-            <input type="text" id="peliculaIngresada" name="director" [(ngModel)]="pelicula.director" required>
-        </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" [(ngModel)]="pelicula.nombre" required>
+        </div> -->
+        <!-- <div class="form-group">
             <label for="fechaRecogida">Fecha de Recogida:</label>
             <input type="date" id="fechaRecogida" name="duracion" [(ngModel)]="pelicula.duracion" required>
         </div>
         <div class="form-group">
             <label for="fechaDevolucion">Fecha de Devolución:</label>
-            <input type="date" id="fechaDevolucion" name="fechaEstreno" [(ngModel)]="pelicula.fechaEstreno" required>
+            <input type="date" id="fechaDevolucion" name="fechaEstreno" [(ngModel)]="pelicula.item.fechaEstreno" required>
+        </div> -->
+        <div class="form-group">
+          <label for="isbn">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" [(ngModel)]="pelicula.item.nombre" required>
         </div>
         <div class="form-group">
             <label for="director">Director:</label>
@@ -34,6 +38,18 @@
             <label for="fechaEstreno">Fecha de Estreno:</label>
             <input type="date" id="fechaEstreno" name="fechaEstreno" [(ngModel)]="pelicula.fechaEstreno" required>
         </div>
+        <div class="form-group">
+          <label for="formato">Formato:</label>
+          <select id="formato" name="formato" [(ngModel)]="pelicula.item.formato.id" required>
+            <option *ngFor="let formato of formatos" [value]="formato.id">
+              {{ formato.nombre }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+            <label for="isbn">Ubicacion:</label>
+            <input type="text" id="ubicacion" name="ubicacion" [(ngModel)]="pelicula.item.ubicacion" required>
+          </div>
         <div class="buttons-container">
             <button type="submit">Guardar</button>
             <button type="button" (click)="goToListapeliculas()">Cancelar</button>

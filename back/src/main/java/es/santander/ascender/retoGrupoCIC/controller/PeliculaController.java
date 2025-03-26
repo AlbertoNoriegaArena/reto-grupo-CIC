@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.santander.ascender.retoGrupoCIC.config.TipoItemNotFoundException;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
+import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.model.Pelicula;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.service.FormatoService;
@@ -49,26 +49,13 @@ public class PeliculaController {
         TipoItem tipoPelicula = tipoPeliculaOpt.get();
 
         // Obtener el tipo del item asociado a la película
-        TipoItem tipoItemRecibido = pelicula.getItem().getTipo();
+        Item itemRecibido = pelicula.getItem();
 
-        // Verificar si el tipoItem es null
-        if (tipoItemRecibido == null || tipoItemRecibido.getId() == null) {
-            return new ResponseEntity<>("Error: No se ha proporcionado un tipo de ítem válido", HttpStatus.BAD_REQUEST);
+        if (itemRecibido == null) {
+            return new ResponseEntity<>("Error: No item asociado a la pelicula", HttpStatus.BAD_REQUEST);
         }
 
-        // Coger el tipoItem en la DDBB
-        Optional<TipoItem> tipoItemBD = tipoItemService.obtenerTipoItemPorId(tipoItemRecibido.getId());
-
-        if (tipoItemBD.isEmpty()) {
-            throw new TipoItemNotFoundException(tipoItemRecibido.getId());
-        }
-
-        // Validar el tipo
-        if (!tipoItemBD.get().getId().equals(tipoPelicula.getId())) {
-            return new ResponseEntity<>(
-                    "Error: Solo se pueden crear películas. Has seleccionado: " + tipoItemBD.get().getNombre(),
-                    HttpStatus.BAD_REQUEST);
-        }
+        itemRecibido.setTipo(tipoPelicula);;
 
         // Validar formato
         List<Formato> formatosValidos = formatoService.obtenerFormatosPorTipoItem(tipoPelicula);
