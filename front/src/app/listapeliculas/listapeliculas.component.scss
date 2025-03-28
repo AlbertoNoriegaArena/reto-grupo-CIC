@@ -8,10 +8,6 @@
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
-  margin: 20px auto;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .movie-list-header h1 {
@@ -142,4 +138,10 @@
   background-color: #333 !important;
   color: #fff;
   ;
+}
+
+.botonVer:hover{
+  color: black;
+  background-color: lightblue;
+
 }

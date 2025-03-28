@@ -2,3 +2,55 @@
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+app-root router-outlet {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.tablaDatos {
+    border: 2px solid #000;
+    width: 90%;
+}
+
+.tablaDatos thead th {
+    text-align: center !important;
+    background-color: lightblue !important;
+    border-bottom: 2px solid #000 !important;
+}
+
+.tablaDatos td {
+    text-align: center !important;
+}
+
+.tablaDatos th div {
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.tablaDatos td,
+.tablaDatos th {
+    border-right: 1px solid black !important;
+}
+
+.tablaDatos tr:nth-child(odd) {
+    background-color: #ccc;
+}
+
+.tablaDatos tr:nth-child(even) {
+    background-color: #dfdbdb;
+}
+
+.mat-mdc-paginator {
+    margin-top: 1%;
+}
+
+.mat-mdc-paginator > *{
+    background-color: #dfdbdb ;
+    border-radius: 10px;
+}
+

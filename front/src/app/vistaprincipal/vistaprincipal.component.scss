@@ -59,3 +59,43 @@ button:hover {
   background-color: #FFEB3B; /* Yellow */
   color: black;
 }
+
+/* Estilo personalizado */
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #e9e2e2;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.btn-custom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.footer {
+  background-color: #343a40;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 1rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer p {
+  margin: 0;
+}

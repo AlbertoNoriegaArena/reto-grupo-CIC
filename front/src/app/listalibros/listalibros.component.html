@@ -1,61 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="movie-list-header">
+  <h1>Lista de Libros <span class="movie-emoji">📚</span></h1>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lista de Libros</title>
-
-  <!-- Bootstrap CSS (v5) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Bootstrap Icons (para los iconos de los botones) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-</head>
-
-<body>
-
-  <div class="movie-list-header">
-    <h1>Lista de Libros <span class="movie-emoji">📚</span></h1>
-    <div class="botones">
-      <button class="btn btn-success w-40 mx-5" (click)="goToFormularioLibros()">Añadir Libro</button>
-      <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la pagina principal</button>
-    </div>
-    <table class="table mt-5">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Isbn</th>
-          <th>Editorial</th>
-          <th>Numero de paginas</th>
-          <th>Formato</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of libros">
-          <td>{{ item.item.nombre }}</td>
-          <td>{{ item.isbn }}</td>
-          <td>{{ item.editorial }}</td>
-          <td>{{ item.numeroPaginas }}</td>
-          <td>{{ item.item.formato.nombre }}</td>
-          <td>
-            <!-- Botón Ver -->
-            <button type="button" class="btn btn-info mx-1">Ver</button>
-
-            <!-- Botón Actualizar -->
-            <button class="btn btn-warning mx-1">Editar</button>
-
-            <!-- Botón Eliminar -->
-            <button class="btn btn-danger mx-1">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-
+  <div class="botones">
+    <button class="btn btn-success w-40 mx-5" (click)="goToFormularioLibros()">Añadir Libro</button>
+    <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la pagina principal</button>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
-</html>
+  <table class="table mt-5">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Isbn</th>
+        <th>Editorial</th>
+        <th>Numero de paginas</th>
+        <th>Formato</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let libro of libros">
+        <td>{{ libro.item.nombre }}</td>
+        <td>{{ libro.isbn }}</td>
+        <td>{{ libro.editorial }}</td>
+        <td>{{ libro.numeroPaginas }}</td>
+        <td>{{ libro.item.formato.nombre }}</td>
+        <td>
+          <!-- Botón Ver -->
+          <button type="button" class="btn btn-info mx-1">Ver</button>
+
+          <!-- Botón Actualizar -->
+          <button class="btn btn-warning mx-1">Editar</button>
+
+          <!-- Botón Eliminar -->
+          <button class="btn btn-danger mx-1">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

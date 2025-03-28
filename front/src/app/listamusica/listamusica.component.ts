@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
     styleUrl: './listamusica.component.scss'
 })
 export class ListamusicaComponent implements OnInit {
-    musica: Musica[] = [];
+    musicas: Musica[] = [];
 
 
     constructor(private musicaService: MusicaService, private router: Router) { }
@@ -24,8 +24,8 @@ export class ListamusicaComponent implements OnInit {
 
     loadMusica() {
         this.musicaService.getMusica().subscribe({
-            next: (musica) => {
-                this.musica = musica;
+            next: (musicas) => {
+                this.musicas = musicas;
             },
             error: (error) => {
                 console.error('Error al cargar la música:', error);
