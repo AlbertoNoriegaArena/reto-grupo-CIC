@@ -1,0 +1,66 @@
+.filtroTabla{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tablaDatos {
+    border: 2px solid #000;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+
+.tablaDatos td,
+.tablaDatos th {
+    border-right: 1px solid black !important;
+}
+
+.tablaDatos tr:nth-child(odd) {
+    background-color: #ccc;
+}
+
+.tablaDatos tr:nth-child(even) {
+    background-color: #dfdbdb;
+}
+
+::ng-deep .tablaDatos table thead th {
+    text-align: center !important;
+    background-color: lightblue !important;
+    border-bottom: 2px solid #000 !important;
+}
+
+::ng-deep .tablaDatos td {
+    text-align: center !important;
+}
+
+::ng-deep .tablaDatos th div {
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.paginacion {
+    margin-top: 1%;
+}
+
+.paginacion>* {
+    background-color: #ccc;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+/* Asegurar que la tabla ocupe todo el ancho disponible */
+.mat-table {
+    width: 100%;
+  }
+  
+  /* Clases de ancho genéricas aplicables a cualquier tabla */
+  .col-1 { width: 25%; } /* Primera columna */
+  .col-2 { width: 10%; } /* Segunda columna */
+  .col-3 { width: 25%; } /* Tercera columna */
+  .col-4 { width: 10%; } /* Cuarta columna */
+  .col-5 { width: 12.5%; } /* Quinta columna */
+  .col-6 { width: 17.5%; } /* Sexta columna */

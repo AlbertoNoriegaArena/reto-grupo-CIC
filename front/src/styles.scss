@@ -4,53 +4,24 @@
 @import 'bootstrap/scss/bootstrap';
 
 app-root router-outlet {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
+    margin: 0 auto !important;
+    width: 90% !important;
     height: 100% !important;
 }
 
-.tablaDatos {
-    border: 2px solid #000;
-    width: 90%;
+.contenedor {
+    width: 90% ;
+    margin: 0 auto;
 }
 
-.tablaDatos thead th {
-    text-align: center !important;
-    background-color: lightblue !important;
-    border-bottom: 2px solid #000 !important;
-}
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente */
+    text-align: center; /* Asegura que el texto también esté centrado */
+    width: 100%;
+  }
+  
 
-.tablaDatos td {
-    text-align: center !important;
-}
 
-.tablaDatos th div {
-    text-align: center !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-}
-
-.tablaDatos td,
-.tablaDatos th {
-    border-right: 1px solid black !important;
-}
-
-.tablaDatos tr:nth-child(odd) {
-    background-color: #ccc;
-}
-
-.tablaDatos tr:nth-child(even) {
-    background-color: #dfdbdb;
-}
-
-.mat-mdc-paginator {
-    margin-top: 1%;
-}
-
-.mat-mdc-paginator > *{
-    background-color: #dfdbdb ;
-    border-radius: 10px;
-}
 
