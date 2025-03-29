@@ -1,22 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PeliculaService } from '../../pelicula.service';
 import { Pelicula } from '../../pelicula';
 import { Router } from '@angular/router';
 import { TablaGenericaComponent } from '../components/tabla-generica/tabla-generica.component';
+import { CommonModule } from '@angular/common';
+import { FormulariopeliculasComponent } from '../formulariopeliculas/formulariopeliculas.component';
+import { ModalComponent } from '../modal/modal.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-listapeliculas',
   standalone: true,
-  imports: [TablaGenericaComponent],
+  imports: [
+    TablaGenericaComponent,
+    CommonModule,
+    FormulariopeliculasComponent,
+    ModalComponent,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule
+  ],
   templateUrl: './listapeliculas.component.html',
   styleUrls: ['./listapeliculas.component.scss'],
 })
 export class ListapeliculasComponent implements OnInit {
   peliculas: Pelicula[] = [];
   dataSource: MatTableDataSource<Pelicula> = new MatTableDataSource();
+  isModalOpen = false;
 
-  displayedColumns: string[] = ['nombre',  'formato', 'director', 'duracion', 'fechaEstreno',  'acciones'];
+  displayedColumns: string[] = ['nombre', 'formato', 'director', 'duracion', 'fechaEstreno', 'acciones'];
 
   columnDefinitions = [
     { key: 'nombre', label: 'Nombre' },
@@ -24,10 +38,9 @@ export class ListapeliculasComponent implements OnInit {
     { key: 'director', label: 'Director' },
     { key: 'duracion', label: 'Duración (minutos)' },
     { key: 'fechaEstreno', label: 'Fecha de Estreno' },
-    
   ];
 
-  constructor(private peliculaService: PeliculaService, private router: Router) {}
+  constructor(private peliculaService: PeliculaService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadPeliculas();
@@ -47,37 +60,45 @@ export class ListapeliculasComponent implements OnInit {
     });
   }
 
+  openModal() {
+    this.isModalOpen = true;
+  }
 
+  closeModal() {
+    this.isModalOpen = false;
+  }
 
-    goToFormularioPeliculas() {
-        this.router.navigate(['/formulariopeliculas']);
-    }
+  onFormSubmitted() {
+    this.closeModal();
+    this.loadPeliculas(); // Refresh the movie list
+    console.log("Form submitted");
+  }
 
-    goToMainPage() {
-        this.router.navigate(['/']);
-    }
+  goToMainPage() {
+    this.router.navigate(['/']);
+  }
 
-    goToDetalles(pelicula: Pelicula) {
-        this.router.navigate(['/detallespelicula', pelicula.item.id]);
-    }
+  goToDetalles(pelicula: Pelicula) {
+    this.router.navigate(['/detallespelicula', pelicula.item.id]);
+  }
 
-    goToActualizar(pelicula: Pelicula) {
-        this.router.navigate(['/actualizarpelicula', pelicula.item.id]);
-    }
+  goToActualizar(pelicula: Pelicula) {
+    this.router.navigate(['/actualizarpelicula', pelicula.item.id]);
+  }
 
-    eliminarPelicula(pelicula: Pelicula) {
-        if (confirm('¿Estás seguro de que deseas eliminar esta película?')) {
-            this.peliculaService.borrar(pelicula.item.id).subscribe({
-                next: () => {
-                    this.peliculas = this.peliculas.filter(p => p.item.id !== pelicula.item.id);
-                    alert('Película eliminada exitosamente.');
-                },
-                error: (error) => {
-                    console.error('Error al eliminar la película:', error);
-                    alert('Hubo un error al eliminar la película.');
-                }
-            });
+  eliminarPelicula(pelicula: Pelicula) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta película?')) {
+      this.peliculaService.borrar(pelicula.item.id).subscribe({
+        next: () => {
+          this.peliculas = this.peliculas.filter(p => p.item.id !== pelicula.item.id);
+          this.loadPeliculas();
+          alert('Película eliminada exitosamente.');
+        },
+        error: (error) => {
+          console.error('Error al eliminar la película:', error);
+          alert('Hubo un error al eliminar la película.');
         }
+      });
     }
-
+  }
 }

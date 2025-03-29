@@ -2,11 +2,14 @@
   <header class="my-4">
     <h1 class="mb-3">Lista de películas <span class="movie-emoji">🎬</span></h1>
     <div class="botonesHeader">
-      <button class="btn btn-success w-40 mx-5" (click)="goToFormularioPeliculas()">Añadir Película</button>
+      <button class="btn btn-success w-40 mx-5" (click)="openModal()">Añadir Película</button>
       <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la página principal</button>
     </div>
   </header>
   <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns"
     [columnDefinitions]="columnDefinitions">
   </app-tabla-generica>
+  <app-modal [isOpen]="isModalOpen" title="Agregar Película" (closeEvent)="closeModal()">
+    <app-formulariopeliculas (formSubmitted)="onFormSubmitted()" (formClosed)="closeModal()"></app-formulariopeliculas>
+  </app-modal>
 </div>

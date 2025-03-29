@@ -1,58 +1,77 @@
-<!-- src/app/formulariopeliculas/formulariopeliculas.component.html -->
 <div class="container">
-    <h2>Añadir Película</h2>
-    <form (ngSubmit)="onSubmit()">
-        <!-- <div class="form-group">
-          <label for="nombrePersona">Nombre de la Persona:</label>
-          <input type="text" id="nombrePersona" name="itemId" [(ngModel)]="pelicula.itemId" required>
-      </div> -->
-        <!-- <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" [(ngModel)]="pelicula.nombre" required>
-        </div> -->
-        <!-- <div class="form-group">
-            <label for="fechaRecogida">Fecha de Recogida:</label>
-            <input type="date" id="fechaRecogida" name="duracion" [(ngModel)]="pelicula.duracion" required>
+  <form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" class="form-control"
+          [(ngModel)]="pelicula.item.nombre" required #nombreRef="ngModel">
+        <div class="text-danger" *ngIf="nombreRef.invalid && nombreRef.touched">
+          El nombre es obligatorio
         </div>
-        <div class="form-group">
-            <label for="fechaDevolucion">Fecha de Devolución:</label>
-            <input type="date" id="fechaDevolucion" name="fechaEstreno" [(ngModel)]="pelicula.item.fechaEstreno" required>
-        </div> -->
-        <div class="form-group">
-          <label for="isbn">Nombre:</label>
-          <input type="text" id="nombre" name="nombre" [(ngModel)]="pelicula.item.nombre" required>
+        <div class="text-danger" *ngIf="erroresBackend?.nombre">
+          {{ erroresBackend.nombre }}
         </div>
-        <div class="form-group">
-            <label for="director">Director:</label>
-            <input type="text" id="director" name="director" [(ngModel)]="pelicula.director" required>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="director">Director:</label>
+        <input type="text" id="director" name="director" class="form-control" [(ngModel)]="pelicula.director">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="duracion">Duración (minutos):</label>
+        <input type="number" id="duracion" name="duracion" class="form-control"
+          [(ngModel)]="pelicula.duracion" required>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="genero">Género:</label>
+        <input type="text" id="genero" name="genero" class="form-control" [(ngModel)]="pelicula.genero">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="fechaEstreno">Fecha de Estreno:</label>
+        <input type="date" id="fechaEstreno" name="fechaEstreno" class="form-control"
+          [(ngModel)]="pelicula.fechaEstreno">
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="formato">Formato:</label>
+        <select id="formato" name="formato" class="form-control" [(ngModel)]="pelicula.item.formato.id" required #formatoRef="ngModel">
+          <option value="" disabled selected>Seleccione un formato</option> 
+          <option *ngFor="let formato of formatos" [value]="formato.id">{{ formato.nombre }}</option>
+        </select>
+        <div class="text-danger" *ngIf="formatoRef.invalid && formatoRef.touched">
+          Debe seleccionar un formato
         </div>
-        <div class="form-group">
-            <label for="duracion">Duración (minutos):</label>
-            <input type="number" id="duracion" name="duracion" [(ngModel)]="pelicula.duracion" required>
+        <div class="text-danger" *ngIf="erroresBackend?.formato">
+          {{ erroresBackend.formato }}
         </div>
-        <div class="form-group">
-            <label for="genero">Género:</label>
-            <input type="text" id="genero" name="genero" [(ngModel)]="pelicula.genero" required>
-        </div>
-        <div class="form-group">
-            <label for="fechaEstreno">Fecha de Estreno:</label>
-            <input type="date" id="fechaEstreno" name="fechaEstreno" [(ngModel)]="pelicula.fechaEstreno" required>
-        </div>
-        <div class="form-group">
-          <label for="formato">Formato:</label>
-          <select id="formato" name="formato" [(ngModel)]="pelicula.item.formato.id" required>
-            <option *ngFor="let formato of formatos" [value]="formato.id">
-              {{ formato.nombre }}
-            </option>
-          </select>
-        </div>
-        <div class="form-group">
-            <label for="isbn">Ubicacion:</label>
-            <input type="text" id="ubicacion" name="ubicacion" [(ngModel)]="pelicula.item.ubicacion" required>
-          </div>
-        <div class="buttons-container">
-            <button type="submit">Guardar</button>
-            <button type="button" (click)="goToListapeliculas()">Cancelar</button>
-        </div>
-    </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion" name="ubicacion" class="form-control" [(ngModel)]="pelicula.item.ubicacion"
+          required>
+      </div>
+    </div>
+
+    <!-- Mensaje de error general del backend -->
+    <div class="alert alert-danger mt-2" *ngIf="erroresBackend?.general">
+      {{ erroresBackend.general }}
+    </div>
+
+    <div class="buttons-container mt-3">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
+    </div>
+
+    
+  </form>
 </div>
