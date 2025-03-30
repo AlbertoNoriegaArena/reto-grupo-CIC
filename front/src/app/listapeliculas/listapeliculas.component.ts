@@ -78,9 +78,14 @@ export class ListapeliculasComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  goToDetalles(pelicula: Pelicula) {
-    this.router.navigate(['/detallespelicula', pelicula.item.id]);
+  verDetalles(row: any): void {
+    if (row && row.idItem) {
+      this.router.navigate(['/detalle-pelicula', row.idItem]);  // Navegar solo si 'idItem' está definido
+    } else {
+      console.error('ID no encontrado para la película:', row);
+    }
   }
+  
 
   goToActualizar(pelicula: Pelicula) {
     this.router.navigate(['/actualizarpelicula', pelicula.item.id]);

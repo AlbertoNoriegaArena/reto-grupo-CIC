@@ -7,7 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule, DatePipe } from '@angular/common';
-import { CustomPaginator } from '../../custom-paginator'; // Importa la función
+import { CustomPaginator } from '../../custom-paginator'; 
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-tabla-generica',
@@ -33,6 +34,7 @@ export class TablaGenericaComponent implements OnInit {
   @Input() dataSource: MatTableDataSource<any> = new MatTableDataSource();
   @Input() displayedColumns: string[] = [];
   @Input() columnDefinitions: { key: string; label: string }[] = [];
+  constructor(private router: Router) {}
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -52,6 +54,11 @@ export class TablaGenericaComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  verDetalles(idItem: number) {
+    // Navegar a la página de detalles de la película
+    this.router.navigate(['/detallepelicula', idItem]); // Asegúrate de que `row.id` sea el ID correcto de la película
   }
 
   isDate(value: any): boolean {

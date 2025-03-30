@@ -19,8 +19,8 @@ export class PeliculaService {
     return this.httpClient.get<Pelicula[]>(this.url);
   }
 
-  buscarUno(director: string): Observable<Pelicula> {
-    return this.httpClient.get<Pelicula>(`${this.url}/${director}`);
+  buscarUno(itemId: number): Observable<Pelicula> {
+    return this.httpClient.get<Pelicula>(`${this.url}/${itemId}`);
   }
 
   actualizar(pelicula: Pelicula): Observable<Pelicula> {

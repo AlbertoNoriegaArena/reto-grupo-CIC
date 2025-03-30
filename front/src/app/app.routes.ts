@@ -10,6 +10,7 @@ import { ListamusicaComponent } from './listamusica/listamusica.component';
 import { ListapersonasComponent } from './listapersonas/listapersonas.component';
 import { FormulariopersonasComponent } from './formulariopersonas/formulariopersonas.component';
 import { DetalleUsuarioComponent } from './detalleusuario/detalleusuario.component'; 
+import { DetallePeliculaComponent } from './detalle-pelicula/detalle-pelicula.component'
 
 
 export const routes: Routes = [
@@ -25,4 +26,5 @@ export const routes: Routes = [
     { path: 'vistaprincipal', component: VistaprincipalComponent },
     { path: 'formulariopersonas', component: FormulariopersonasComponent },
     { path: 'detalleusuario/:id', component: DetalleUsuarioComponent},
+    { path: 'detallepelicula/:id', component: DetallePeliculaComponent },
 ];
