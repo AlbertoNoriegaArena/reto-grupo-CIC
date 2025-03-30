@@ -1,0 +1,14 @@
+<div class="modal" [class.show]="isOpen" *ngIf="isOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-secondary text-white">
+          <h5 class="modal-title">{{ title }}</h5>
+          <button type="button" class="btn-close" (click)="close()"></button>
+        </div>
+        <div class="modal-body">
+          <ng-content></ng-content>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show" *ngIf="isOpen"></div>

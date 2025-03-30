@@ -1,5 +1,4 @@
-// src/app/formulariopeliculas/formulariopeliculas.component.ts
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Pelicula } from '../../pelicula';
@@ -12,42 +11,106 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './formulariopeliculas.component.html',
-  styleUrl: './formulariopeliculas.component.scss'
+  styleUrls: ['./formulariopeliculas.component.scss']
 })
 export class FormulariopeliculasComponent implements OnInit {
   formatos: { nombre: string; id: number }[] = [];
   tipoItemSeleccionado: string = "Pelicula";
-  pelicula = { item: { formato: {} } } as Pelicula;
   erroresBackend: any = {};
 
   @Output() formSubmitted = new EventEmitter<void>();
   @Output() formClosed = new EventEmitter<void>();
 
-  constructor(private peliculaService: PeliculaService, private router: Router, private http: HttpClient) { }
+  @Input() isEditMode: boolean = false;
+  @Input() pelicula: Pelicula = { 
+     id: 0,
+     nombre: '',
+     director: '',
+     duracion: 0,
+     genero: '',
+     fechaEstreno: '',
+     item: { 
+         id: 0,
+         nombre: '',
+         ubicacion: '',
+         tipo: {
+             id: 0,
+             nombre: ''
+         },
+         formato: {
+             id: 0,
+             nombre: ''
+         },
+         fecha: '',
+         estado: ''
+     }
+   };
+
+  constructor(
+    private peliculaService: PeliculaService,
+    private router: Router,
+    private http: HttpClient
+  ) {}
+
+  ngOnInit() {
+    this.getFormatos(); // Llamada a la API para obtener los formatos
+  }
 
   onSubmit() {
-    // Comprobar que el formulario es válido
-    this.peliculaService.insertar(this.pelicula).subscribe({
-      next: (respuesta) => {
-        console.log('Película guardada con éxito', respuesta);
-        this.erroresBackend = {};  // Limpiar errores si la petición fue exitosa
-        this.resetForm();  // Llamar a reset para limpiar el formulario después de guardar
-        this.formSubmitted.emit();  // Emitir el evento de éxito si es necesario
-        this.formClosed.emit();  // Emitir el evento de cierre
-      },
-      error: (error) => {
-        if (error.status === 400) {
-          if (typeof error.error === 'string') {
-            this.erroresBackend = { general: error.error }; // Guardamos error como un mensaje general
-          } else {
-            this.erroresBackend = error.error; // Guardamos los errores específicos de los campos
-          }
-        } else {
-          console.error('Error en el servidor', error);
-        }
-      }
-    });
+    if (this.isEditMode) {
+      this.update();
+    } else {
+      this.create();
+    }
   }
+
+  create() {
+    this.peliculaService.insertar(this.pelicula).subscribe({
+        next: (respuesta) => {
+          console.log('Película guardada con éxito', respuesta);
+          this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
+          this.resetForm();  // Limpiar el formulario después de guardar
+          this.formSubmitted.emit();  // Emitir el evento de éxito
+          this.formClosed.emit();  // Emitir el evento de cierre
+        },
+        error: (error) => {
+          if (error.status === 400) {
+            // Guardamos los errores del backend si los hay
+            if (typeof error.error === 'string') {
+              this.erroresBackend = { general: error.error };
+            } else {
+              this.erroresBackend = error.error;
+            }
+          } else {
+            console.error('Error en el servidor', error);
+          }
+        }
+      });
+ }
+
+ update() {
+    this.peliculaService.actualizar(this.pelicula).subscribe({
+        next: (respuesta) => {
+          console.log('Película actualizada con éxito', respuesta);
+          this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
+          this.resetForm();  // Limpiar el formulario después de guardar
+          this.formSubmitted.emit();  // Emitir el evento de éxito
+          this.formClosed.emit();  // Emitir el evento de cierre
+        },
+        error: (error) => {
+          if (error.status === 400) {
+            // Guardamos los errores del backend si los hay
+            if (typeof error.error === 'string') {
+              this.erroresBackend = { general: error.error };
+            } else {
+              this.erroresBackend = error.error;
+            }
+          } else {
+            console.error('Error en el servidor', error);
+          }
+        }
+      });
+ }
 
   closeForm() {
     this.resetForm();
@@ -55,15 +118,13 @@ export class FormulariopeliculasComponent implements OnInit {
   }
 
   resetForm() {
-    this.pelicula = { item: { formato: {} } } as Pelicula;  // Reseteamos el objeto pelicula
-    this.erroresBackend = {};  // Limpiamos los errores del backend
-  }
-
-  ngOnInit() {
-    this.getFormatos();
+    // Limpiar el objeto 'pelicula' y los errores
+    this.pelicula = { item: { formato: {} }, fechaEstreno: '' } as Pelicula;
+    this.erroresBackend = {};  // Limpiar los errores
   }
 
   getFormatos() {
+    // Obtener los formatos desde la API
     this.http.get<any[]>('http://localhost:4200/api/TipoItemFormatos').subscribe(
       (data) => {
         this.formatos = data

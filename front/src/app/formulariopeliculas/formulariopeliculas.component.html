@@ -15,7 +15,8 @@
 
       <div class="form-group col-md-6">
         <label for="director">Director:</label>
-        <input type="text" id="director" name="director" class="form-control" [(ngModel)]="pelicula.director">
+        <input type="text" id="director" name="director" class="form-control"
+          [(ngModel)]="pelicula.director">
       </div>
     </div>
 
@@ -28,7 +29,8 @@
 
       <div class="form-group col-md-6">
         <label for="genero">Género:</label>
-        <input type="text" id="genero" name="genero" class="form-control" [(ngModel)]="pelicula.genero">
+        <input type="text" id="genero" name="genero" class="form-control"
+          [(ngModel)]="pelicula.genero">
       </div>
     </div>
 
@@ -41,7 +43,8 @@
 
       <div class="form-group col-md-6">
         <label for="formato">Formato:</label>
-        <select id="formato" name="formato" class="form-control" [(ngModel)]="pelicula.item.formato.id" required #formatoRef="ngModel">
+        <select id="formato" name="formato" class="form-control"
+          [(ngModel)]="pelicula.item.formato.id" required #formatoRef="ngModel">
           <option value="" disabled selected>Seleccione un formato</option> 
           <option *ngFor="let formato of formatos" [value]="formato.id">{{ formato.nombre }}</option>
         </select>
@@ -57,8 +60,8 @@
     <div class="row">
       <div class="form-group col-md-6">
         <label for="ubicacion">Ubicación:</label>
-        <input type="text" id="ubicacion" name="ubicacion" class="form-control" [(ngModel)]="pelicula.item.ubicacion"
-          required>
+        <input type="text" id="ubicacion" name="ubicacion" class="form-control"
+          [(ngModel)]="pelicula.item.ubicacion" required>
       </div>
     </div>
 
@@ -71,7 +74,5 @@
       <button type="submit" class="btn btn-primary">Guardar</button>
       <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
     </div>
-
-    
   </form>
 </div>

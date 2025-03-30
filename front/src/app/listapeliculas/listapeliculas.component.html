@@ -6,10 +6,15 @@
       <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la página principal</button>
     </div>
   </header>
-  <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns"
-    [columnDefinitions]="columnDefinitions">
+  <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns" [deleteCallback]="delete.bind(this)"   [editCallback]="editar.bind(this)"
+  [viewDetailsCallback]="verDetalles" [columnDefinitions]="columnDefinitions" >
   </app-tabla-generica>
-  <app-modal [isOpen]="isModalOpen" title="Agregar Película" (closeEvent)="closeModal()">
-    <app-formulariopeliculas (formSubmitted)="onFormSubmitted()" (formClosed)="closeModal()"></app-formulariopeliculas>
+  
+  <app-modal [isOpen]="isModalOpen" [title]="isEditMode ? 'Editar Película' : 'Agregar Película'" (closeEvent)="closeModal()">
+    <app-formulariopeliculas 
+      [isEditMode]="isEditMode"
+      (formSubmitted)="onFormSubmitted()" 
+      (formClosed)="closeModal()">
+    </app-formulariopeliculas>
   </app-modal>
 </div>

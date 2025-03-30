@@ -9,6 +9,8 @@ import { FormulariopeliculasComponent } from '../formulariopeliculas/formulariop
 import { ModalComponent } from '../modal/modal.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-listapeliculas',
@@ -20,7 +22,8 @@ import { MatIconModule } from '@angular/material/icon';
     ModalComponent,
     MatTableModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule,
   ],
   templateUrl: './listapeliculas.component.html',
   styleUrls: ['./listapeliculas.component.scss'],
@@ -28,7 +31,9 @@ import { MatIconModule } from '@angular/material/icon';
 export class ListapeliculasComponent implements OnInit {
   peliculas: Pelicula[] = [];
   dataSource: MatTableDataSource<Pelicula> = new MatTableDataSource();
+  isEditMode = false;
   isModalOpen = false;
+  selectedPelicula: Pelicula = { item: { formato: {} } } as Pelicula;
 
   displayedColumns: string[] = ['nombre', 'formato', 'director', 'duracion', 'fechaEstreno', 'acciones'];
 
@@ -78,32 +83,52 @@ export class ListapeliculasComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  verDetalles(row: any): void {
-    if (row && row.idItem) {
-      this.router.navigate(['/detalle-pelicula', row.idItem]);  // Navegar solo si 'idItem' está definido
-    } else {
-      console.error('ID no encontrado para la película:', row);
+  editar(id: number) {
+    const pelicula = this.dataSource.data.find(p => p.item.id === id);
+    if (pelicula) {
+      this.selectedPelicula = { ...pelicula }; // Clonar para evitar modificar el original
+      this.isEditMode = true;
+      this.isModalOpen = true; // Abrir modal de edición
     }
   }
-  
 
-  goToActualizar(pelicula: Pelicula) {
-    this.router.navigate(['/actualizarpelicula', pelicula.item.id]);
+  verDetalles(id: number) {
+    this.router.navigate(['/detallepelicula', id]);  // Navegar a la página de detalles
   }
 
-  eliminarPelicula(pelicula: Pelicula) {
-    if (confirm('¿Estás seguro de que deseas eliminar esta película?')) {
-      this.peliculaService.borrar(pelicula.item.id).subscribe({
-        next: () => {
-          this.peliculas = this.peliculas.filter(p => p.item.id !== pelicula.item.id);
-          this.loadPeliculas();
-          alert('Película eliminada exitosamente.');
-        },
-        error: (error) => {
-          console.error('Error al eliminar la película:', error);
-          alert('Hubo un error al eliminar la película.');
-        }
-      });
-    }
+  delete(id: number) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Este registro será eliminado y no lo podrás recuperar',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      confirmButtonColor: '#d33', 
+      cancelButtonText: 'Cancelar',
+      reverseButtons: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.peliculaService.borrar(id).subscribe(response => {
+          if (response.success) {
+            Swal.fire('Eliminado', response.message);
+            this.refreshData(); // Refresca la tabla
+          } else {
+            Swal.fire('Error', response.message); // Muestra el mensaje del backend
+          }
+        }, error => {
+          Swal.fire('Error', error.message, 'error'); // Error genérico
+        });
+      }
+    });
   }
+
+  refreshData() {
+    this.peliculaService.getPeliculas().subscribe(data => {
+      this.dataSource.data = data.map(pelicula => ({
+        ...pelicula,
+        nombre: pelicula.item?.nombre,
+        formato: pelicula.item?.formato?.nombre
+      }));
+    });
+  }
+
 }

@@ -64,3 +64,65 @@
   .col-4 { width: 10%; } /* Cuarta columna */
   .col-5 { width: 12.5%; } /* Quinta columna */
   .col-6 { width: 17.5%; } /* Sexta columna */
+
+  .modal-body {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+  
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+  
+        label {
+          font-weight: bold;
+          font-size: 14px;
+          color: #333;
+        }
+  
+        input {
+          padding: 10px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+          font-size: 14px;
+          width: 100%;
+        }
+      }
+  
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+  
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  }
+  
+  .modal .modal-dialog {
+    max-width: 90%;
+    width: auto;
+  }
+  
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
