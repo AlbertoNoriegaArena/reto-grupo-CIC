@@ -1,25 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute , Router } from '@angular/router';
 import { PeliculaService } from '../../pelicula.service';
 import { Pelicula } from '../../pelicula'; 
-import { CommonModule , DatePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';  
 
 @Component({
   selector: 'app-detalle-pelicula',
+  standalone: true,
+  imports: [
+    CommonModule,  
+  ],
   templateUrl: './detalle-pelicula.component.html',
   styleUrls: ['./detalle-pelicula.component.scss'],
-  providers: [CommonModule , DatePipe],  
 })
-
 export class DetallePeliculaComponent implements OnInit {
   pelicula: Pelicula | undefined;
 
   constructor(
     private route: ActivatedRoute,
     private peliculaService: PeliculaService,
-    private datePipe: DatePipe ,
-    private router: Router, 
+    private router: Router,
   ) {}
 
   ngOnInit() {

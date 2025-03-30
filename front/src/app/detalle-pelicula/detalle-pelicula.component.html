@@ -17,14 +17,14 @@
                 <div class="column">
                     <p><strong>Director:</strong> {{ pelicula?.director }}</p>
                     <p><strong>Duración:</strong> {{ pelicula?.duracion }} minutos</p>
-                    <p><strong>Fecha de estreno:</strong> {{ pelicula?.fechaEstreno }}</p>
+                    <p><strong>Fecha de estreno:</strong> {{ pelicula?.fechaEstreno | date: 'dd/MM/yyyy' }}</p>
                     <p><strong>Género:</strong> {{ pelicula?.genero }}</p>
                 </div>
 
                 <div class="column">
                     <p><strong>Formato:</strong> {{ pelicula?.item?.formato?.nombre }}</p>
                     <p><strong>Ubicación:</strong> {{ pelicula?.item?.ubicacion}}</p>
-                    <p><strong>Fecha:</strong> {{ pelicula?.item?.fecha}}</p>
+                    <p><strong>Fecha:</strong> {{ pelicula?.item?.fecha | date: 'dd/MM/yyyy'}}</p>
                     <p><strong>Estado:</strong> {{ pelicula?.item?.estado}}</p>
                 </div>
             </div>
