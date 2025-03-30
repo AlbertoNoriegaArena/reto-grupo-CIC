@@ -38,7 +38,7 @@ public class PeliculaController {
     private TipoItemService tipoItemService;
 
     @PostMapping
-    public ResponseEntity<?> create( @Valid @RequestBody Pelicula pelicula) {
+    public ResponseEntity<?> create(@Valid @RequestBody Pelicula pelicula) {
         // Buscar el tipo "Película"
         Optional<TipoItem> tipoPeliculaOpt = tipoItemService.obtenerPorNombre("Pelicula");
 
@@ -55,7 +55,8 @@ public class PeliculaController {
             return new ResponseEntity<>("Error: No item asociado a la pelicula", HttpStatus.BAD_REQUEST);
         }
 
-        itemRecibido.setTipo(tipoPelicula);;
+        itemRecibido.setTipo(tipoPelicula);
+        ;
 
         // Validar formato
         List<Formato> formatosValidos = formatoService.obtenerFormatosPorTipoItem(tipoPelicula);
@@ -81,7 +82,7 @@ public class PeliculaController {
     // Método para actualizar la película
     @PutMapping("/{itemId}")
     public ResponseEntity<Pelicula> update(@PathVariable("itemId") Long itemId, @Valid @RequestBody Pelicula pelicula) {
-    
+
         Pelicula updatedPelicula = peliculaService.updatePelicula(itemId, pelicula);
 
         return new ResponseEntity<>(updatedPelicula, HttpStatus.OK);
@@ -92,10 +93,10 @@ public class PeliculaController {
     public ResponseEntity<String> delete(@PathVariable("itemId") Long itemId) {
         try {
             peliculaService.deletePelicula(itemId);
-            return new ResponseEntity<>("Película eliminada", HttpStatus.OK);
+            return ResponseEntity.ok(""); // 200 OK con un cuerpo vacío
         } catch (IllegalArgumentException e) {
-
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 }

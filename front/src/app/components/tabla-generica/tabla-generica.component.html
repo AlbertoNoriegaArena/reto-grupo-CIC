@@ -39,10 +39,10 @@
           <button mat-icon-button color="primary" matTooltip="Ver detalles" (click)="verDetalles(row.item?.id)">
             <mat-icon>visibility</mat-icon>
           </button>
-          <button mat-icon-button color="accent" matTooltip="Editar">
+          <button mat-icon-button color="accent" matTooltip="Editar" (click)="update(row.item?.id)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" matTooltip="Eliminar">
+          <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="delete(row.item?.id)">
             <mat-icon>delete</mat-icon>
           </button>
         </td>
