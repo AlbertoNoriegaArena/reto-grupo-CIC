@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { TablaGenericaComponent } from '../components/tabla-generica/tabla-generica.component';
 import { CommonModule } from '@angular/common';
 import { FormulariopeliculasComponent } from '../formulariopeliculas/formulariopeliculas.component';
-import { ModalComponent } from '../modal/modal.component';
+import { ModalComponent } from '../components/modal/modal.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import Swal from 'sweetalert2';
@@ -33,6 +33,8 @@ export class ListapeliculasComponent implements OnInit {
   dataSource: MatTableDataSource<Pelicula> = new MatTableDataSource();
   isEditMode = false;
   isModalOpen = false;
+  titleModal = 'Agregar Película'; //Variable para el título dinámico
+
   selectedPelicula: Pelicula = { item: { formato: {} } } as Pelicula;
 
   displayedColumns: string[] = ['nombre', 'formato', 'director', 'duracion', 'fechaEstreno', 'acciones'];
@@ -65,35 +67,39 @@ export class ListapeliculasComponent implements OnInit {
     });
   }
 
-  openModal() {
+  abrirModalAgregar() {
+    
+    this.isEditMode = false;
+    this.titleModal = 'Agregar Película'; //Cambiar el título
     this.isModalOpen = true;
   }
 
-  closeModal() {
+  abrirModalEditar(id: number) {
+    const pelicula = this.dataSource.data.find(p => p.item.id === id);
+    if (pelicula) {
+      this.selectedPelicula = { ...pelicula }; //Clonamos la película
+      this.isEditMode = true;
+      this.titleModal = 'Editar Película'; //Cambiar el título
+      this.isModalOpen = true;
+    }
+  }
+
+  cerrarModal() {
     this.isModalOpen = false;
+    this.titleModal = 'Agregar Película'; //Resetear el título
   }
 
   onFormSubmitted() {
-    this.closeModal();
-    this.loadPeliculas(); // Refresh the movie list
-    console.log("Form submitted");
+    this.cerrarModal();
+    this.loadPeliculas(); 
   }
 
   goToMainPage() {
     this.router.navigate(['/']);
   }
 
-  editar(id: number) {
-    const pelicula = this.dataSource.data.find(p => p.item.id === id);
-    if (pelicula) {
-      this.selectedPelicula = { ...pelicula }; // Clonar para evitar modificar el original
-      this.isEditMode = true;
-      this.isModalOpen = true; // Abrir modal de edición
-    }
-  }
-
   verDetalles(id: number) {
-    this.router.navigate(['/detallepelicula', id]);  // Navegar a la página de detalles
+    this.router.navigate(['/detallepelicula', id]); //Navegar a la página de detalles
   }
 
   delete(id: number) {
@@ -110,12 +116,12 @@ export class ListapeliculasComponent implements OnInit {
         this.peliculaService.borrar(id).subscribe(response => {
           if (response.success) {
             Swal.fire('Eliminado', response.message);
-            this.refreshData(); // Refresca la tabla
+            this.refreshData();
           } else {
-            Swal.fire('Error', response.message); // Muestra el mensaje del backend
+            Swal.fire('Error', response.message);
           }
         }, error => {
-          Swal.fire('Error', error.message, 'error'); // Error genérico
+          Swal.fire('Error', error.message, 'error');
         });
       }
     });
@@ -130,5 +136,4 @@ export class ListapeliculasComponent implements OnInit {
       }));
     });
   }
-
 }

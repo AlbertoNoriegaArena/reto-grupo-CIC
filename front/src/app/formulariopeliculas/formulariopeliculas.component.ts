@@ -108,7 +108,7 @@ export class FormulariopeliculasComponent implements OnInit {
           } else {
             console.error('Error en el servidor', error);
           }
-        }
+        },
       });
  }
 
@@ -121,6 +121,7 @@ export class FormulariopeliculasComponent implements OnInit {
     // Limpiar el objeto 'pelicula' y los errores
     this.pelicula = { item: { formato: {} }, fechaEstreno: '' } as Pelicula;
     this.erroresBackend = {};  // Limpiar los errores
+    this.isEditMode=false;
   }
 
   getFormatos() {
