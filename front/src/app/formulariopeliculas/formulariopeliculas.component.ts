@@ -45,51 +45,46 @@ export class FormulariopeliculasComponent implements OnInit {
 
   create() {
     this.peliculaService.insertar(this.pelicula).subscribe({
-        next: (respuesta) => {
-          console.log('Película guardada con éxito', respuesta);
-          this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
-          this.resetForm();  // Limpiar el formulario después de guardar
-          this.formSubmitted.emit();  // Emitir el evento de éxito
-          this.formClosed.emit();  // Emitir el evento de cierre
-        },
-        error: (error) => {
-          if (error.status === 400) {
-            // Guardamos los errores del backend si los hay
-            if (typeof error.error === 'string') {
-              this.erroresBackend = { general: error.error };
-            } else {
-              this.erroresBackend = error.error;
-            }
-          } else {
-            console.error('Error en el servidor', error);
-          }
-        }
-      });
- }
+      next: (respuesta) => {
+        console.log('Película guardada con éxito', respuesta);
+        this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
+        this.resetForm();  // Limpiar el formulario después de guardar
+        this.formSubmitted.emit();  // Emitir el evento de éxito
+        this.formClosed.emit();  // Emitir el evento de cierre
+      },
+      error: (error) => {
+        this.handleBackendErrors(error);
+      }
+    });
+  }
 
- update() {
+  update() {
     this.peliculaService.actualizar(this.pelicula).subscribe({
-        next: (respuesta) => {
-          console.log('Película actualizada con éxito', respuesta);
-          this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
-          this.resetForm();  // Limpiar el formulario después de guardar
-          this.formSubmitted.emit();  // Emitir el evento de éxito
-          this.formClosed.emit();  // Emitir el evento de cierre
-        },
-        error: (error) => {
-          if (error.status === 400) {
-            // Guardamos los errores del backend si los hay
-            if (typeof error.error === 'string') {
-              this.erroresBackend = { general: error.error };
-            } else {
-              this.erroresBackend = error.error;
-            }
-          } else {
-            console.error('Error en el servidor', error);
-          }
-        },
-      });
- }
+      next: (respuesta) => {
+        console.log('Película actualizada con éxito', respuesta);
+        this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
+        this.resetForm();  // Limpiar el formulario después de guardar
+        this.formSubmitted.emit();  // Emitir el evento de éxito
+        this.formClosed.emit();  // Emitir el evento de cierre
+      },
+      error: (error) => {
+        this.handleBackendErrors(error);
+      }
+    });
+  }
+
+  // Función reutilizable para manejar errores del backend
+handleBackendErrors(error: any) {
+  if (error.status === 400 && error.error?.errors) {
+    this.erroresBackend = error.error.errors.reduce((acc: any, curr: any) => {
+      acc[curr.field] = curr.defaultMessage; // Asegura que usas `defaultMessage`
+      return acc;
+    }, {});
+  } else {
+    this.erroresBackend = { general: 'El nombre y el formato son obligatorios' };
+  }
+}
+
 
   closeForm() {
     this.resetForm();
