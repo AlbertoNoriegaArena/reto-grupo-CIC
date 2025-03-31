@@ -12,7 +12,7 @@ public class CustomValidationException extends RuntimeException {
 
     private final Map<String, String> violations;
 
-    public CustomValidationException(Set<ConstraintViolation<Item>> violations2) {
+    public <T> CustomValidationException(Set<ConstraintViolation<T>> violations2) {
         this.violations = new HashMap<>();
 
         // Convertimos las violaciones a un mapa de claves (campo) y mensajes de error

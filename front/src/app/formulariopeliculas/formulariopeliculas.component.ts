@@ -17,35 +17,14 @@ export class FormulariopeliculasComponent implements OnInit {
   formatos: { nombre: string; id: number }[] = [];
   tipoItemSeleccionado: string = "Pelicula";
   erroresBackend: any = {};
+  
 
   @Output() formSubmitted = new EventEmitter<void>();
   @Output() formClosed = new EventEmitter<void>();
 
   @Input() isEditMode: boolean = false;
-  @Input() pelicula: Pelicula = { 
-     id: 0,
-     nombre: '',
-     director: '',
-     duracion: 0,
-     genero: '',
-     fechaEstreno: '',
-     item: { 
-         id: 0,
-         nombre: '',
-         ubicacion: '',
-         tipo: {
-             id: 0,
-             nombre: ''
-         },
-         formato: {
-             id: 0,
-             nombre: ''
-         },
-         fecha: '',
-         estado: ''
-     }
-   };
-
+  @Input() pelicula!: Pelicula; 
+  
   constructor(
     private peliculaService: PeliculaService,
     private router: Router,
@@ -118,10 +97,9 @@ export class FormulariopeliculasComponent implements OnInit {
   }
 
   resetForm() {
-    // Limpiar el objeto 'pelicula' y los errores
+    // Limpiar el objeto 'pelicula' 
     this.pelicula = { item: { formato: {} }, fechaEstreno: '' } as Pelicula;
     this.erroresBackend = {};  // Limpiar los errores
-    this.isEditMode=false;
   }
 
   getFormatos() {

@@ -20,7 +20,7 @@ public class Pelicula {
 
     @Size(max = 40, message = "El nombre del director no puede tener más de 40 caracteres")
     private String director;
-    @Min(value = 1, message = "La duración debe ser mayor a 0 minutos")
+    @Min(value = 0, message = "La duración debe ser mayor a 0 minutos")
     private Integer duracion; // Duración en minutos
     @Size(max = 30, message = "El género no puede tener más de 30 caracteres")
     private String genero;
