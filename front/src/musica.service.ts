@@ -1,7 +1,7 @@
 // src/musica.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Musica } from './musica'; // Import the Musica interface
 import { catchError, map } from 'rxjs/operators';
 
@@ -10,6 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class MusicaService {
   private url = 'http://localhost:4200/api/musica'; // Replace with your actual backend URL
+  private formatosUrl = 'http://localhost:4200/api/TipoItemFormatos';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -18,7 +19,14 @@ export class MusicaService {
   }
 
   getMusica(): Observable<Musica[]> {
-    return this.httpClient.get<Musica[]>(this.url);
+    return this.httpClient.get<Musica[]>(this.url).pipe(
+      map(musica => musica.map(m => ({
+        ...m,
+        nombre: m.item?.nombre ?? '',
+        formato: m.item?.formato?.nombre ?? ''
+      }))),
+      catchError(this.handleError)
+    );
   }
 
   buscarUno(itemId: number): Observable<Musica> {
@@ -26,26 +34,35 @@ export class MusicaService {
   }
 
   actualizar(musica: Musica) {
-    return this.httpClient.put(`/api/musica/${musica.item.id}`, musica);
+    return this.httpClient.put(`${this.url}/${musica.item.id}`, musica);
   }
 
-  borrar(id: number): Observable<{ success: boolean; message: string }> {
-    return this.httpClient.delete<{ success: boolean; message: string }>(`${this.url}/${id}`).pipe(
-      map(response => {
-        return { success: true, message: 'Música eliminada' }; // Si se borra correctamente
-      }),
-      catchError((error) => {
-        let errorMessage = 'Error desconocido';
+  borrar(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.url}/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
 
-        // Si el backend envía un error con estructura JSON
-        if (error.error && error.error.mensaje) {
-          errorMessage = error.error.mensaje;  // Extrae el mensaje del backend
-        } else if (error.message) {
-          errorMessage = error.message;
-        }
+  private handleError(error: any) {
+    let errorMessage = 'Error desconocido';
+    if (error.error?.mensaje) {
+      errorMessage = error.error.mensaje;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    return throwError(() => new Error(errorMessage));
+  }
 
-        return [{ success: false, message: errorMessage }]; // Devuelve un error controlado
-      })
+  // Método para obtener los formatos
+  getFormatos(tipoItemSeleccionado: string): Observable<{ nombre: string; id: number }[]> {
+    return this.httpClient.get<any[]>(this.formatosUrl).pipe(
+      map(data => data
+        .filter(item => item.tipoItem.nombre === tipoItemSeleccionado)
+        .map(item => ({
+          id: item.formato.id,
+          nombre: item.formato.nombre
+        }))
+      )
     );
   }
 }

@@ -4,8 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Musica } from '../../musica';
 import { MusicaService } from '../../musica.service';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-formulariomusica',
@@ -25,11 +23,22 @@ export class FormulariomusicaComponent implements OnInit {
     @Input() isEditMode: boolean = false;
     @Input() musica!: Musica;
 
-
-    constructor(private musicaService: MusicaService, private router: Router, private http: HttpClient) { }
+    constructor(private musicaService: MusicaService,) { }
 
     ngOnInit() {
         this.getFormatos(); // Llamada a la API para obtener los formatos
+    }
+
+    // Llamada al servicio para obtener los formatos
+    getFormatos() {
+        this.musicaService.getFormatos(this.tipoItemSeleccionado).subscribe({
+            next: (data) => {
+                this.formatos = data;
+            },
+            error: (error) => {
+                console.error('Error fetching formats:', error);
+            }
+        });
     }
 
     onSubmit() {
@@ -44,7 +53,6 @@ export class FormulariomusicaComponent implements OnInit {
         this.musicaService.insertar(this.musica).subscribe({
             next: (respuesta) => {
                 console.log('Música guardada con éxito', respuesta);
-                this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
                 this.resetForm();  // Limpiar el formulario después de guardar
                 this.formSubmitted.emit();  // Emitir el evento de éxito
                 this.formClosed.emit();  // Emitir el evento de cierre
@@ -60,7 +68,6 @@ export class FormulariomusicaComponent implements OnInit {
             next: (respuesta) => {
                 console.log('Película actualizada con éxito', respuesta);
                 this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
-                this.resetForm();  // Limpiar el formulario después de guardar
                 this.formSubmitted.emit();  // Emitir el evento de éxito
                 this.formClosed.emit();  // Emitir el evento de cierre
             },
@@ -82,7 +89,6 @@ export class FormulariomusicaComponent implements OnInit {
         }
     }
 
-
     closeForm() {
         this.resetForm();
         this.formClosed.emit();
@@ -90,26 +96,7 @@ export class FormulariomusicaComponent implements OnInit {
 
     resetForm() {
         // Limpiar el objeto 'musica' 
-        this.musica = { item: { formato: {} },  } as Musica;
+        this.musica = { item: { formato: {} }, } as Musica;
         this.erroresBackend = {};  // Limpiar los errores
     }
-
-    getFormatos() {
-        // Obtener los formatos desde la API
-        this.http.get<any[]>('http://localhost:4200/api/TipoItemFormatos').subscribe(
-            (data) => {
-                this.formatos = data
-                    .filter(item => item.tipoItem.nombre === this.tipoItemSeleccionado)
-                    .map(item => ({
-                        id: item.formato.id, // Use formato.id as value
-                        nombre: item.formato.nombre // Use formato.nombre as display name
-                    }));
-            },
-            (error) => {
-                console.error('Error fetching formats:', error);
-            }
-        );
-    }
 }
-
-

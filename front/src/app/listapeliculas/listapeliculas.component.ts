@@ -56,12 +56,8 @@ export class ListapeliculasComponent implements OnInit {
   loadPeliculas() {
     this.peliculaService.getPeliculas().subscribe({
       next: (peliculas) => {
-        this.peliculas = peliculas.map(p => ({
-          ...p,
-          nombre: p.item.nombre,
-          formato: p.item.formato.nombre,
-        }));
-        this.dataSource.data = this.peliculas;
+        this.peliculas = peliculas;
+        this.dataSource.data = peliculas;
       },
       error: (error) => console.error('Error al cargar las películas:', error),
     });
@@ -110,30 +106,17 @@ export class ListapeliculasComponent implements OnInit {
       confirmButtonText: 'Eliminar',
       confirmButtonColor: '#d33', 
       cancelButtonText: 'Cancelar',
-      reverseButtons: false
     }).then((result) => {
       if (result.isConfirmed) {
-        this.peliculaService.borrar(id).subscribe(response => {
-          if (response.success) {
-            Swal.fire('Eliminado', response.message);
-            this.refreshData();
-          } else {
-            Swal.fire('Error', response.message);
-          }
-        }, error => {
-          Swal.fire('Error', error.message, 'error');
+        this.peliculaService.borrar(id).subscribe({
+          next: () => {
+            Swal.fire('Eliminado', 'Película eliminada correctamente');
+            this.loadPeliculas();
+          },
+          error: (error) => Swal.fire('Error', error.message),
         });
       }
     });
   }
 
-  refreshData() {
-    this.peliculaService.getPeliculas().subscribe(data => {
-      this.dataSource.data = data.map(pelicula => ({
-        ...pelicula,
-        nombre: pelicula.item?.nombre,
-        formato: pelicula.item?.formato?.nombre
-      }));
-    });
-  }
 }
