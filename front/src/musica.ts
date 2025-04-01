@@ -4,11 +4,7 @@ export interface Musica {
   genero: string;
   cantante: string;
   album: string;
-  duracion: number;
-  nombrePersona: string;
-  albumIngresado: string;
-  fechaRecogida: string;
-  fechaDevolucion: string;
+  duracion: string; // Cambiado de number a string para coincidir con el JSON
   item: {
     id: number;
     nombre: string;

@@ -44,7 +44,7 @@ public class MusicaController {
         Optional<TipoItem> tipoMusicaOpt = tipoItemService.obtenerPorNombre("Musica");
 
         if (tipoMusicaOpt.isEmpty()) {
-            return new ResponseEntity<>("Error: Tipo Musica no encontrado", HttpStatus.INTERNAL_SERVER_ERROR);    
+            return new ResponseEntity<>("Error: Tipo Musica no encontrado", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         TipoItem tipoMusica = tipoMusicaOpt.get();
@@ -63,9 +63,9 @@ public class MusicaController {
 
         if (!formatosValidos.contains(musica.getItem().getFormato())) {
             return new ResponseEntity<>("Formato inválido para musica. Formatos válidos:"
-                + formatosValidos.stream().map(Formato::getNombre).toList(), HttpStatus.BAD_REQUEST);   
+                    + formatosValidos.stream().map(Formato::getNombre).toList(), HttpStatus.BAD_REQUEST);
         }
-       
+
         return new ResponseEntity<>(musicaService.createMusica(musica), HttpStatus.CREATED);
     }
 
@@ -81,9 +81,9 @@ public class MusicaController {
 
     @PutMapping("/{itemId}")
     public ResponseEntity<Musica> update(@PathVariable("itemId") Long itemId, @Valid @RequestBody Musica musica) {
-        
+
         Musica updateMusica = musicaService.updateMusica(itemId, musica);
-        
+
         return new ResponseEntity<>(updateMusica, HttpStatus.OK);
     }
 
@@ -91,10 +91,9 @@ public class MusicaController {
     public ResponseEntity<String> delete(@PathVariable("itemId") Long itemId) {
         try {
             musicaService.deleteMusica(itemId);
-            return new ResponseEntity<>("Musica eliminada", HttpStatus.OK);
+            return ResponseEntity.ok(""); // 200 OK con un cuerpo vacío
         } catch (IllegalArgumentException e) {
-
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

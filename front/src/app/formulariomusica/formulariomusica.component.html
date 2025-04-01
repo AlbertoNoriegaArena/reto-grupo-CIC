@@ -1,58 +1,86 @@
-<!-- src/app/formulariomusica/formulariomusica.component.html -->
 <div class="container">
-  <h2>Añadir Música</h2>
-  <form (ngSubmit)="onSubmit()">
-      <!-- <div class="form-group">
-          <label for="nombrePersona">Nombre de la Persona:</label>
-          <input type="text" id="nombrePersona" name="nombrePersona" [(ngModel)]="musica.nombrePersona" required>
+  <form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" class="form-control" [(ngModel)]="musica.item.nombre" required
+          #nombreRef="ngModel">
+        <div class="text-danger" *ngIf="nombreRef.invalid && nombreRef.touched">
+          El nombre es obligatorio
+        </div>
+        <div class="text-danger" *ngIf="erroresBackend?.nombre">
+          {{ erroresBackend.nombre }}
+        </div>
       </div>
-      <div class="form-group">
-          <label for="albumIngresado">Álbum Ingresado:</label>
-          <input type="text" id="albumIngresado" name="albumIngresado" [(ngModel)]="musica.albumIngresado" required>
+
+      <div class="form-group col-md-6">
+        <label for="cantante">Cantante:</label>
+        <input type="text" id="cantante" name="cantante" class="form-control" [(ngModel)]="musica.cantante">
+        <div class="text-danger" *ngIf="erroresBackend?.cantante">
+          {{ erroresBackend.cantante }}
+        </div>
       </div>
-      <div class="form-group">
-          <label for="fechaRecogida">Fecha de Recogida:</label>
-          <input type="date" id="fechaRecogida" name="fechaRecogida" [(ngModel)]="musica.fechaRecogida" required>
-      </div>
-      <div class="form-group">
-          <label for="fechaDevolucion">Fecha de Devolución:</label>
-          <input type="date" id="fechaDevolucion" name="fechaDevolucion" [(ngModel)]="musica.fechaDevolucion" required>
-      </div> -->
-      <div class="form-group">
-        <label for="isbn">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" [(ngModel)]="musica.item.nombre" required>
-      </div>
-      <div class="form-group">
-          <label for="genero">Género:</label>
-          <input type="text" id="genero" name="genero" [(ngModel)]="musica.genero" required>
-      </div>
-      <div class="form-group">
-          <label for="cantante">Cantante:</label>
-          <input type="text" id="cantante" name="cantante" [(ngModel)]="musica.cantante" required>
-      </div>
-      <div class="form-group">
-          <label for="album">Álbum:</label>
-          <input type="text" id="album" name="album" [(ngModel)]="musica.album" required>
-      </div>
-      <div class="form-group">
-          <label for="duracion">Duración (segundos):</label>
-          <input type="number" id="duracion" name="duracion" [(ngModel)]="musica.duracion" required>
-      </div>
-      <div class="form-group">
-        <label for="formato">Formato:</label>
-        <select id="formato" name="formato" [(ngModel)]="musica.item.formato.id" required>
-          <option *ngFor="let formato of formatos" [value]="formato.id">
-            {{ formato.nombre }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="isbn">Ubicacion:</label>
-        <input type="text" id="ubicacion" name="ubicacion" [(ngModel)]="musica.item.ubicacion" required>
-      </div>
-      <div class="buttons-container">
-        <button type="submit">Guardar</button>
-        <button type="button" (click)="goToListamusica()">Cancelar</button>
     </div>
-</form>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="duracion">Duración:</label>
+        <input type="text" id="duracion" name="duracion" class="form-control" [(ngModel)]="musica.duracion">
+        <div class="text-danger" *ngIf="erroresBackend?.duracion">
+          {{ erroresBackend.duracion }}
+        </div>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="genero">Género:</label>
+        <input type="text" id="genero" name="genero" class="form-control" [(ngModel)]="musica.genero">
+        <div class="text-danger" *ngIf="erroresBackend?.genero">
+          {{ erroresBackend.genero }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="album">Álbum:</label>
+        <input type="text" id="album" name="album" class="form-control" [(ngModel)]="musica.album">
+        <div class="text-danger" *ngIf="erroresBackend?.album">
+          {{ erroresBackend.album }}
+        </div>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="formato">Formato:</label>
+        <select id="formato" name="formato" class="form-control" [(ngModel)]="musica.item.formato.id" required
+          #formatoRef="ngModel">
+          <option value="" disabled selected>Seleccione un formato</option>
+          <option *ngFor="let formato of formatos" [value]="formato.id">{{ formato.nombre }}</option>
+        </select>
+        <div class="text-danger" *ngIf="formatoRef.invalid && formatoRef.touched">
+          Debe seleccionar un formato
+        </div>
+        <div class="text-danger" *ngIf="erroresBackend?.formato">
+          {{ erroresBackend.formato }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion" name="ubicacion" class="form-control" [(ngModel)]="musica.item.ubicacion"
+          required>
+      </div>
+    </div>
+
+    <!-- Mensaje de error general del backend -->
+    <div class="alert alert-danger mt-2" *ngIf="erroresBackend?.general">
+      {{ erroresBackend.general }}
+    </div>
+
+    <div class="buttons-container mt-3">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
+    </div>
+  </form>
 </div>

@@ -1,42 +1,19 @@
-<div class="movie-list-header">
-  <h1>Lista de Música <span class="movie-emoji">🎵</span></h1>
-  <div class="botones">
-    <button class="btn btn-success w-40 mx-5" (click)="goToFormularioMusica()">Añadir Música</button>
-    <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la pagina principal</button>
+<div class="contenedor">
+  <header class="my-4">
+    <h1>Lista de Música <span class="movie-emoji">🎵</span></h1>
+    <div class="botonesHeader">
+      <button class="btn btn-success w-40 mx-5" (click)="abrirModalAgregar()">Añadir Música</button>
+      <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la página principal</button>
+    </div>
+  </header>
+  <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns"
+    [deleteCallback]="delete.bind(this)" [editCallback]="abrirModalEditar.bind(this)"
+    [viewDetailsCallback]="verDetalles" [columnDefinitions]="columnDefinitions">
+  </app-tabla-generica>
 
-  </div>
+  <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
+    <app-formulariomusica [musica]="selectedMusica" [isEditMode]="isEditMode" (formSubmitted)="onFormSubmitted()"
+      (formClosed)="cerrarModal()"></app-formulariomusica>
+  </app-modal>
 
-  <table class="table bg-dark text-white mt-5">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Cantante</th>
-        <th>Album</th>
-        <th>Genero</th>
-        <th>Duracion</th>
-        <th>Formato</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let musica of musicas">
-        <td>{{ musica.item.nombre }}</td>
-        <td>{{ musica.cantante }}</td>
-        <td>{{ musica.album }}</td>
-        <td>{{ musica.genero }}</td>
-        <td>{{ musica.duracion }}</td>
-        <td>{{ musica.item.formato.nombre }}</td>
-        <td>
-          <!-- Botón Ver -->
-          <button type="button" class="btn btn-info mx-1">Ver</button>
-
-          <!-- Botón Actualizar -->
-          <button class="btn btn-warning mx-1">Editar</button>
-
-          <!-- Botón Eliminar -->
-          <button class="btn btn-danger mx-1">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>

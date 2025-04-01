@@ -1,0 +1,32 @@
+<div class="contenedorDetalle d-flex">
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <h4 class="text-white text-center mb-4">COLECCIÓN PERSONAL</h4>
+        
+      <a (click)="goToMainPage()">Inicio</a>
+      <a (click)="goToMusica()">Música</a> 
+    </div>
+
+    <!-- Sección principal -->
+    <div class="main-content">
+        <div class="user-card">
+            <h3>{{ musica?.item?.nombre }}</h3>
+            <div class="user-info d-flex">
+
+                <div class="column">
+                    <p><strong>Cantante:</strong> {{ musica?.cantante }}</p>
+                    <p><strong>Duración:</strong> {{ musica?.duracion }}</p>
+                    <p><strong>Álbum:</strong> {{ musica?.album }}</p>
+                    <p><strong>Género:</strong> {{ musica?.genero }}</p>
+                </div>
+
+                <div class="column">
+                    <p><strong>Formato:</strong> {{ musica?.item?.formato?.nombre }}</p>
+                    <p><strong>Ubicación:</strong> {{ musica?.item?.ubicacion}}</p>
+                    <p><strong>Fecha:</strong> {{ musica?.item?.fecha | date: 'dd/MM/yyyy'}}</p>
+                    <p><strong>Estado:</strong> {{ musica?.item?.estado}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
