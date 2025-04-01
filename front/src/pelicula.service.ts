@@ -16,7 +16,7 @@ export class PeliculaService {
     return this.httpClient.post<Pelicula>(this.url, pelicula);
   }
 
-  buscarTodos(): Observable<Pelicula[]> {
+  getPeliculas(): Observable<Pelicula[]> {
     return this.httpClient.get<Pelicula[]>(this.url);
   }
 
@@ -25,9 +25,8 @@ export class PeliculaService {
   }
 
   actualizar(pelicula: Pelicula) {
-    return this.httpClient.put(`/api/pelicula/${pelicula.item.id}`, pelicula); 
+    return this.httpClient.put(`/api/pelicula/${pelicula.item.id}`, pelicula);
   }
-  
 
   borrar(id: number): Observable<{ success: boolean; message: string }> {
     return this.httpClient.delete<{ success: boolean; message: string }>(`${this.url}/${id}`).pipe(
@@ -36,21 +35,16 @@ export class PeliculaService {
       }),
       catchError((error) => {
         let errorMessage = 'Error desconocido';
-  
+
         // Si el backend envía un error con estructura JSON
         if (error.error && error.error.mensaje) {
           errorMessage = error.error.mensaje;  // Extrae el mensaje del backend
         } else if (error.message) {
           errorMessage = error.message;
         }
-  
+
         return [{ success: false, message: errorMessage }]; // Devuelve un error controlado
       })
     );
   }
-  
-  getPeliculas(): Observable<Pelicula[]> {
-    return this.httpClient.get<Pelicula[]>(this.url);
-  }
-
 }

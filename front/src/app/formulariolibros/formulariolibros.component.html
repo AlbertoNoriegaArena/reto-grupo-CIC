@@ -1,54 +1,94 @@
-<!-- src/app/formulariolibros/formulariolibros.component.html -->
 <div class="container">
-  <h2>Añadir Libro</h2>
-  <form (ngSubmit)="onSubmit()">
-      <!-- <div class="form-group">
-          <label for="nombrePersona">Nombre de la Persona:</label>
-          <input type="text" id="nombrePersona" name="nombrePersona" [(ngModel)]="libro.nombrePersona" required>
-      </div> -->
-      <!-- <div class="form-group">
-          <label for="libroIngresado">Libro Ingresado:</label>
-          <input type="text" id="libroIngresado" name="libroIngresado" [(ngModel)]="libro.libroIngresado" required>
-      </div> -->
-      <!-- <div class="form-group">
-          <label for="fechaRecogida">Fecha de Recogida:</label>
-          <input type="date" id="fechaRecogida" name="fechaRecogida" [(ngModel)]="libro.fechaRecogida" required>
+  <form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" class="form-control" [(ngModel)]="libro.item.nombre" required
+          #nombreRef="ngModel">
+        <div class="text-danger" *ngIf="nombreRef.invalid && nombreRef.touched">
+          El nombre es obligatorio
+        </div>
+        <div class="text-danger" *ngIf="erroresBackend?.nombre">
+          {{ erroresBackend.nombre }}
+        </div>
       </div>
-      <div class="form-group">
-          <label for="fechaDevolucion">Fecha de Devolución:</label>
-          <input type="date" id="fechaDevolucion" name="fechaDevolucion" [(ngModel)]="libro.fechaDevolucion" required>
-      </div> -->
-      <div class="form-group">
-        <label for="isbn">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" [(ngModel)]="libro.item.nombre" required>
+
+      <div class="form-group col-md-6">
+        <label for="autor">Autor:</label>
+        <input type="text" id="autor" name="autor" class="form-control" [(ngModel)]="libro.autor" required
+          maxlength="30">
+        <div class="text-danger" *ngIf="erroresBackend?.autor">
+          {{ erroresBackend.autor }}
+        </div>
       </div>
-      <div class="form-group">
-          <label for="isbn">ISBN:</label>
-          <input type="text" id="isbn" name="isbn" [(ngModel)]="libro.isbn" required>
-      </div>
-      <div class="form-group">
-          <label for="editorial">Editorial:</label>
-          <input type="text" id="editorial" name="editorial" [(ngModel)]="libro.editorial" required>
-      </div>
-      <div class="form-group">
-          <label for="numeroPaginas">Número de Páginas:</label>
-          <input type="number" id="numeroPaginas" name="numeroPaginas" [(ngModel)]="libro.numeroPaginas" required>
-      </div>
-      <div class="form-group">
-        <label for="formato">Formato:</label>
-        <select id="formato" name="formato" [(ngModel)]="libro.item.formato.id" required>
-          <option *ngFor="let formato of formatos" [value]="formato.id">
-            {{ formato.nombre }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="isbn">Ubicacion:</label>
-        <input type="text" id="ubicacion" name="ubicacion" [(ngModel)]="libro.item.ubicacion" required>
-      </div>
-      <div class="buttons-container">
-        <button type="submit">Guardar</button>
-        <button type="button" (click)="goToListalibros()">Cancelar</button>
     </div>
-</form>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" class="form-control" [(ngModel)]="libro.isbn" required>
+        <div class="text-danger" *ngIf="erroresBackend?.isbn">
+          {{ erroresBackend.isbn }}
+        </div>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="editorial">Editorial:</label>
+        <input type="text" id="editorial" name="editorial" class="form-control" [(ngModel)]="libro.editorial" required
+          maxlength="30">
+        <div class="text-danger" *ngIf="erroresBackend?.editorial">
+          {{ erroresBackend.editorial }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="numeroPaginas">Número de Páginas:</label>
+        <input type="number" id="numeroPaginas" name="numeroPaginas" class="form-control"
+          [(ngModel)]="libro.numeroPaginas" min="1" required>
+        <div class="text-danger" *ngIf="erroresBackend?.numeroPaginas">
+          {{ erroresBackend.numeroPaginas }}
+        </div>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="formato">Formato:</label>
+        <select id="formato" name="formato" class="form-control" [(ngModel)]="libro.item.formato.id" required
+          #formatoRef="ngModel">
+          <option value="" disabled selected>Seleccione un formato</option>
+          <option *ngFor="let formato of formatos" [value]="formato.id">{{ formato.nombre }}</option>
+        </select>
+        <div class="text-danger" *ngIf="formatoRef.invalid && formatoRef.touched">
+          Debe seleccionar un formato
+        </div>
+        <div class="text-danger" *ngIf="erroresBackend?.formato">
+          {{ erroresBackend.formato }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="fechaPublicacion">Fecha de Publicación:</label>
+        <input type="date" id="fechaPublicacion" name="fechaPublicacion" class="form-control"
+          [(ngModel)]="libro.fechaPublicacion">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion" name="ubicacion" class="form-control" [(ngModel)]="libro.item.ubicacion"
+          >
+      </div>
+    </div>
+
+    <!-- Mensaje de error general del backend -->
+    <div class="alert alert-danger mt-2" *ngIf="erroresBackend?.general">
+      {{ erroresBackend.general }}
+    </div>
+
+    <div class="buttons-container mt-3">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
+    </div>
+  </form>
 </div>

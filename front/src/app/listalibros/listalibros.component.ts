@@ -1,20 +1,55 @@
 // src/app/listalibros/listalibros.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { LibroService } from '../../libro.service';
 import { Libro } from '../../libro';
 import { Router } from '@angular/router';
+import { TablaGenericaComponent } from '../components/tabla-generica/tabla-generica.component';
+import { CommonModule } from '@angular/common';
+import { FormularioLibrosComponent } from '../formulariolibros/formulariolibros.component';
+import { ModalComponent } from '../components/modal/modal.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
+
+
 
 @Component({
     selector: 'app-listalibros',
     standalone: true,
-    imports: [CommonModule],
+    imports: [
+        TablaGenericaComponent,
+        CommonModule,
+        FormularioLibrosComponent,
+        ModalComponent,
+        MatTableModule,
+        MatButtonModule,
+        MatIconModule,
+        FormsModule,
+    ],
     templateUrl: './listalibros.component.html',
     styleUrl: './listalibros.component.scss'
 })
 export class ListalibrosComponent implements OnInit {
     libros: Libro[] = [];
+    dataSource: MatTableDataSource<Libro> = new MatTableDataSource();
+    isEditMode = false;
+    isModalOpen = false;
+    titleModal = 'Agregar Libro'; //Variable para el título dinámico
 
+    selectedLibro: Libro = { item: { formato: {} } } as Libro;
+    
+      displayedColumns: string[] = ['nombre', 'formato', 'autor','isbn', 'editorial',  'acciones'];
+    
+      columnDefinitions = [
+        { key: 'nombre', label: 'Nombre' },
+        { key: 'formato', label: 'Formato' },
+        { key: 'autor', label: 'Autor' },
+        { key: 'isbn', label: 'Isbn' },
+        { key: 'editorial', label: 'Editorial' },
+      ];
+    
     constructor(private libroService: LibroService, private router: Router) { }
 
     ngOnInit(): void {
@@ -24,17 +59,86 @@ export class ListalibrosComponent implements OnInit {
     loadLibros() {
         this.libroService.getLibros().subscribe({
             next: (libros) => {
-                this.libros = libros;
+                this.libros = libros.map(p => ({
+                    ...p,
+                    nombre: p.item.nombre,
+                    formato: p.item.formato.nombre,
+                }));
+                this.dataSource.data = this.libros;
             },
             error: (error) => {
                 console.error('Error al cargar los libros:', error);
             }
         });
     }
-    goToFormularioLibros() {
-        this.router.navigate(['/formulariolibros']);
-    }
-    goToMainPage() {
+    
+    abrirModalAgregar() {
+    
+        this.isEditMode = false;
+        this.titleModal = 'Agregar Libro'; //Cambiar el título
+        this.isModalOpen = true;
+      }
+    
+      abrirModalEditar(id: number) {
+        const libro = this.dataSource.data.find(l => l.item.id === id);
+        if (libro) {
+          this.selectedLibro = { ...libro }; //Clonamos la película
+          this.isEditMode = true;
+          this.titleModal = 'Editar Libro'; //Cambiar el título
+          this.isModalOpen = true;
+        }
+      }
+    
+      cerrarModal() {
+        this.isModalOpen = false;
+        this.titleModal = 'Agregar Libro'; //Resetear el título
+      }
+    
+      onFormSubmitted() {
+        this.cerrarModal();
+        this.loadLibros(); 
+      }
+    
+      goToMainPage() {
         this.router.navigate(['/']);
-    }
+      }
+
+      verDetalles(id: number) {
+          this.router.navigate(['/detallelibro', id]); //Navegar a la página de detalles
+        }
+      
+        delete(id: number) {
+          Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Este registro será eliminado y no lo podrás recuperar',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            confirmButtonColor: '#d33', 
+            cancelButtonText: 'Cancelar',
+            reverseButtons: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.libroService.borrar(id).subscribe(response => {
+                if (response.success) {
+                  Swal.fire('Eliminado', response.message);
+                  this.refreshData();
+                } else {
+                  Swal.fire('Error', response.message);
+                }
+              }, error => {
+                Swal.fire('Error', error.message, 'error');
+              });
+            }
+          });
+        }
+      
+        refreshData() {
+          this.libroService.getLibros().subscribe(data => {
+            this.dataSource.data = data.map(libro => ({
+              ...libro,
+              nombre: libro.item?.nombre,
+              formato: libro.item?.formato?.nombre
+            }));
+          });
+        }
 }

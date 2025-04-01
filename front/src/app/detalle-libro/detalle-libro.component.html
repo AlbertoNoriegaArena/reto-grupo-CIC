@@ -1,0 +1,34 @@
+<div class="contenedorDetalle d-flex">
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <h4 class="text-white text-center mb-4">COLECCIÓN PERSONAL</h4>
+        
+        <!-- <button class="btn btn-success w-40 mx-5" (click)="loadLibros()">Libros</button> -->
+      <a (click)="goToMainPage()">Inicio</a>
+      <a (click)="goToLibros()">Libros</a> 
+    </div>
+
+    <!-- Sección principal -->
+    <div class="main-content">
+        <div class="user-card">
+            <h3>{{ libro?.item?.nombre }}</h3>
+            <div class="user-info d-flex">
+
+                <div class="column">
+                    <p><strong>Autor:</strong> {{ libro?.autor }}</p>
+                    <p><strong>Número de páginas:</strong> {{ libro?.numeroPaginas }}</p>
+                    <p><strong>Fecha de publicación:</strong> {{ libro?.fechaPublicacion | date: 'dd/MM/yyyy' }}</p>
+                    <p><strong>ISBN:</strong> {{ libro?.isbn }}</p>
+                    <p><strong>Editorial:</strong> {{ libro?.editorial }}</p>
+                </div>
+
+                <div class="column">
+                    <p><strong>Formato:</strong> {{ libro?.item?.formato?.nombre }}</p>
+                    <p><strong>Ubicación:</strong> {{ libro?.item?.ubicacion}}</p>
+                    <p><strong>Fecha:</strong> {{ libro?.item?.fecha | date: 'dd/MM/yyyy'}}</p>
+                    <p><strong>Estado:</strong> {{ libro?.item?.estado}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

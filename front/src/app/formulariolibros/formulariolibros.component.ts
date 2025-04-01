@@ -1,5 +1,5 @@
 // src/app/formulariolibros/formulariolibros.component.ts
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Libro } from '../../libro';
@@ -14,34 +14,84 @@ import { HttpClient } from '@angular/common/http';
     templateUrl: './formulariolibros.component.html',
     styleUrl: './formulariolibros.component.scss'
 })
-export class FormulariolibrosComponent implements OnInit {
+export class FormularioLibrosComponent implements OnInit {
     formatos: { nombre: string; id: number }[] = [];
-    libro = {item: {formato: {}}} as Libro;
     tipoItemSeleccionado: string = "Libro";
+    erroresBackend: any = {};
+
+      @Output() formSubmitted = new EventEmitter<void>();
+      @Output() formClosed = new EventEmitter<void>();
+    
+      @Input() isEditMode: boolean = false;
+      @Input() libro!: Libro; 
 
     constructor(private libroService: LibroService, private router: Router, private http: HttpClient) { }
 
-    onSubmit() {
-        console.log('Formulario enviado:', this.libro);
-        this.libroService.insertar(this.libro).subscribe({
-            next: (libro) => {
-                console.log('Libro insertado:', libro);
-             
-                this.router.navigate(['/listalibros']);
-            },
-            error: (error) => {
-                console.error('Error al insertar el libro:', error);
-            }
-        });
-    }
-    goToListalibros() { // Updated method name
-        this.router.navigate(['/listalibros']); // Navigate to listamusica
+    ngOnInit() {
+        this.getFormatos(); // Llamada a la API para obtener los formatos
       }
 
-    ngOnInit() {
-        this.getFormatos();
-    }
-    
+      onSubmit() {
+          if (this.isEditMode) {
+            this.update();
+          } else {
+            this.create();
+          }
+        }
+      
+        create() {
+          this.libroService.insertar(this.libro).subscribe({
+            next: (respuesta) => {
+              console.log('Libro guardado con éxito', respuesta);
+              this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
+              this.resetForm();  // Limpiar el formulario después de guardar
+              this.formSubmitted.emit();  // Emitir el evento de éxito
+              this.formClosed.emit();  // Emitir el evento de cierre
+            },
+            error: (error) => {
+              this.handleBackendErrors(error);
+            }
+          });
+        }
+      
+        update() {
+          this.libroService.actualizar(this.libro).subscribe({
+            next: (respuesta) => {
+              console.log('Libro actualizada con éxito', respuesta);
+              this.erroresBackend = {}; // Limpiar errores si la petición fue exitosa
+              this.resetForm();  // Limpiar el formulario después de guardar
+              this.formSubmitted.emit();  // Emitir el evento de éxito
+              this.formClosed.emit();  // Emitir el evento de cierre
+            },
+            error: (error) => {
+              this.handleBackendErrors(error);
+            }
+          });
+        }
+      
+        // Función reutilizable para manejar errores del backend
+      handleBackendErrors(error: any) {
+        if (error.status === 400 && error.error?.errors) {
+          this.erroresBackend = error.error.errors.reduce((acc: any, curr: any) => {
+            acc[curr.field] = curr.defaultMessage; // Asegura que usas `defaultMessage`
+            return acc;
+          }, {});
+        } else {
+          this.erroresBackend = { general: 'El nombre y el formato son obligatorios' };
+        }
+      }
+      
+        closeForm() {
+          this.resetForm();
+          this.formClosed.emit();
+        }
+      
+        resetForm() {
+          // Limpiar el objeto 'libro' 
+          this.libro = { item: { formato: {} }, } as Libro;
+          this.erroresBackend = {};  // Limpiar los errores
+        }
+        
     getFormatos() {
         this.http.get<any[]>('http://localhost:4200/api/TipoItemFormatos').subscribe(
             (data) => {

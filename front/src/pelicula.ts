@@ -1,7 +1,6 @@
 // src/pelicula.ts
 export interface Pelicula {
   id: number;
-  nombre: string;
   director: string;
   duracion: number;
   genero: string;

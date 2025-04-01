@@ -1,40 +1,19 @@
-<div class="movie-list-header">
-  <h1>Lista de Libros <span class="movie-emoji">📚</span></h1>
+<div class="contenedor">
+  <header class="my-4">
+    <h1>Lista de Libros <span class="movie-emoji">📚</span></h1>
+    <div class="botonesHeader">
+      <button class="btn btn-success w-40 mx-5" (click)="abrirModalAgregar()">Añadir Libro</button>
+      <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la página principal</button>
+    </div>
+  </header>
+  <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns"
+    [deleteCallback]="delete.bind(this)" [editCallback]="abrirModalEditar.bind(this)"
+    [viewDetailsCallback]="verDetalles" [columnDefinitions]="columnDefinitions">
+  </app-tabla-generica>
 
-  <div class="botones">
-    <button class="btn btn-success w-40 mx-5" (click)="goToFormularioLibros()">Añadir Libro</button>
-    <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la pagina principal</button>
-  </div>
+  <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
+    <app-formulariolibros [libro]="selectedLibro" [isEditMode]="isEditMode" (formSubmitted)="onFormSubmitted()"
+      (formClosed)="cerrarModal()"></app-formulariolibros>
+  </app-modal>
 
-  <table class="table mt-5">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Isbn</th>
-        <th>Editorial</th>
-        <th>Numero de paginas</th>
-        <th>Formato</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let libro of libros">
-        <td>{{ libro.item.nombre }}</td>
-        <td>{{ libro.isbn }}</td>
-        <td>{{ libro.editorial }}</td>
-        <td>{{ libro.numeroPaginas }}</td>
-        <td>{{ libro.item.formato.nombre }}</td>
-        <td>
-          <!-- Botón Ver -->
-          <button type="button" class="btn btn-info mx-1">Ver</button>
-
-          <!-- Botón Actualizar -->
-          <button class="btn btn-warning mx-1">Editar</button>
-
-          <!-- Botón Eliminar -->
-          <button class="btn btn-danger mx-1">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>

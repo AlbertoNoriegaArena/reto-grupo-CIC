@@ -1,5 +1,7 @@
 package es.santander.ascender.retoGrupoCIC.model;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -16,11 +18,14 @@ public class Libro {
     @JsonProperty(access = Access.READ_ONLY)
     private Long itemId;
 
+    @Size(max=30 , message = "El autor no puede superar los 30 caracteres")
+    private String autor;
     private String isbn;
     @Size(max=30 , message = "La editorial no puede superar los 30 caracteres")
     private String editorial;
-    @Min(value = 1)
+    @Min(value = 0, message = "El número de páginas debe ser mayor a 0")
     private Integer numeroPaginas;
+    private LocalDate fechaPublicacion;
 
     @OneToOne
     @MapsId
@@ -41,6 +46,17 @@ public class Libro {
         this.isbn = isbn;
         this.editorial = editorial;
         this.numeroPaginas = numeroPaginas;
+        this.item = item;
+    }
+
+    public Libro(Long itemId, String autor, String isbn, String editorial, Integer numeroPaginas,
+            LocalDate fechaPublicacion, Item item) {
+        this.itemId = itemId;
+        this.autor = autor;
+        this.isbn = isbn;
+        this.editorial = editorial;
+        this.numeroPaginas = numeroPaginas;
+        this.fechaPublicacion = fechaPublicacion;
         this.item = item;
     }
 
@@ -74,6 +90,22 @@ public class Libro {
 
     public void setNumeroPaginas(Integer numeroPaginas) {
         this.numeroPaginas = numeroPaginas;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+    public LocalDate getFechaPublicacion() {
+        return fechaPublicacion;
+    }
+
+    public void setFechaPublicacion(LocalDate fechaPublicacion) {
+        this.fechaPublicacion = fechaPublicacion;
     }
 
     public Item getItem() {

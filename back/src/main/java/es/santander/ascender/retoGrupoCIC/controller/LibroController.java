@@ -91,10 +91,10 @@ public class LibroController {
      public ResponseEntity<String> delete(@PathVariable("itemId") Long itemId) {
         try {
              libroService.deleteLibro(itemId);
-             return new ResponseEntity<>("Libro eliminada", HttpStatus.OK);
+             return ResponseEntity.ok(""); // 200 OK con un cuerpo vacío
         } catch (IllegalArgumentException e) {
  
-             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         }     
 
