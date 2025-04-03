@@ -82,10 +82,8 @@ public class PrestamoController {
     public ResponseEntity<?> deletePrestamo(@PathVariable Long id) {
         try {
             prestamoService.deletePrestamo(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (PrestamoNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (PrestamoBorradoException | IllegalStateException e) {
+            return ResponseEntity.ok(""); // 200 OK con un cuerpo vacío
+        } catch ( IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

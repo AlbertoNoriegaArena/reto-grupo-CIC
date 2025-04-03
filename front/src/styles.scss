@@ -10,18 +10,42 @@ app-root router-outlet {
 }
 
 .contenedor {
-    width: 90% ;
+    width: 90%;
     margin: 0 auto;
 }
 
 header {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra horizontalmente */
-    text-align: center; /* Asegura que el texto también esté centrado */
+    align-items: center;
+    /* Centra horizontalmente */
+    text-align: center;
+    /* Asegura que el texto también esté centrado */
     width: 100%;
+}
+
+/*ESTILOS SNACK BAR*/
+
+mat-snack-bar-container.custom-snackbar>*{
+    background-color: #4caf50 !important; /* Transparente o el color que desees */
   }
-  
+  .custom-snackbar simple-snack-bar .mdc-snackbar__label{
+    color: white !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+  }
 
+  mat-snack-bar-container {
+    border: 2px solid black !important;
+    border-radius: 8px !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2) !important;
+  }
 
+  .custom-snackbar .mdc-button__label{
+    color: black;
+  }
 
+  .custom-snackbar .mdc-button__label:hover{
+    color: #ccc;
+  }

@@ -40,7 +40,7 @@ export class VistaprincipalComponent {
 
     // Navegación a la lista de préstamos
     goToPrestamos() {
-        this.router.navigate(['/prestamos']);  // Asegúrate de tener configurada la ruta '/prestamos'
+        this.router.navigate(['/listaprestamos']);  // Asegúrate de tener configurada la ruta '/prestamos'
     }
 
 }

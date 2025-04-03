@@ -6,7 +6,7 @@
     </mat-form-field>
   </div>
 
-  <div class="mat-elevation-z8 mt-4 tablaDatos">
+  <div class="mat-elevation-z8 mt-4 tablaDatos" [ngClass]="{ 'prestamos': tipoTabla === 'prestamos' }">
     <table mat-table [dataSource]="dataSource" matSort>
 
       <!-- Generar Columnas con Anchos Fijos -->
@@ -34,19 +34,36 @@
 
       <!-- Columna de Acciones (Siempre Última) -->
       <ng-container matColumnDef="acciones">
-        <th mat-header-cell *matHeaderCellDef class="col-6">Acciones</th>
+        <th mat-header-cell *matHeaderCellDef class="col-6"></th>
         <td mat-cell *matCellDef="let row" class="col-6">
-          <button mat-icon-button color="primary" matTooltip="Ver detalles" (click)="onVerDetalles(row.item?.id)">
-            <mat-icon>visibility</mat-icon>
-          </button>
-          <button mat-icon-button color="accent" matTooltip="Editar" (click)="onEdit(row.item?.id)" >
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="onDelete(row.item?.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <!-- Contenedor flex para los botones -->
+          <div class="acciones-buttons">
+            <!-- Si es una tabla de préstamos, usa row.id; si no, usa row.item?.id -->
+            <button mat-icon-button color="primary" matTooltip="Ver detalles" 
+              (click)="tipoTabla === 'prestamos' ? onVerDetalles(row.id) : onVerDetalles(row.item?.id)">
+              <mat-icon>visibility</mat-icon>
+            </button>
+      
+            <button mat-icon-button color="accent" matTooltip="Editar" 
+              (click)="tipoTabla === 'prestamos' ? onEdit(row.id) : onEdit(row.item?.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+      
+            <button mat-icon-button color="warn" matTooltip="Eliminar" 
+              (click)="tipoTabla === 'prestamos' ? onDelete(row.id) : onDelete(row.item?.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+      
+            <!-- Botón "Devolver" solo en la tabla de préstamos cuando el préstamo sigue activo -->
+            <button *ngIf="tipoTabla === 'prestamos' && row.fechaDevolucion === 'EN PRESTAMO'" 
+              mat-icon-button color="primary" matTooltip="Devolver" 
+              (click)="onDevolver(row.id)" class="botonDevolver">
+              <span class="devolver">Devolver</span>
+            </button>
+          </div>
         </td>
       </ng-container>
+      
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -57,30 +74,3 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
   </div>
 </div>
-
-<!-- Modal para editar
-<app-modal [isOpen]="isModalOpen" [title]="'Editar Película'" (closeEvent)="closeModal()">
-  <div class="modal-body">
-    <form (ngSubmit)="saveChanges()">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="nombre">Nombre</label>
-          <input type="text" id="nombre" [(ngModel)]="selectedPelicula?.item.nombre" name="nombre" required />
-        </div>
-        <div class="form-group">
-          <label for="ubicacion">Ubicación</label>
-          <input type="text" id="ubicacion" [(ngModel)]="selectedPelicula?.item.ubicacion" name="ubicacion" />
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="formato">Formato</label>
-          <input type="text" id="formato" [(ngModel)]="selectedPelicula?.item.formato.nombre" name="formato" required />
-        </div>
-      </div>
-
-      <button type="submit">Guardar</button>
-    </form>
-  </div>
-</app-modal> -->

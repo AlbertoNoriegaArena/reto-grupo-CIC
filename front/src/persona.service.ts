@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Persona } from './persona';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,18 @@ export class PersonaService {
 
   // Obtener todas las personas
   getAllPersonas(): Observable<Persona[]> {
-    return this.http.get<Persona[]>(this.url);
+    return this.http.get<Persona[]>(this.url).pipe(
+      map(personas => personas.map(p => ({
+        ...p,
+        nombre: p.nombre ?? '',   // Asegurar que el nombre nunca sea undefined
+        email: p.email ?? '',
+        telefono: p.telefono ?? '',
+        direccion: p.direccion ?? ''
+      }))),
+      catchError(this.handleError)
+    );
   }
+  
 
   // Obtener persona por ID
   getPersonaById(id: number): Observable<Persona> {
@@ -35,4 +46,14 @@ export class PersonaService {
   deletePersona(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
+
+   private handleError(error: any) {
+      let errorMessage = 'Error desconocido';
+      if (error.error?.mensaje) {
+        errorMessage = error.error.mensaje;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      return throwError(() => new Error(errorMessage));
+    }
 }

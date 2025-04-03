@@ -1,0 +1,24 @@
+<div class="contenedor">
+    <header class="my-4">
+        <h1 class="mb-3">Lista de préstamos <span class="movie-emoji"></span></h1>
+        <div class="botonesHeader">
+            <button class="btn btn-success w-40 mx-5" (click)="abrirModalAgregar()">Nuevo préstamo</button>
+            <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la página principal</button>
+        </div>
+    </header>
+    <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns"
+        [deleteCallback]="delete.bind(this)" [editCallback]="abrirModalEditar.bind(this)"
+        [viewDetailsCallback]="verDetalles" [devolverCallback]="devolverPrestamo.bind(this)" [columnDefinitions]="columnDefinitions" [tipoTabla]="'prestamos'">
+    </app-tabla-generica>
+
+    <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
+        <app-formularioprestamos
+        [prestamo]="selectedPrestamo"
+        [prestamoDevuelto]="prestamoDevuelto"
+        [isEditMode]="isEditMode"
+        (formSubmitted)="onFormSubmitted()"
+        (formClosed)="cerrarModal()"
+      ></app-formularioprestamos>
+    </app-modal>
+
+</div>

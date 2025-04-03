@@ -1,0 +1,48 @@
+<div class="contenedorDetalle d-flex">
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <h4 class="text-white text-center mb-4">COLECCIÓN PERSONAL</h4>
+        <a (click)="goToMainPage()">Inicio</a>
+        <a (click)="goToPrestamos()">Préstamos</a>
+    </div>
+
+    <!-- Sección principal -->
+    <div class="main-content">
+        <div class="user-card">
+            <div class="user-info row">
+                <!-- Información del artículo -->
+                <div class="col-md-6">
+                    <h5>Información del artículo</h5>
+                    <p><strong>Nombre:</strong> {{ prestamo?.item?.nombre }}</p>
+                    <p><strong>Tipo:</strong> {{ prestamo?.item?.tipo?.nombre }}</p>
+                    <p><strong>Formato:</strong> {{ prestamo?.item?.formato?.nombre }}</p>
+                    <p><strong>Ubicación:</strong> {{ prestamo?.item?.ubicacion }}</p>
+                    <p><strong>Fecha de adquisición:</strong> {{ prestamo?.item?.fecha | date: 'dd/MM/yyyy' }}</p>
+                </div>
+
+                <!-- Datos de la persona -->
+                <div class="col-md-6">
+                    <h5>Datos de la persona</h5>
+                    <p><strong>Prestado a:</strong> {{ prestamo?.persona?.nombre }}</p>
+                    <p><strong>Dirección:</strong> {{ prestamo?.persona?.direccion }}</p>
+                    <p><strong>Email:</strong> {{ prestamo?.persona?.email }}</p>
+                    <p><strong>Teléfono:</strong> {{ prestamo?.persona?.telefono }}</p>
+                    
+                </div>
+
+                <!-- Datos del préstamo -->
+                <div class="col-md-6 mt-3">
+                    <h5>Datos del préstamo</h5>
+                    <p><strong>Fecha de préstamo:</strong> {{ prestamo?.fechaPrestamo | date: 'dd/MM/yyyy' }}</p>
+                    <p><strong>Fecha prevista de devolución:</strong> {{ prestamo?.fechaPrevistaDevolucion | date: 'dd/MM/yyyy' }}</p>
+                    <p><strong>Fecha de devolución:</strong> 
+                        <span *ngIf="prestamo?.fechaDevolucion; else noDevuelto">
+                            {{ prestamo?.fechaDevolucion | date: 'dd/MM/yyyy' }}
+                        </span>
+                        <ng-template #noDevuelto> En préstamo</ng-template>
+                    </p>
+                </div>
+            </div> <!-- Cierre de row -->
+        </div> <!-- Cierre de user-card -->
+    </div> <!-- Cierre de main-content -->
+</div>

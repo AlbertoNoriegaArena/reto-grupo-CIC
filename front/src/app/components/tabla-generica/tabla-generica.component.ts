@@ -10,7 +10,6 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { CustomPaginator } from '../../custom-paginator';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-tabla-generica',
   standalone: true,
@@ -40,8 +39,9 @@ export class TablaGenericaComponent implements OnInit {
   @Input() deleteCallback!: (id: number) => void;
   @Input() editCallback!: (id: number) => void;
   @Input() viewDetailsCallback!: (id: number) => void;
-
-
+  @Input() devolverCallback!: (id: number) => void;
+  @Input() tipoTabla!: string;  
+  
   constructor(private router: Router,) { }
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -92,6 +92,12 @@ export class TablaGenericaComponent implements OnInit {
   onDelete(id: number) {
     if (this.deleteCallback) {
       this.deleteCallback(id); // Ejecuta el callback con el ID
+    }
+  }
+
+  onDevolver(id: number) {
+    if (this.devolverCallback) {
+      this.devolverCallback(id);  // Ejecuta el callback con el ID
     }
   }
 

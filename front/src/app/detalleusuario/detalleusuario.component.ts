@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Persona } from '../../persona';
 import { ActivatedRoute } from '@angular/router'; 
 import { PersonaService } from '../../persona.service';
-import { PrestamosService } from '../../prestamo.service'; // Importar PrestamoService
+import { PrestamoService } from '../../prestamo.service'; // Importar PrestamoService
 
 @Component({
   selector: 'app-detalleusuario',
@@ -24,7 +24,7 @@ export class DetalleUsuarioComponent implements OnInit {
   constructor(
     private route: ActivatedRoute, 
     private personaService: PersonaService,
-    private prestamoService: PrestamosService // Inyectamos PrestamoService
+    private prestamoService: PrestamoService // Inyectamos PrestamoService
   ) { }
 
   ngOnInit(): void {
