@@ -32,8 +32,8 @@ export class PeliculaService {
     return this.httpClient.get<Pelicula>(`${this.url}/${itemId}`);
   }
 
-  actualizar(pelicula: Pelicula) {
-    return this.httpClient.put(`${this.url}/${pelicula.item.id}`, pelicula);
+  actualizar(pelicula: Pelicula): Observable<Pelicula>  {
+    return this.httpClient.put<Pelicula>(`${this.url}/${pelicula.item.id}`, pelicula);
   }
 
   borrar(id: number): Observable<void> {

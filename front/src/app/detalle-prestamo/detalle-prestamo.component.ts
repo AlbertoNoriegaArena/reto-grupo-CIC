@@ -93,15 +93,7 @@ export class DetallePrestamoComponent implements OnInit {
   onFormSubmitted() {
     // Recargar el préstamo actualizado desde el servicio
     if (this.prestamoSeleccionado?.id) {
-      this.prestamoService.getPrestamoById(this.prestamoSeleccionado.id).subscribe({
-        next: (prestamoActualizado) => {
-          this.prestamo = prestamoActualizado; // Actualizar la vista con los nuevos datos
-          this.cerrarModal(); // Cerrar el modal
-        },
-        error: (error) => {
-          console.error("Error al actualizar el detalle del préstamo:", error);
-        }
-      });
+      this.actualizarDetallePrestamo(this.prestamoSeleccionado.id);
     }
   }
 }

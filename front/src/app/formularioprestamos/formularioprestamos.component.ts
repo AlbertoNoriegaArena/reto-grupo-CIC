@@ -93,7 +93,7 @@ export class FormularioprestamosComponent implements OnInit {
   update() {
     this.prestamoService.updatePrestamo(this.prestamo).subscribe({
       next: (respuesta) => {
-        console.log('Película actualizada con éxito', respuesta);
+        console.log('Prestamo actualizada con éxito', respuesta);
         this.loadItems();
         this.resetForm();  // Limpiar el formulario después de guardar
         this.formSubmitted.emit();  // Emitir el evento de éxito
