@@ -1,54 +1,68 @@
 <div class="container">
   <form (ngSubmit)="onSubmit()" #form="ngForm">
-    <!-- Dropdown para seleccionar la persona -->
     <div class="row">
+      <!-- Selección del Item -->
       <div class="form-group col-md-6">
         <label for="itemId">Item:</label>
-        <select id="itemId" name="itemId" class="form-control" [(ngModel)]="prestamo.itemId" required
-          #itemRef="ngModel">
-          <option value="" disabled selected>Seleccione un item</option>
-          <option *ngFor="let item of items" [value]="item.id">{{ item.nombre }}</option>
-        </select>
-        <div class="text-danger" *ngIf="itemRef.invalid && itemRef.touched">
-          Debe seleccionar un item
-        </div>
-        <div class="text-danger" *ngIf="erroresBackend?.itemId">
-          {{ erroresBackend.itemId }}
-        </div>
+        <ng-container *ngIf="!isEditMode; else itemReadonly">
+          <select id="itemId" name="itemId" class="form-control" [(ngModel)]="prestamo.itemId" required #itemRef="ngModel">
+            <option value="" disabled selected>Seleccione un item</option>
+            <option *ngFor="let item of items" [value]="item.id">{{ item.nombre }}</option>
+          </select>
+          <div class="text-danger" *ngIf="itemRef.invalid && itemRef.touched">
+            Debe seleccionar un item
+          </div>
+        </ng-container>
+        <ng-template #itemReadonly>
+          <input id="itemId" name="itemId" class="form-control" [(ngModel)]="prestamo.item.nombre" disabled>
+        </ng-template>
       </div>
+
+      <!-- Fecha Prevista de Devolución -->
       <div class="form-group col-md-6">
         <label for="fechaPrevistaDevolucion">Fecha Prevista de Devolución:</label>
         <input type="date" id="fechaPrevistaDevolucion" name="fechaPrevistaDevolucion" class="form-control"
-          [(ngModel)]="prestamo.fechaPrevistaDevolucion" required>
-        <div class="text-danger" *ngIf="erroresBackend?.fechaPrevistaDevolucion">
-          {{ erroresBackend.fechaPrevistaDevolucion }}
-        </div>
+          [(ngModel)]="prestamo.fechaPrevistaDevolucion">
       </div>
     </div>
+
     <div class="row">
+      <!-- Selección de la Persona -->
       <div class="form-group col-md-6">
         <label for="persona">Persona:</label>
-        <select id="persona" name="persona" class="form-control" [(ngModel)]="prestamo.persona.id" required
-          #personaRef="ngModel">
-          <option value="" disabled selected>Seleccione una persona</option>
-          <option *ngFor="let persona of personas" [value]="persona.id">{{ persona.nombre }}</option>
-        </select>
-        <div class="text-danger" *ngIf="personaRef.invalid && personaRef.touched">
-          La persona es obligatoria
+        <ng-container *ngIf="!isEditMode; else personaReadonly">
+          <select id="persona" name="persona" class="form-control" [(ngModel)]="prestamo.persona.id" required #personaRef="ngModel">
+            <option value="" disabled selected>Seleccione una persona</option>
+            <option *ngFor="let persona of personas" [value]="persona.id">{{ persona.nombre }}</option>
+          </select>
+          <div class="text-danger" *ngIf="personaRef.invalid && personaRef.touched">
+            La persona es obligatoria
+          </div>
+        </ng-container>
+        <ng-template #personaReadonly>
+          <input id="persona" name="persona" class="form-control" [(ngModel)]="prestamo.persona.nombre" disabled>
+        </ng-template>
+      </div>
+        <!-- Fecha de Préstamo (Solo en modo edición) -->
+        <div class="form-group col-md-6" *ngIf="isEditMode">
+          <label for="fechaPrestamo">Fecha de Préstamo:</label>
+          <input type="date" id="fechaPrestamo" name="fechaPrestamo" class="form-control"
+            [(ngModel)]="prestamo.fechaPrestamo" disabled>
         </div>
-        <div class="text-danger" *ngIf="erroresBackend?.persona">
-          {{ erroresBackend.persona }}
-        </div>
+  </div>
+
+    <div class="row" *ngIf="esEditable()&&isEditMode">
+      <!-- Fecha de Devolución (Editable solo si ya fue devuelto) -->
+      <div class="form-group col-md-6">
+        <label for="fechaDevolucion">Fecha de Devolución:</label>
+        <input type="date" id="fechaDevolucion" name="fechaDevolucion" class="form-control"
+          [(ngModel)]="prestamo.fechaDevolucion" [disabled]="!esEditable()">
       </div>
     </div>
 
-    <!-- Mensaje de error general del backend -->
-    <div class="alert alert-danger mt-2" *ngIf="erroresBackend?.general">
-      {{ erroresBackend.general }}
-    </div>
-
+    <!-- Botones -->
     <div class="buttons-container mt-3">
-      <button type="submit" class="btn btn-primary">Crear Préstamo</button>
+      <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Editar préstamo' : 'Crear préstamo' }}</button>
       <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
     </div>
   </form>

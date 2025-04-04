@@ -18,6 +18,9 @@ export class FormularioprestamosComponent implements OnInit {
   items: { id: number; nombre: string }[] = [];
   erroresBackend: any = {};
 
+  nombreItem: string = '';
+  nombrePersona: string = '';
+
   @Output() formSubmitted = new EventEmitter<void>();
   @Output() formClosed = new EventEmitter<void>();
 
@@ -48,7 +51,7 @@ export class FormularioprestamosComponent implements OnInit {
   }
 
   loadItems() {
-    this.prestamoService.getAvailableItems().subscribe({ // Call the new method
+    this.prestamoService.getAvailableItems().subscribe({ 
       next: (data) => {
         this.items = data;
       },
@@ -57,7 +60,14 @@ export class FormularioprestamosComponent implements OnInit {
       }
     });
   }
+
   onSubmit() {
+    if (this.prestamo.fechaDevolucion === "EN PRESTAMO") {
+      this.prestamo.fechaDevolucion = null; // Asegurar que se envíe como null
+    }
+
+    console.log("Enviando datos:", this.prestamo); // Verifica qué se envía
+
     if (this.isEditMode) {
       this.update();
     } else {
@@ -119,5 +129,9 @@ export class FormularioprestamosComponent implements OnInit {
 
     } as Prestamo;
     this.erroresBackend = {};  // Limpiar los errores
+  }
+
+  esEditable(): boolean {
+    return this.prestamo.fechaDevolucion !== null && this.prestamo.fechaDevolucion !== "EN PRESTAMO";
   }
 }

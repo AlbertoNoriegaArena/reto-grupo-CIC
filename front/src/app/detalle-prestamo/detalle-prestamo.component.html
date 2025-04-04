@@ -27,22 +27,31 @@
                     <p><strong>Dirección:</strong> {{ prestamo?.persona?.direccion }}</p>
                     <p><strong>Email:</strong> {{ prestamo?.persona?.email }}</p>
                     <p><strong>Teléfono:</strong> {{ prestamo?.persona?.telefono }}</p>
-                    
-                </div>
 
+                </div>
+            </div>
+            <div class="user-info row mt-3">
                 <!-- Datos del préstamo -->
-                <div class="col-md-6 mt-3">
+                <div class="col-md-6">
                     <h5>Datos del préstamo</h5>
                     <p><strong>Fecha de préstamo:</strong> {{ prestamo?.fechaPrestamo | date: 'dd/MM/yyyy' }}</p>
-                    <p><strong>Fecha prevista de devolución:</strong> {{ prestamo?.fechaPrevistaDevolucion | date: 'dd/MM/yyyy' }}</p>
-                    <p><strong>Fecha de devolución:</strong> 
+                    <p><strong>Fecha prevista de devolución:</strong> {{ prestamo?.fechaPrevistaDevolucion | date:
+                        'dd/MM/yyyy' }}</p>
+                    <p><strong>Fecha de devolución:</strong>
                         <span *ngIf="prestamo?.fechaDevolucion; else noDevuelto">
                             {{ prestamo?.fechaDevolucion | date: 'dd/MM/yyyy' }}
                         </span>
                         <ng-template #noDevuelto> En préstamo</ng-template>
                     </p>
                 </div>
-            </div> <!-- Cierre de row -->
-        </div> <!-- Cierre de user-card -->
-    </div> <!-- Cierre de main-content -->
+                <div class="actions col-md-3">
+                    <!-- Botón para devolver el préstamo (solo si el item está prestado) -->
+                    <button *ngIf="!prestamo?.fechaDevolucion" (click)="devolverPrestamo(prestamo?.id ?? 0)" class="btn btn-info w-100">Devolver préstamo</button>
+    
+                    <!-- Botón para actualizar el registro -->
+                    <button (click)="actualizarRegistro()" class="btn btn-info w-100 mt-2">Actualizar registro</button>
+                </div>
+            </div>
+        </div> 
+    </div> 
 </div>

@@ -70,33 +70,41 @@ public class PrestamoService {
     }
 
     public Prestamo updatePrestamo(Long id, Prestamo prestamo) {
+        // Buscar el préstamo por ID
         Optional<Prestamo> prestamoOptional = prestamoRepository.findById(id);
-        if (prestamoOptional.isPresent()) {
-            Prestamo prestamoExistente = prestamoOptional.get();
-
-            comprobacionesItemYPersona(prestamo);
-
-            validacionFechaPrevistaDevolucion(prestamo);
-
-            if (prestamo.isBorrado()) {
-                throw new PrestamoBorradoException(id);
-            }
-
-            if (prestamo.getFechaPrevistaDevolucion() != null) {
-                prestamoExistente.setFechaPrevistaDevolucion(prestamo.getFechaPrevistaDevolucion());
-            }
-
-            if (prestamo.getFechaDevolucion() != null) {
-                prestamoExistente.setFechaDevolucion(prestamo.getFechaDevolucion());
-
-                Item itemDevuelto = itemService.obtenerItemPorId(prestamoExistente.getItemId()).get();
-                itemDevuelto.setEstado(EstadoItem.DISPONIBLE);
-                itemService.updateItem(itemDevuelto.getId(), itemDevuelto);
-            }
-
-            return prestamoRepository.save(prestamoExistente);
+        if (prestamoOptional.isEmpty()) {
+            throw new PrestamoNotFoundException(id);
         }
-        throw new PrestamoNotFoundException(id);
+
+        Prestamo prestamoExistente = prestamoOptional.get();
+
+        // Validar Item y Persona
+        comprobacionesItemYPersona(prestamo);
+
+        // Validar Fecha Prevista de Devolución
+        validacionFechaPrevistaDevolucion(prestamo);
+
+        // Actualizar datos del préstamo
+        prestamoExistente.setFechaPrevistaDevolucion(prestamo.getFechaPrevistaDevolucion());
+
+        // Si el préstamo se ha devuelto, actualizar la fecha de devolución y el estado
+        // del Item
+        if (prestamo.getFechaDevolucion() != null) {
+            prestamoExistente.setFechaDevolucion(prestamo.getFechaDevolucion());
+
+            // Actualizar estado del Item a DISPONIBLE
+            Optional<Item> itemOptional = itemService.obtenerItemPorId(prestamoExistente.getItemId());
+            if (itemOptional.isEmpty()) {
+                throw new ItemNotFoundException(prestamoExistente.getItemId());
+            }
+
+            Item itemDevuelto = itemOptional.get();
+            itemDevuelto.setEstado(EstadoItem.DISPONIBLE);
+            itemService.updateItem(itemDevuelto.getId(), itemDevuelto);
+        }
+
+        // Guardar los cambios
+        return prestamoRepository.save(prestamoExistente);
     }
 
     public void deletePrestamo(Long id) {
@@ -166,9 +174,9 @@ public class PrestamoService {
             throw new PersonaNotFoundException(prestamo.getPersona().getId());
         }
 
-        // Comprobar que el item esté disponible
+        // Si el ítem está prestado, pero estamos solo actualizando la fecha prevista de devolución, no lanzamos la excepción.
         Item item = itemOptional.get();
-        if (item.getEstado() == EstadoItem.PRESTADO) {
+        if (item.getEstado() == EstadoItem.PRESTADO && prestamo.getFechaPrevistaDevolucion() == null) {
             throw new ItemPrestadoException(item.getNombre());
         }
     }
@@ -201,22 +209,21 @@ public class PrestamoService {
 
     public List<Prestamo> listarPrestamosActivos(String nombrePersona, LocalDate fechaPrevistaDevolucion) {
         List<Prestamo> prestamos = prestamoRepository.findByFechaDevolucionIsNull();
-    
+
         if (nombrePersona != null && !nombrePersona.isEmpty()) {
             prestamos = prestamos.stream()
                     .filter(p -> p.getPersona().getNombre().equalsIgnoreCase(nombrePersona))
                     .toList();
         }
-    
+
         if (fechaPrevistaDevolucion != null) {
             prestamos = prestamos.stream()
                     .filter(p -> p.getFechaPrevistaDevolucion() != null &&
                             p.getFechaPrevistaDevolucion().equals(fechaPrevistaDevolucion))
                     .toList();
         }
-    
+
         return prestamos;
     }
-    
 
 }
