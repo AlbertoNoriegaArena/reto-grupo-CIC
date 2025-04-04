@@ -49,9 +49,17 @@
                     <button *ngIf="!prestamo?.fechaDevolucion" (click)="devolverPrestamo(prestamo?.id ?? 0)" class="btn btn-info w-100">Devolver préstamo</button>
     
                     <!-- Botón para actualizar el registro -->
-                    <button (click)="actualizarRegistro()" class="btn btn-info w-100 mt-2">Actualizar registro</button>
+                    <button (click)="actualizarRegistro(prestamo?.id ?? 0)" class="btn btn-info w-100 mt-2">Editar prestamo</button>
                 </div>
             </div>
         </div> 
     </div> 
+    <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
+        <app-formularioprestamos
+        [isEditMode]="isEditMode"
+        [prestamo]="prestamoSeleccionado!"
+        (formSubmitted)="onFormSubmitted()"
+        (formClosed)="cerrarModal()"
+      ></app-formularioprestamos>
+    </app-modal>
 </div>
