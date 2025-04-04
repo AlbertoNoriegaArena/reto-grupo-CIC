@@ -5,7 +5,8 @@ import { Libro } from '../../libro';
 import { CommonModule } from '@angular/common';
 import { ModalComponent } from '../components/modal/modal.component';
 import { FormularioLibrosComponent } from '../formulariolibros/formulariolibros.component';
-
+import { PrestamoService } from '../../prestamo.service';
+import { Prestamo } from '../../prestamo';
 
 @Component({
   selector: 'app-detalle-libro',
@@ -23,11 +24,13 @@ export class DetalleLibroComponent implements OnInit {
   titleModal = 'Editar libro';
   isEditMode = true;
   libroSeleccionado: Libro = { item: { formato: {} } } as Libro;
+  prestamos: Prestamo[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private libroService: LibroService,
     private router: Router,
+    private prestamoService: PrestamoService,
   ) { }
 
   ngOnInit() {
@@ -37,6 +40,11 @@ export class DetalleLibroComponent implements OnInit {
         this.libro = libro;
       });
     }
+
+    // Llamada para cargar los préstamos disponibles
+    this.prestamoService.getPrestamos().subscribe((prestamos) => {
+      this.prestamos = prestamos;
+    });
   }
 
   goToMainPage() {
@@ -45,6 +53,17 @@ export class DetalleLibroComponent implements OnInit {
 
   goToLibros() {
     this.router.navigate(['/listalibros']);
+  }
+
+  irAlPrestamo(id: number) {
+    const prestamo = this.prestamos.find((p) => p.item.id === id);
+
+    if (prestamo) {
+      // Si se encuentra el préstamo, redirige al detalle del préstamo
+      this.router.navigate([`/detalleprestamo/${prestamo.id}`]);
+    } else {
+      console.error('No se encontró un préstamo para este libro.');
+    }
   }
 
   actualizarRegistro(id: number) {
@@ -60,10 +79,10 @@ export class DetalleLibroComponent implements OnInit {
   onFormSubmitted() {
     if (this.libroSeleccionado?.item.id) {
       this.libroService.buscarUno(this.libroSeleccionado.item.id).subscribe(
-         (libroActualizada) => {
+        (libroActualizada) => {
           this.libro = libroActualizada;
           this.cerrarModal();
-          
+
         },
         (error) => {
           console.error("Error al actualizar el detalle del préstamo:", error);

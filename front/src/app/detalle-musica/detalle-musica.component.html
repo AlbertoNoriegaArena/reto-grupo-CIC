@@ -28,9 +28,18 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="actions col-md-12">
-                        <button (click)="actualizarRegistro(musica?.item?.id ?? 0)" class="btn btn-info w-100 mt-2">Editar
-                            música</button>
+                    <div class="col-md-6">
+                        <button (click)="actualizarRegistro(musica?.item?.id ?? 0)" class="btn btn-info w-100 mt-2">
+                            Editar música
+                        </button>
+                    </div>
+                    <div class="col-md-6 ml-1">
+                        <!-- Botón para ir al préstamo si el musica está prestado -->
+                        <button *ngIf="musica?.item?.estado === 'PRESTADO'"
+                                (click)="irAlPrestamo(musica?.item?.id ?? 0)" 
+                                class="btn btn-warning w-100 mt-2">
+                            Ver préstamo
+                        </button>
                     </div>
                 </div>
             </div>

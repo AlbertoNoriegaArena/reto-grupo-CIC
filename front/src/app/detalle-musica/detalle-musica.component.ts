@@ -5,6 +5,8 @@ import { Musica } from '../../musica';
 import { CommonModule } from '@angular/common';
 import { ModalComponent } from '../components/modal/modal.component';
 import { FormulariomusicaComponent } from '../formulariomusica/formulariomusica.component';
+import { PrestamoService } from '../../prestamo.service';
+import { Prestamo } from '../../prestamo';
 
 @Component({
   selector: 'app-detalle-musica',
@@ -24,11 +26,13 @@ export class DetalleMusicaComponent implements OnInit {
   titleModal = 'Editar Préstamo';
   isEditMode = true;
   musicaSeleccionada: Musica = { item: { formato: {} } } as Musica;
+  prestamos: Prestamo[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private musicaService: MusicaService,
     private router: Router,
+    private prestamoService: PrestamoService,
   ) { }
 
   ngOnInit() {
@@ -38,6 +42,10 @@ export class DetalleMusicaComponent implements OnInit {
         this.musica = musica;
       });
     }
+     // Llamada para cargar los préstamos disponibles
+     this.prestamoService.getPrestamos().subscribe((prestamos) => {
+      this.prestamos = prestamos;
+    });
   }
 
   goToMainPage() {
@@ -46,6 +54,17 @@ export class DetalleMusicaComponent implements OnInit {
 
   goToMusica() {
     this.router.navigate(['/listamusica']);
+  }
+
+  irAlPrestamo(id: number) {
+    const prestamo = this.prestamos.find((p) => p.item.id === id);
+
+    if (prestamo) {
+      // Si se encuentra el préstamo, redirige al detalle del préstamo
+      this.router.navigate([`/detalleprestamo/${prestamo.id}`]);
+    } else {
+      console.error('No se encontró un préstamo para esta música');
+    }
   }
 
   actualizarRegistro(id: number) {
