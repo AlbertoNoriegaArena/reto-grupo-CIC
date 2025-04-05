@@ -55,7 +55,7 @@
             </button>
       
             <!-- Botón "Devolver" solo en la tabla de préstamos cuando el préstamo sigue activo -->
-            <button *ngIf="tipoTabla === 'prestamos' && row.fechaDevolucion === 'EN PRESTAMO'" 
+            <button *ngIf="tipoTabla === 'prestamos' && (row.fechaDevolucion === null || row.fechaDevolucion === 'EN PRESTAMO')" 
               mat-icon-button color="primary" matTooltip="Devolver" 
               (click)="onDevolver(row.id)" class="botonDevolver">
               <span class="devolver">Devolver</span>

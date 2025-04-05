@@ -4,21 +4,33 @@
         <div class="botonesHeader">
             <button class="btn btn-success w-40 mx-5" (click)="abrirModalAgregar()">Nuevo préstamo</button>
             <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la página principal</button>
+            <div class="tab-buttons my-3">
+                <button class="tab-button" [class.active]="prestamosFiltrados === 'todos'"
+                    (click)="filtrarPrestamos('todos')">Todos</button>
+
+                <button class="tab-button" [class.active]="prestamosFiltrados === 'activos'"
+                    (click)="filtrarPrestamos('activos')">Activos</button>
+
+                <button class="tab-button" [class.active]="prestamosFiltrados === 'vencidos'"
+                    (click)="filtrarPrestamos('vencidos')">Vencidos</button>
+            </div>
+
         </div>
     </header>
-    <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns"
-        [deleteCallback]="delete.bind(this)" [editCallback]="abrirModalEditar.bind(this)"
-        [viewDetailsCallback]="verDetalles" [devolverCallback]="devolverPrestamo.bind(this)" [columnDefinitions]="columnDefinitions" [tipoTabla]="'prestamos'">
+    <div *ngIf="dataSource.data.length === 0" class="text-center my-4 text-muted">
+        Sin registros para mostrar
+    </div>
+    <app-tabla-generica *ngIf="dataSource.data.length > 0" [dataSource]="dataSource"
+        [displayedColumns]="displayedColumns" [deleteCallback]="delete.bind(this)"
+        [editCallback]="abrirModalEditar.bind(this)" [viewDetailsCallback]="verDetalles"
+        [devolverCallback]="devolverPrestamo.bind(this)" [columnDefinitions]="columnDefinitions"
+        [tipoTabla]="'prestamos'">
     </app-tabla-generica>
 
     <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
-        <app-formularioprestamos
-        [prestamo]="selectedPrestamo"
-        [prestamoDevuelto]="prestamoDevuelto"
-        [isEditMode]="isEditMode"
-        (formSubmitted)="onFormSubmitted()"
-        (formClosed)="cerrarModal()"
-      ></app-formularioprestamos>
+        <app-formularioprestamos [prestamo]="selectedPrestamo" [prestamoDevuelto]="prestamoDevuelto"
+            [isEditMode]="isEditMode" (formSubmitted)="onFormSubmitted()"
+            (formClosed)="cerrarModal()"></app-formularioprestamos>
     </app-modal>
 
 </div>

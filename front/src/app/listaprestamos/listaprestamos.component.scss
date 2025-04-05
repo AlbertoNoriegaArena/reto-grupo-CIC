@@ -1,0 +1,28 @@
+.tab-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  
+    .tab-button {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-bottom: 3px solid transparent;
+      background-color: transparent;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #555;
+      transition: all 0.3s ease;
+  
+      &:hover {
+        color: #007bff;
+        border-bottom: 3px solid #007bff;
+      }
+  
+      &.active {
+        color: #007bff;
+        border-bottom: 3px solid #007bff;
+        font-weight: bold;
+      }
+    }
+  }
+  

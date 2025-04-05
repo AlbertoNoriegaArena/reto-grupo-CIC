@@ -84,4 +84,28 @@ export class PrestamoService {
     }
     return throwError(() => new Error(errorMessage));
   }
+
+  getPrestamosActivos() {
+    return this.http.get<Prestamo[]>(`${this.apiUrl}/activos`).pipe(
+      map(prestamos => prestamos.map(p => ({
+        ...p,
+        nombreItem: p.item?.nombre ?? '',
+        nombrePersona: p.persona?.nombre ?? '',
+      }))
+      ),
+      catchError(this.handleError)
+    );
+  }
+  
+  getPrestamosVencidos() {
+    return this.http.get<Prestamo[]>(`${this.apiUrl}/vencidos`).pipe(
+      map(prestamos => prestamos.map(p => ({
+        ...p,
+        nombreItem: p.item?.nombre ?? '',
+        nombrePersona: p.persona?.nombre ?? '',
+      }))
+      ),
+      catchError(this.handleError)
+    );
+  }
 }

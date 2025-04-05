@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PrestamoService } from '../../prestamo.service';
 import { Prestamo } from '../../prestamo';
@@ -37,18 +37,32 @@ export class ListaprestamosComponent implements OnInit {
   isModalOpen = false;
   titleModal = 'Agregar Prestamo'; //Variable para el título dinámico
 
-  @Output() prestamoDevuelto = new EventEmitter<void>(); 
+  prestamosFiltrados: 'todos' | 'activos' | 'vencidos' = 'todos';
+
+  displayedColumns: string[] = [];
+  columnDefinitions: any[] = [];
+
+  @Output() prestamoDevuelto = new EventEmitter<void>();
 
   selectedPrestamo: Prestamo = { item: { formato: {} } } as Prestamo;
 
-  displayedColumns: string[] = ['nombreItem', 'nombrePersona', 'fechaPrestamo', 'fechaPrevistaDevolucion', 'fechaDevolucion', 'acciones'];
-
-  columnDefinitions = [
+  // Todas las columnas (para "Todos")
+  todosDisplayedColumns: string[] = ['nombreItem', 'nombrePersona', 'fechaPrestamo', 'fechaPrevistaDevolucion', 'fechaDevolucion', 'acciones'];
+  todosColumnDefinitions = [
     { key: 'nombreItem', label: 'Artículo' },
     { key: 'nombrePersona', label: 'Prestado a' },
     { key: 'fechaPrestamo', label: 'Fecha de préstamo' },
     { key: 'fechaPrevistaDevolucion', label: 'Fecha prevista de devolución' },
     { key: 'fechaDevolucion', label: 'Fecha de Devolución' },
+  ];
+
+  // Sin "fechaDevolucion" (para activos y vencidos)
+  reducedDisplayedColumns: string[] = ['nombreItem', 'nombrePersona', 'fechaPrestamo', 'fechaPrevistaDevolucion', 'acciones'];
+  reducedColumnDefinitions = [
+    { key: 'nombreItem', label: 'Artículo' },
+    { key: 'nombrePersona', label: 'Prestado a' },
+    { key: 'fechaPrestamo', label: 'Fecha de préstamo' },
+    { key: 'fechaPrevistaDevolucion', label: 'Fecha prevista de devolución' },
   ];
 
   constructor(private prestamoService: PrestamoService, private router: Router, private snackBar: MatSnackBar) { }
@@ -58,6 +72,10 @@ export class ListaprestamosComponent implements OnInit {
   }
 
   loadPrestamos() {
+    this.prestamosFiltrados = 'todos';
+    this.displayedColumns = this.todosDisplayedColumns;
+    this.columnDefinitions = this.todosColumnDefinitions;
+
     this.prestamoService.getPrestamos().subscribe({
       next: (prestamos) => {
         this.prestamos = prestamos;
@@ -115,7 +133,7 @@ export class ListaprestamosComponent implements OnInit {
         this.prestamoService.deletePrestamo(id).subscribe({
           next: () => {
             Swal.fire('Eliminado', 'Préstamo eliminado');
-            this.loadPrestamos(); 
+            this.loadPrestamos();
           },
           error: (error) => {
             const errorMessage = error.error?.mensaje || 'Error al eliminar el préstamo';
@@ -129,13 +147,38 @@ export class ListaprestamosComponent implements OnInit {
   devolverPrestamo(id: number): void {
     this.prestamoService.devolverPrestamo(id).subscribe(
       () => {
-        this.snackBar.open('Préstamo devuelto', 'Cerrar', { duration: 3000, verticalPosition: 'top', panelClass: ['custom-snackbar']});
-        this.loadPrestamos(); 
-        this.prestamoDevuelto.emit(); 
+        this.snackBar.open('Préstamo devuelto', 'Cerrar', { duration: 3000, verticalPosition: 'top', panelClass: ['custom-snackbar'] });
+        this.loadPrestamos();
+        this.prestamoDevuelto.emit();
       },
       (error) => {
-        this.snackBar.open(error.message || 'Error al devolver el préstamo', 'Cerrar', { duration: 5000,  verticalPosition: 'top', panelClass: ['custom-snackbar']});
+        this.snackBar.open(error.message || 'Error al devolver el préstamo', 'Cerrar', { duration: 5000, verticalPosition: 'top', panelClass: ['custom-snackbar'] });
       }
     );
   }
+
+  filtrarPrestamos(tipo: 'activos' | 'vencidos' | 'todos') {
+    this.prestamosFiltrados = tipo;
+  
+    if (tipo === 'activos') {
+      this.displayedColumns = this.reducedDisplayedColumns;
+      this.columnDefinitions = this.reducedColumnDefinitions;
+  
+      this.prestamoService.getPrestamosActivos().subscribe({
+        next: (data) => this.dataSource.data = data,
+        error: (err) => console.error('Error al cargar préstamos activos', err)
+      });
+    } else if (tipo === 'vencidos') {
+      this.displayedColumns = this.reducedDisplayedColumns;
+      this.columnDefinitions = this.reducedColumnDefinitions;
+  
+      this.prestamoService.getPrestamosVencidos().subscribe({
+        next: (data) => this.dataSource.data = data,
+        error: (err) => console.error('Error al cargar préstamos vencidos', err)
+      });
+    } else {
+      this.loadPrestamos(); // Esto ya setea las columnas completas
+    }
+  }
+  
 }
