@@ -25,4 +25,19 @@
       }
     }
   }
+
+  .botonesHeader {
+    top: 18%;
+    margin-bottom: 2%;
+  }
+  /* Ajustes en resoluciones pequeñas */
+@media (max-width: 1024px) {
+    .botonesHeader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  
+
   

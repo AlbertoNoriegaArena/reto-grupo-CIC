@@ -23,6 +23,9 @@
         <label for="fechaPrevistaDevolucion">Fecha Prevista de Devolución:</label>
         <input type="date" id="fechaPrevistaDevolucion" name="fechaPrevistaDevolucion" class="form-control"
           [(ngModel)]="prestamo.fechaPrevistaDevolucion">
+          <div class="text-danger" *ngIf="erroresBackend?.fechaPrevistaDevolucion">
+            {{ erroresBackend.fechaPrevistaDevolucion }}
+          </div>
       </div>
     </div>
 
@@ -58,6 +61,11 @@
         <input type="date" id="fechaDevolucion" name="fechaDevolucion" class="form-control"
           [(ngModel)]="prestamo.fechaDevolucion" [disabled]="!esEditable()">
       </div>
+    </div>
+
+    <!-- Mensaje de error general del backend -->
+    <div class="alert alert-danger mt-2" *ngIf="erroresBackend?.general">
+      {{ erroresBackend.general }}
     </div>
 
     <!-- Botones -->

@@ -19,21 +19,21 @@ import { DetallePrestamoComponent } from './detalle-prestamo/detalle-prestamo.co
 
 
 export const routes: Routes = [
-    { path: '', component: VistaprincipalComponent },
-    { path: 'formulariopeliculas', component: FormulariopeliculasComponent },
-    { path: 'listacoleccion', component: ListacoleccionComponent },
-    { path: 'formulariolibros', component: FormularioLibrosComponent },
-    { path: 'listalibros', component: ListalibrosComponent },
-    { path: 'listapeliculas', component: ListapeliculasComponent },
-    { path: 'formulariomusica', component: FormulariomusicaComponent },
-    { path: 'listamusica', component: ListamusicaComponent },
-    { path: 'listausuarios', component: ListapersonasComponent },
-    { path: 'vistaprincipal', component: VistaprincipalComponent },
-    { path: 'formulariopersonas', component: FormulariopersonasComponent },
-    { path: 'detalleusuario/:id', component: DetalleUsuarioComponent},
-    { path: 'detallepelicula/:id', component: DetallePeliculaComponent },
-    { path: 'detallemusica/:id', component: DetalleMusicaComponent },
-    { path: 'detallelibro/:id', component: DetalleLibroComponent },
-    { path: 'listaprestamos', component: ListaprestamosComponent },
-    { path: 'detalleprestamo/:id', component: DetallePrestamoComponent }
-];
+    { path: '', component: VistaprincipalComponent, data: { breadcrumb: 'Inicio' } },
+    { path: 'formulariopeliculas', component: FormulariopeliculasComponent, data: { breadcrumb: 'Agregar Película' } },
+    { path: 'listacoleccion', component: ListacoleccionComponent, data: { breadcrumb: 'Colección' } },
+    { path: 'formulariolibros', component: FormularioLibrosComponent, data: { breadcrumb: 'Agregar Libro' } },
+    { path: 'listalibros', component: ListalibrosComponent, data: { breadcrumb: 'Lista de Libros' } },
+    { path: 'listapeliculas', component: ListapeliculasComponent, data: { breadcrumb: 'Lista de Películas' } },
+    { path: 'formulariomusica', component: FormulariomusicaComponent, data: { breadcrumb: 'Agregar Música' } },
+    { path: 'listamusica', component: ListamusicaComponent, data: { breadcrumb: 'Lista de Música' } },
+    { path: 'listausuarios', component: ListapersonasComponent, data: { breadcrumb: 'Lista de Usuarios' } },
+    { path: 'vistaprincipal', component: VistaprincipalComponent, data: { breadcrumb: 'Inicio' } },
+    { path: 'formulariopersonas', component: FormulariopersonasComponent, data: { breadcrumb: 'Agregar Persona' } },
+    { path: 'detalleusuario/:id', component: DetalleUsuarioComponent, data: { breadcrumb: 'Detalles Usuario' } },
+    { path: 'detallepelicula/:id', component: DetallePeliculaComponent, data: { breadcrumb: 'Detalles Película' } },
+    { path: 'detallemusica/:id', component: DetalleMusicaComponent, data: { breadcrumb: 'Detalles Música' } },
+    { path: 'detallelibro/:id', component: DetalleLibroComponent, data: { breadcrumb: 'Detalles Libro' } },
+    { path: 'listaprestamos', component: ListaprestamosComponent, data: { breadcrumb: 'Lista de Préstamos' } },
+    { path: 'detalleprestamo/:id', component: DetallePrestamoComponent, data: { breadcrumb: 'Detalles Préstamo' } }
+  ];

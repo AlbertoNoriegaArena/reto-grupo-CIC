@@ -1,22 +1,18 @@
 <div class="contenedor">
-    <header class="my-4">
-        <h1 class="mb-3">Lista de préstamos <span class="movie-emoji"></span></h1>
-        <div class="botonesHeader">
-            <button class="btn btn-success w-40 mx-5" (click)="abrirModalAgregar()">Nuevo préstamo</button>
-            <button class="btn btn-primary w-40 mx-5" (click)="goToMainPage()">Volver a la página principal</button>
-            <div class="tab-buttons my-3">
-                <button class="tab-button" [class.active]="prestamosFiltrados === 'todos'"
-                    (click)="filtrarPrestamos('todos')">Todos</button>
+    <div class="tab-buttons my-3">
+        <button class="tab-button" [class.active]="prestamosFiltrados === 'todos'"
+            (click)="filtrarPrestamos('todos')">Todos</button>
 
-                <button class="tab-button" [class.active]="prestamosFiltrados === 'activos'"
-                    (click)="filtrarPrestamos('activos')">Activos</button>
+        <button class="tab-button" [class.active]="prestamosFiltrados === 'activos'"
+            (click)="filtrarPrestamos('activos')">Activos</button>
 
-                <button class="tab-button" [class.active]="prestamosFiltrados === 'vencidos'"
-                    (click)="filtrarPrestamos('vencidos')">Vencidos</button>
-            </div>
+        <button class="tab-button" [class.active]="prestamosFiltrados === 'vencidos'"
+            (click)="filtrarPrestamos('vencidos')">Vencidos</button>
+    </div>
+    <div class="botonesHeader">
+        <button class="btn btn-success w-40 mx-5" (click)="abrirModalAgregar()">Nuevo préstamo</button>
 
-        </div>
-    </header>
+    </div>
     <div *ngIf="dataSource.data.length === 0" class="text-center my-4 text-muted">
         Sin registros para mostrar
     </div>
