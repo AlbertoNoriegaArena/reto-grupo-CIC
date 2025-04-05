@@ -116,7 +116,7 @@ export class ListalibrosComponent implements OnInit {
       if (result.isConfirmed) {
         this.libroService.borrar(id).subscribe({
           next: () => {
-            Swal.fire('Eliminado', 'Película eliminada correctamente');
+            Swal.fire('Eliminado', 'Libro eliminadoM correctamente');
             this.loadLibros();
           },
           error: (error) => Swal.fire('Error', error.message),
