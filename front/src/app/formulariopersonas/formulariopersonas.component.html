@@ -5,9 +5,6 @@
           <label for="nombre">Nombre:</label>
           <input type="text" id="nombre" name="nombre" class="form-control" [(ngModel)]="persona.nombre" required
             #nombreRef="ngModel">
-          <div class="text-danger" *ngIf="nombreRef.invalid && nombreRef.touched">
-            El nombre es obligatorio
-          </div>
           <div class="text-danger" *ngIf="erroresBackend?.nombre">
             {{ erroresBackend.nombre }}
           </div>

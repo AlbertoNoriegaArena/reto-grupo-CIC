@@ -66,11 +66,23 @@ export class TablaGenericaComponent implements OnInit {
 
   isDate(value: any): boolean {
     if (typeof value === 'string') {
-      // Intenta parsear la cadena como una fecha
-      return !isNaN(Date.parse(value));
+      // Try parsing with Date.parse() first
+      const parsedDate = Date.parse(value);
+      if (!isNaN(parsedDate)) {
+        // If parsing is successful, check if the original string can be formatted back to a date
+        const date = new Date(parsedDate);
+        const formattedDate = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        // Check if the formatted date is different from the original string
+        if (formattedDate.replace(/-/g, '/') !== value.replace(/-/g, '/')) {
+          return false;
+        }
+        return true;
+      }
+      return false;
     }
     return value instanceof Date;
   }
+
 
   isNumber(value: any): boolean {
     return typeof value === 'number';
