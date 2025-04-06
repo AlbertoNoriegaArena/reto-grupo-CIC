@@ -1,27 +1,53 @@
-
 <div class="container">
-    <h2>Crear usuario</h2>
-    <form (ngSubmit)="onSubmit()">
-        <div class="form-group">
-            <label for="nombrePersona">Nombre:</label>
-            <input type="text" id="nombrePersona" name="nombrePersona" [(ngModel)]="persona.nombre" required>
+    <form (ngSubmit)="onSubmit()" #form="ngForm">
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" class="form-control" [(ngModel)]="persona.nombre" required
+            #nombreRef="ngModel">
+          <div class="text-danger" *ngIf="nombreRef.invalid && nombreRef.touched">
+            El nombre es obligatorio
+          </div>
+          <div class="text-danger" *ngIf="erroresBackend?.nombre">
+            {{ erroresBackend.nombre }}
+          </div>
         </div>
-        <div class="form-group">
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="Direccion" name="Direccion" [(ngModel)]="persona.direccion" required>
+  
+        <div class="form-group col-md-6">
+          <label for="direccion">Dirección:</label>
+          <input type="text" id="direccion" name="direccion" class="form-control" [(ngModel)]="persona.direccion">
+          <div class="text-danger" *ngIf="erroresBackend?.direccion">
+            {{ erroresBackend.direccion }}
+          </div>
         </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" [(ngModel)]="persona.email" required>
-        </div>
-       
-        <div class="form-group">
-            <label for="telefono">Teléfono:</label>
-            <input type="number" id="telefono" name="telefono" [(ngModel)]="persona.telefono" required>
-        </div>
-        <div class="buttons-container">
-          <button type="submit">Guardar</button>
-          <button type="button" (click)="goToListausuarios()">Cancelar</button>
       </div>
-  </form>
+  
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" class="form-control" [(ngModel)]="persona.email">
+          <div class="text-danger" *ngIf="erroresBackend?.email">
+            {{ erroresBackend.email }}
+          </div>
+        </div>
+  
+        <div class="form-group col-md-6">
+          <label for="telefono">Teléfono:</label>
+          <input type="text" id="telefono" name="telefono" class="form-control" [(ngModel)]="persona.telefono">
+          <div class="text-danger" *ngIf="erroresBackend?.telefono">
+            {{ erroresBackend.telefono }}
+          </div>
+        </div>
+      </div>
+    
+      <!-- Mensaje de error general del backend -->
+      <div class="alert alert-danger mt-2" *ngIf="erroresBackend?.general">
+        {{ erroresBackend.general }}
+      </div>
+  
+      <div class="buttons-container mt-3">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
+      </div>
+    </form>
   </div>

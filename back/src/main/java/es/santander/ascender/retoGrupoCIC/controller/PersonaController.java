@@ -3,6 +3,7 @@ package es.santander.ascender.retoGrupoCIC.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,11 @@ public class PersonaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePersona(@PathVariable Long id) {
-        personaService.deletePersona(id);
-        return ResponseEntity.ok("Persona borrada con éxito");
+        try {
+            personaService.deletePersona(id);
+            return ResponseEntity.ok(""); // 200 OK con un cuerpo vacío
+        } catch ( IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }

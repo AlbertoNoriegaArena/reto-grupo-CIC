@@ -1,21 +1,53 @@
-import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Persona } from '../../persona';
 import { PersonaService } from '../../persona.service';
+import { TablaGenericaComponent } from '../components/tabla-generica/tabla-generica.component';
+import { FormulariopersonasComponent } from '../formulariopersonas/formulariopersonas.component';
+import { ModalComponent } from '../components/modal/modal.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-listapersonas',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [
+    TablaGenericaComponent,
+    CommonModule,
+    FormulariopersonasComponent,
+    ModalComponent,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    FormsModule,
+  ],
   templateUrl: './listapersonas.component.html',
   styleUrl: './listapersonas.component.scss',
-  standalone: true
 })
 
 export class ListapersonasComponent implements OnInit {
-
   personas: Persona[] = [];
+
+  dataSource: MatTableDataSource<Persona> = new MatTableDataSource();
+    isEditMode = false;
+    isModalOpen = false;
+    titleModal = 'Agregar Usuario'; 
+  
+    selectedPersona: Persona = {} as Persona;
+  
+    displayedColumns: string[] = ['nombre', 'direccion', 'email', 'telefono', 'acciones'];
+  
+    columnDefinitions = [
+      { key: 'nombre', label: 'Nombre' },
+      { key: 'direccion', label: 'Dirección' },
+      { key: 'email', label: 'Email' },
+      { key: 'telefono', label: 'Teléfono' },
+    ];
   constructor(private router: Router, private personaService: PersonaService) { }
 
   ngOnInit(): void {
@@ -26,6 +58,8 @@ export class ListapersonasComponent implements OnInit {
     this.personaService.getAllPersonas().subscribe(
       (personas) => {
         this.personas = personas;
+        this.dataSource.data = personas;
+        console.log('Personas cargadas:', this.personas);
       },
       (error) => {
         console.error('Error loading personas:', error);
@@ -33,34 +67,58 @@ export class ListapersonasComponent implements OnInit {
     );
   }
 
-  verPersona(persona: Persona): void {
-    console.log('Ver persona:', persona);
-    this.router.navigate(['/detalleusuario', persona.id]); // Navigate to detallecoleccion with id
+  abrirModalAgregar() {
+    this.isEditMode = false;
+    this.titleModal = 'Agregar usuario'; 
+    this.isModalOpen = true;
   }
 
-  editarPersona(persona: Persona): void {
-    console.log('Editar persona:', persona);
-    this.router.navigate(['/editarpersona', persona.id]); // Changed to number
+  abrirModalEditar(id: number) {
+    const persona = this.dataSource.data.find(p => p.id === id);
+    if (persona) {
+      this.selectedPersona = { ...persona }; 
+      this.isEditMode = true;
+      this.titleModal = 'Editar usuario'; 
+      this.isModalOpen = true;
+    }
   }
 
-  eliminarPersona(persona: Persona): void {
-    this.personaService.deletePersona(persona.id).subscribe({
-      next: () => {
-        console.log('Persona eliminada:', persona);
-        this.loadPersonas(); // Reload the list after deletion
-      },
-    });
+  cerrarModal() {
+    this.isModalOpen = false;
+    this.titleModal = 'Agregar usuario'; 
+  }
 
+  onFormSubmitted() {
+    this.cerrarModal();
+    this.loadPersonas(); 
   }
 
   goToMainPage() {
     this.router.navigate(['/']);
   }
-  goToCreatePage() {
-    this.router.navigate(['/crearpersona']);
-  }
-  goToFormulariopersonas() {
-    this.router.navigate(['/formulariopersonas']);
-  }
 
+  verDetalles(id: number) {
+      this.router.navigate(['/detalleusuario', id]); 
+    }
+  
+    delete(id: number) {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Este registro será eliminado y no lo podrás recuperar',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        confirmButtonColor: '#d33', 
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.personaService.deletePersona(id).subscribe({
+            next: () => {
+              Swal.fire('Eliminado', 'Usuario eliminado correctamente');
+              this.loadPersonas();
+            },
+            error: (error) => Swal.fire('Error', error.message),
+          });
+        }
+      });
+    }
 }

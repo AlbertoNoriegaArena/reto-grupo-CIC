@@ -17,7 +17,7 @@ export class PersonaService {
     return this.http.get<Persona[]>(this.url).pipe(
       map(personas => personas.map(p => ({
         ...p,
-        nombre: p.nombre ?? '',   // Asegurar que el nombre nunca sea undefined
+        nombre: p.nombre ?? '',  
         email: p.email ?? '',
         telefono: p.telefono ?? '',
         direccion: p.direccion ?? ''
@@ -26,7 +26,6 @@ export class PersonaService {
     );
   }
   
-
   // Obtener persona por ID
   getPersonaById(id: number): Observable<Persona> {
     return this.http.get<Persona>(`${this.url}/${id}`);
@@ -38,13 +37,15 @@ export class PersonaService {
   }
 
   // Actualizar una persona existente
-  updatePersona(id: number, persona: Persona): Observable<Persona> {
-    return this.http.put<Persona>(`${this.url}/${id}`, persona);
+  updatePersona(persona: Persona): Observable<Persona> {
+    return this.http.put<Persona>(`${this.url}/${persona.id}`, persona);
   }
 
   // Eliminar una persona
   deletePersona(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+    return this.http.delete<void>(`${this.url}/${id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
    private handleError(error: any) {

@@ -40,17 +40,17 @@
           <div class="acciones-buttons">
             <!-- Si es una tabla de préstamos, usa row.id; si no, usa row.item?.id -->
             <button mat-icon-button color="primary" matTooltip="Ver detalles" 
-              (click)="tipoTabla === 'prestamos' ? onVerDetalles(row.id) : onVerDetalles(row.item?.id)">
+              (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas') ? onVerDetalles(row.id) : onVerDetalles(row.item?.id)">
               <mat-icon>visibility</mat-icon>
             </button>
       
             <button mat-icon-button color="accent" matTooltip="Editar" 
-              (click)="tipoTabla === 'prestamos' ? onEdit(row.id) : onEdit(row.item?.id)">
+              (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas') ? onEdit(row.id) : onEdit(row.item?.id)">
               <mat-icon>edit</mat-icon>
             </button>
       
             <button mat-icon-button color="warn" matTooltip="Eliminar" 
-              (click)="tipoTabla === 'prestamos' ? onDelete(row.id) : onDelete(row.item?.id)">
+              (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas') ? onDelete(row.id) : onDelete(row.item?.id)">
               <mat-icon>delete</mat-icon>
             </button>
       
