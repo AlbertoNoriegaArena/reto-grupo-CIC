@@ -66,14 +66,18 @@ export class PrestamoService {
   }
 
   getAvailableItems(): Observable<{nombre: string; id: number }[]> {
-    return this.http.get<any[]>(this.itemsUrl).pipe( // Change the type to any[]
-      map(items => items.map(item => ({
-        id: item.id,
-        nombre: item.nombre
-      }))),
+    return this.http.get<any[]>(this.itemsUrl).pipe( 
+      map(items => 
+        items.map(item => ({
+          id: item.id,
+          nombre: item.nombre
+        }))
+        .sort((a, b) => a.nombre.localeCompare(b.nombre)) // Ordenar alfabéticamente por el campo 'nombre'
+      ),
       catchError(this.handleError)
     );
   }
+  
 
   private handleError(error: any) {
     let errorMessage = 'Error desconocido';

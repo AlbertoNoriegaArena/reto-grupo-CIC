@@ -5,11 +5,12 @@ import { Prestamo } from '../../prestamo';
 import { PrestamoService } from '../../prestamo.service';
 import { PersonaService } from '../../persona.service';
 import { Persona } from '../../persona';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-formularioprestamos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgSelectModule],
   templateUrl: './formularioprestamos.component.html',
   styleUrl: './formularioprestamos.component.scss'
 })

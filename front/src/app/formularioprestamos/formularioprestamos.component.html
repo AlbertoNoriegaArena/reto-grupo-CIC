@@ -5,10 +5,21 @@
       <div class="form-group col-md-6">
         <label for="itemId">Item:</label>
         <ng-container *ngIf="!isEditMode; else itemReadonly">
-          <select id="itemId" name="itemId" class="form-control" [(ngModel)]="prestamo.itemId" required #itemRef="ngModel">
-            <option value="" disabled selected>Seleccione un item</option>
-            <option *ngFor="let item of items" [value]="item.id">{{ item.nombre }}</option>
-          </select>
+          <ng-select
+          id="itemId"
+          name="itemId"
+          [items]="items"
+          bindLabel="nombre"
+          bindValue="id"
+          [(ngModel)]="prestamo.itemId"
+          placeholder="Seleccione un item"
+          [searchable]="true"
+          [notFoundText]="'No se encontraron resultados'"
+          [loadingText]="'Cargando opciones...'"
+          [virtualScroll]="true"
+          required
+          #itemRef="ngModel">
+        </ng-select>   
           <div class="text-danger" *ngIf="itemRef.invalid && itemRef.touched">
             Debe seleccionar un item
           </div>
@@ -34,10 +45,22 @@
       <div class="form-group col-md-6">
         <label for="persona">Persona:</label>
         <ng-container *ngIf="!isEditMode; else personaReadonly">
-          <select id="persona" name="persona" class="form-control" [(ngModel)]="prestamo.persona.id" required #personaRef="ngModel">
-            <option value="" disabled selected>Seleccione una persona</option>
-            <option *ngFor="let persona of personas" [value]="persona.id">{{ persona.nombre }}</option>
-          </select>
+          <ng-select
+            id="persona"
+            name="persona"
+            [items]="personas"
+            bindLabel="nombre"
+            bindValue="id"
+            [(ngModel)]="prestamo.persona.id"
+            placeholder="Seleccione una persona"
+            [searchable]="true"
+            [notFoundText]="'No se encontraron personas'"
+            [typeToSearchText]="'Escriba para buscar...'"
+            [loadingText]="'Cargando personas...'"
+            [virtualScroll]="true"
+            required
+            #personaRef="ngModel">
+          </ng-select>
           <div class="text-danger" *ngIf="personaRef.invalid && personaRef.touched">
             La persona es obligatoria
           </div>
