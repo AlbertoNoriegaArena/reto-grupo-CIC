@@ -1,41 +1,5 @@
 /* detalleusuario.component.scss */
 
-.d-flex {
-    display: flex;
-    min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la pantalla */
-  }
-  
-  .sidebar {
-    width: 250px;
-    background-color: #343a40; /* Dark background for sidebar */
-    color: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
-  }
-  
-  .sidebar h4 {
-    margin-bottom: 20px;
-    font-weight: bold;
-  }
-  
-  .sidebar a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    width: 100%;
-    text-align: center;
-    transition: background-color 0.3s ease;
-  }
-  
-  .sidebar a:hover {
-    background-color: #495057; /* Slightly lighter on hover */
-  }
-  
   .main-content {
     flex-grow: 1;
     padding: 20px;
@@ -84,6 +48,7 @@
     margin-bottom: 1rem;
     color: #212529;
     border-collapse: collapse;
+    text-align: center;
   }
   
   .table-bordered {
@@ -105,40 +70,69 @@
   .table-dark thead th {
     border-color: #454d55;
   }
+
+  // Establecer un ancho fijo para las columnas
+.table th:nth-child(1), 
+.table td:nth-child(1) {
+  width: 20%; /* 20% del ancho total */
+}
+
+.table th:nth-child(2), 
+.table td:nth-child(2) {
+  width: 15%; /* 15% del ancho total */
+}
+
+.table th:nth-child(3), 
+.table td:nth-child(3) {
+  width: 15%; /* 15% del ancho total */
+}
+
+.table th:nth-child(4), 
+.table td:nth-child(4) {
+  width: 20%; /* 20% del ancho total */
+}
+
+.table th:nth-child(5), 
+.table td:nth-child(5) {
+  width: 20%; /* 20% del ancho total */
+}
+
+.table th:nth-child(6), 
+.table td:nth-child(6) {
+  width: 10%; /* 10% del ancho total */
+}
   
-  .btn-info {
-    color: #fff;
-    background-color: #17a2b8;
-    border-color: #17a2b8;
-  }
+  .tab-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    text-align: center;
   
-  .btn-info:hover {
-    color: #fff;
-    background-color: #138496;
-    border-color: #117a8b;
-  }
+    .tab-button {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-bottom: 3px solid transparent;
+      background-color: transparent;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #555;
+      transition: all 0.3s ease;
+      
   
-  .btn-secondary {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
-  }
+      &:hover {
+        color: #007bff;
+        border-bottom: 3px solid #007bff;
+      }
   
-  .btn-secondary:hover {
-    color: #fff;
-    background-color: #5a6268;
-    border-color: #545b62;
+      &.active {
+        color: #007bff;
+        border-bottom: 3px solid #007bff;
+        font-weight: bold;
+      }
+    }
   }
+
   
-  .btn-success {
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-  }
-  
-  .btn-success:hover {
-    color: #fff;
-    background-color: #218838;
-    border-color: #1e7e34;
-  }
+
+
   

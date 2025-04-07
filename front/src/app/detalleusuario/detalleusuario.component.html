@@ -8,21 +8,32 @@
                 <p><strong>Dirección:</strong> {{ persona.direccion }}</p>
                 <p><strong>Email:</strong> {{ persona.email }}</p>
                 <p><strong>Teléfono:</strong> {{ persona.telefono }}</p>
+                <div class="col-md-6">
+                    <button (click)="actualizarRegistro(persona?.id ?? 0)" class="btn btn-info w-100 mt-2">
+                        Editar usuario
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Repositorios de Préstamos -->
         <div class="repo-card">
-            <h4>Repositorios de Préstamos</h4>
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <button class="btn btn-info w-100" (click)="verPrestamos('pelicula')">Películas</button>
+            <h6 class="text-center">Préstamos activos</h6>
+            <div class="row tab-buttons my-3">
+                <div class="col">
+                    <button class="tab-button" [class.active]="prestamosAsociados === 'todos'"
+                        (click)="verTodosPrestamos()">Todos</button>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <button class="btn btn-info w-100" (click)="verPrestamos('libro')">Libros</button>
+                <div class="col">
+                    <button class="tab-button" [class.active]="prestamosAsociados === 'pelicula'"
+                        (click)="verPrestamos('pelicula')">Películas</button>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <button class="btn btn-info w-100" (click)="verPrestamos('musica')">Música</button>
+                <div class="col">
+                    <button class="tab-button" [class.active]="prestamosAsociados === 'libro'"
+                        (click)="verPrestamos('libro')">Libros</button>
+                </div>
+                <div class="col">
+                    <button class="tab-button" [class.active]="prestamosAsociados === 'musica'"
+                        (click)="verPrestamos('musica')">Música</button>
                 </div>
             </div>
         </div>
@@ -33,23 +44,23 @@
             <table class="table table-bordered">
                 <thead class="table-dark">
                     <tr>
-                        <th>Nombre</th>
-                        <th>Tipo</th>
-                        <th>Formato</th>
-                        <th>Fecha de préstamo</th>
-                        <th>Fecha de devolución</th>
-                        <th>Detalle</th>
+                        <th class="w-30">Nombre</th>
+                        <th class="w-10">Tipo</th>
+                        <th class="w-10">Formato</th>
+                        <th class="w-20">Fecha de préstamo</th>
+                        <th class="w-20">Fecha prevista de devolución</th>
+                        <th class="w-10"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let prestamo of prestamos">
-                        <td>{{ prestamo.item.nombre }}</td>
-                        <td>{{ prestamo.item.tipo.nombre }}</td>
-                        <td>{{ prestamo.item.formato.nombre }}</td>
-                        <td>{{ prestamo.fechaPrestamo }}</td>
-                        <td>{{ prestamo.fechaDevolucion ? prestamo.fechaDevolucion : 'Prestado actualmente' }}</td>
-                        <td>
-                            <button class="btn btn-info" (click)="verDetallePrestamo(prestamo)">Ver Detalle</button>
+                        <td class="w-30">{{ prestamo.item.nombre }}</td>
+                        <td class="w-10">{{ prestamo.item.tipo.nombre }}</td>
+                        <td class="w-10">{{ prestamo.item.formato.nombre }}</td>
+                        <td class="w-20">{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy'}}</td>
+                        <td class="w-20">{{ prestamo.fechaPrevistaDevolucion | date: 'dd/MM/yyyy'}}</td>
+                        <td class="w-10">
+                            <button class="btn btn-dark" (click)="verDetallePrestamo(prestamo.item.id)">Ir al préstamo</button>
                         </td>
                     </tr>
                 </tbody>
@@ -62,33 +73,45 @@
             <table class="table table-bordered">
                 <thead class="table-dark">
                     <tr>
-                        <th>Nombre</th>
-                        <th>Tipo</th>
-                        <th>Formato</th>
-                        <th>Fecha de préstamo</th>
-                        <th>Fecha de devolución</th>
-                        <th>Detalle</th>
+                        <th class="w-30">Nombre</th>
+                        <th class="w-10">Tipo</th>
+                        <th class="w-10">Formato</th>
+                        <th class="w-20">Fecha de préstamo</th>
+                        <th class="w-20">Fecha prevista de devolución</th>
+                        <th class="w-10"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let prestamo of todosPrestamos">
-                        <td>{{ prestamo.item.nombre }}</td>
-                        <td>{{ prestamo.item.tipo.nombre }}</td>
-                        <td>{{ prestamo.item.formato.nombre }}</td>
-                        <td>{{ prestamo.fechaPrestamo }}</td>
-                        <td>{{ prestamo.fechaDevolucion ? prestamo.fechaDevolucion : 'Prestado actualmente' }}</td>
-                        <td>
-                            <button class="btn btn-info" (click)="verDetallePrestamo(prestamo)">Ver Detalle</button>
+                        <td class="w-30">{{ prestamo.item.nombre }}</td>
+                        <td class="w-10">{{ prestamo.item.tipo.nombre }}</td>
+                        <td class="w-10">{{ prestamo.item.formato.nombre }}</td>
+                        <td class="w-20">{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy'}}</td>
+                        <td class="w-20">{{ prestamo.fechaPrevistaDevolucion | date: 'dd/MM/yyyy' }}</td>
+                        <td class="w-10">
+                            <button class="btn btn-dark" (click)="verDetallePrestamo(prestamo.item.id)">Ir al préstamo</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Botones Inferiores -->
-        <div class="bottom-buttons">
-            <button class="btn btn-secondary" (click)="volver()">Atrás</button>
-            <button class="btn btn-success" (click)="verTodosPrestamos()">Ver Todos</button>
+        <!-- Si no hay préstamos del tipo seleccionado -->
+        <div *ngIf="mostrarTabla && prestamos.length === 0" class="alert alert-warning mt-2">
+            No hay préstamos de {{ tipoRepositorio }} activos para este usuario
+        </div>
+
+        <!-- Si no hay préstamos en total -->
+        <div *ngIf="verTodosTabla && todosPrestamos.length === 0" class="alert alert-warning mt-2">
+            Este usuario no tiene ningún préstamo activo
         </div>
     </div>
+    <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
+        <app-formulariopersonas
+        [isEditMode]="isEditMode"
+        [persona]="personaSeleccionada!"
+        (formSubmitted)="onFormSubmitted()"
+        (formClosed)="cerrarModal()"
+      ></app-formulariopersonas>
+    </app-modal>
 </div>

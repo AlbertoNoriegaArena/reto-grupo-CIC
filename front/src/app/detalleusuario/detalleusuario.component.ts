@@ -1,71 +1,130 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, DatePipe  } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Persona } from '../../persona';
-import { ActivatedRoute } from '@angular/router'; 
+import { ActivatedRoute, Router } from '@angular/router';
 import { PersonaService } from '../../persona.service';
 import { PrestamoService } from '../../prestamo.service'; // Importar PrestamoService
+import { ModalComponent } from '../components/modal/modal.component';
+import { FormulariopersonasComponent } from '../formulariopersonas/formulariopersonas.component';
 
 @Component({
   selector: 'app-detalleusuario',
-  imports: [NgFor, NgIf],
+  imports: [NgFor, NgIf, DatePipe, FormulariopersonasComponent, ModalComponent],
   templateUrl: './detalleusuario.component.html',
   styleUrl: './detalleusuario.component.scss',
-  standalone: true, 
+  standalone: true,
 })
 export class DetalleUsuarioComponent implements OnInit {
 
-  persona: Persona = {} as Persona; 
+  persona: Persona = {} as Persona;
   prestamos: any[] = [];
   todosPrestamos: any[] = [];
   mostrarTabla: boolean = false;
   verTodosTabla: boolean = false;
   tipoRepositorio: string = '';
+  personaSeleccionada: Persona = {} as Persona;
+  isModalOpen = false;
+  titleModal = 'Editar película';
+  isEditMode = true;
+
+  prestamosAsociados: 'todos' | 'pelicula' | 'musica' | 'libro' = 'todos';
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
+    private router: Router,
     private personaService: PersonaService,
     private prestamoService: PrestamoService // Inyectamos PrestamoService
   ) { }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id'); 
+
+    const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.personaService.getPersonaById(Number(id)).subscribe(persona => {
         this.persona = persona;
+        this.verTodosPrestamos();
       });
     }
+
   }
 
-  // 🔹 Modificado para obtener los préstamos desde el backend
   verPrestamos(tipo: string): void {
-    if (!this.persona.id) return; // Asegurar que la persona tiene ID
+    if (!this.persona.id) return;
+
+    // Evita recargar si ya está mostrando ese tipo
+    if (this.prestamosAsociados === tipo) return;
+
+    this.prestamosAsociados = tipo as 'pelicula' | 'libro' | 'musica';
 
     this.prestamoService.getPrestamosPorPersona(this.persona.id).subscribe((prestamos: any[]) => {
       this.tipoRepositorio = tipo;
-      this.prestamos = prestamos.filter(p => p.item.tipo.nombre.toLowerCase() === tipo.toLowerCase());
+
+      // Filtrar por tipo y además que no tengan fechaDevolucion (activos)
+      this.prestamos = prestamos.filter(p =>
+        p.item.tipo.nombre.toLowerCase() === tipo.toLowerCase() &&
+        !p.fechaDevolucion
+      );
+
       this.mostrarTabla = true;
       this.verTodosTabla = false;
     });
   }
 
-  // 🔹 Obtener TODOS los préstamos del usuario desde el backend
+
   verTodosPrestamos(): void {
     if (!this.persona.id) return;
 
+    if (this.prestamosAsociados === 'todos' && this.todosPrestamos.length > 0) return;
+
+    this.prestamosAsociados = 'todos';
+    this.verTodosTabla = true;
+    this.mostrarTabla = false;
+
     this.prestamoService.getPrestamosPorPersona(this.persona.id).subscribe((prestamos: any[]) => {
-      this.todosPrestamos = prestamos;
-      this.verTodosTabla = true;
-      this.mostrarTabla = false;
+      // Solo prestamos activos: sin fechaDevolucion
+      this.todosPrestamos = prestamos.filter(p => !p.fechaDevolucion);
     });
   }
 
-  verDetallePrestamo(prestamo: any): void {
-    console.log('Ver detalle del préstamo', prestamo);
-    // Aquí puedes agregar la lógica para mostrar un modal o redirigir a otra página
+  verDetallePrestamo(itemId: number) {
+    let prestamo;
+
+    if (this.prestamosAsociados === 'todos') {
+      prestamo = this.todosPrestamos.find((p) => p.item.id === itemId);
+    } else {
+      prestamo = this.prestamos.find((p) => p.item.id === itemId);
+    }
+
+    if (prestamo) {
+      this.router.navigate([`/detalleprestamo/${prestamo.id}`]);
+    } else {
+      console.error('No se encontró el préstamo');
+    }
   }
 
-  volver(): void {
-    this.mostrarTabla = false;
-    this.verTodosTabla = false;
+  actualizarRegistro(id: number) {
+    if (!this.persona) return;
+    this.personaSeleccionada = { ...this.persona };
+    this.isModalOpen = true;
   }
+
+  cerrarModal() {
+    this.isModalOpen = false;
+  }
+
+  onFormSubmitted() {
+    if (this.personaSeleccionada?.id) {
+      this.personaService.getPersonaById(this.personaSeleccionada.id).subscribe(
+        (personaActualizada) => {
+          this.persona = personaActualizada;
+          this.cerrarModal();
+
+        },
+        (error) => {
+          console.error("Error al actualizar el detalle del usuario", error);
+        }
+      );
+    }
+  }
+  
 }
