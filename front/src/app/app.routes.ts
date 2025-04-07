@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { FormulariopeliculasComponent } from './formulariopeliculas/formulariopeliculas.component';
 import { VistaprincipalComponent } from './vistaprincipal/vistaprincipal.component';
-import { ListacoleccionComponent } from './listacoleccion/listacoleccion.component';
 import { FormularioLibrosComponent } from './formulariolibros/formulariolibros.component';
 import { ListalibrosComponent } from './listalibros/listalibros.component';
 import { ListapeliculasComponent } from './listapeliculas/listapeliculas.component';
@@ -21,7 +20,6 @@ import { DetallePrestamoComponent } from './detalle-prestamo/detalle-prestamo.co
 export const routes: Routes = [
     { path: '', component: VistaprincipalComponent, data: { breadcrumb: 'Inicio' } },
     { path: 'formulariopeliculas', component: FormulariopeliculasComponent, data: { breadcrumb: 'Agregar Película' } },
-    { path: 'listacoleccion', component: ListacoleccionComponent, data: { breadcrumb: 'Colección' } },
     { path: 'formulariolibros', component: FormularioLibrosComponent, data: { breadcrumb: 'Agregar Libro' } },
     { path: 'listalibros', component: ListalibrosComponent, data: { breadcrumb: 'Lista de Libros' } },
     { path: 'listapeliculas', component: ListapeliculasComponent, data: { breadcrumb: 'Lista de Películas' } },

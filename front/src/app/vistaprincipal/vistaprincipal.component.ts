@@ -11,19 +11,9 @@ import { Router } from '@angular/router';
     styleUrl: './vistaprincipal.component.scss'
 })
 export class VistaprincipalComponent {
-    showLibros = false;
-    showPeliculas = false;
-    showMusica = false;
 
     constructor(private router: Router) { }
 
-    toggleLibros() {
-        this.showLibros = !this.showLibros;
-    }
-
-    goToFormularioLibros() {
-        this.router.navigate(['/formulariolibros']);
-    }
     goToListaLibros() {
         this.router.navigate(['/listalibros']);
     }
@@ -33,8 +23,8 @@ export class VistaprincipalComponent {
     goToListaMusica() {
         this.router.navigate(['/listamusica']);
     }
-      // Navegación a la lista de usuarios
-      goToListausuarios() {
+    // Navegación a la lista de usuarios
+    goToListausuarios() {
         this.router.navigate(['/listausuarios']);  // Asegúrate de tener configurada la ruta '/usuarios'
     }
 

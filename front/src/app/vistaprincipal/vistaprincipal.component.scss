@@ -1,9 +1,10 @@
 /* src/app/vistaprincipal/vistaprincipal.component.scss */
-.container {
+.contenedorPaginaInicio {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
+  width: 100%;
   height: 100vh;
   text-align: center;
   padding: 20px;
@@ -11,7 +12,7 @@
   position: relative;
 
   /* --- Linear Gradient Background (Dark Blue to Dark Gray) --- */
-  background-image: linear-gradient(to bottom, #678baf, #34495e); /* Dark blue to dark gray */
+  background-image: linear-gradient(to bottom, #678baf, #34495e) !important; /* Dark blue to dark gray */
   /* #2c3e50 is a dark blue, #34495e is a dark gray */
 }
 
