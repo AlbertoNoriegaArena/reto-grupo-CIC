@@ -14,9 +14,10 @@ import { FormatoService } from '../../formato.service';
 export class FormularioformatosComponent implements OnInit {
   @Output() formSubmitted = new EventEmitter<void>();
   @Output() formClosed = new EventEmitter<void>();
+  @Input() isEditMode: boolean = false;
   @Input() formato!: Formato;
   erroresBackend: any = {};
-  tiposItem: any = []; 
+  tiposItem: any = [];
   selectedTipoItemId: number = 0;
 
   constructor(private formatoService: FormatoService) { }
@@ -32,33 +33,58 @@ export class FormularioformatosComponent implements OnInit {
   }
 
   loadTiposItem() {
-      this.formatoService.getTipoItems().subscribe({
-        next: (tiposItem) => {
-          this.tiposItem = tiposItem;
-        },
-        error: (err) => {
-          console.error('Error al cargar los tipos de item', err);
-        }
-      });
+    this.formatoService.getTipoItems().subscribe({
+      next: (tiposItem) => {
+        this.tiposItem = tiposItem;
+      },
+      error: (err) => {
+        console.error('Error al cargar los tipos de item', err);
       }
+    });
+  }
 
   onSubmit() {
+    if (this.isEditMode && this.formato.id !== 0) {
+      this.update();
+    } else {
       this.create();
+    }
   }
+
+  update() {
+    const nombre = this.formato.nombre?.trim();
+  
+    if (!nombre) {
+      this.erroresBackend.general = 'Debe completar todos los campos';
+      return;
+    }
+  
+    this.formatoService.actualizar(this.formato).subscribe({
+      next: () => {
+        this.resetForm();
+        this.formSubmitted.emit();
+        this.formClosed.emit();
+      },
+      error: (errorFormato) => {
+        this.handleBackendErrors(errorFormato);
+      }
+    });
+  }
+  
 
   create() {
     this.formato.tipoItem = this.tiposItem.find(
       (tipo: any) => tipo.id === Number(this.selectedTipoItemId)
     );
-  
+
     const tipoItemId = this.formato.tipoItem?.id;
     const nombre = this.formato.nombre?.trim();
-  
+
     if (!tipoItemId || !nombre) {
       this.erroresBackend.general = 'Debe completar todos los campos';
       return;
     }
-  
+
     //Crear el formato
     this.formatoService.insertar({
       nombre,
@@ -66,7 +92,7 @@ export class FormularioformatosComponent implements OnInit {
     }).subscribe({
       next: (formatoCreado) => {
         const formatoId = formatoCreado.id;
-        
+
         // crear relación con TipoItemFormato
         this.formatoService.crearRelacionTipoItemFormato(tipoItemId, formatoId).subscribe({
           next: () => {
@@ -102,7 +128,7 @@ export class FormularioformatosComponent implements OnInit {
       this.erroresBackend = { general: 'Ocurrió un error inesperado' };
     }
   }
-  
+
 
   closeForm() {
     this.resetForm();

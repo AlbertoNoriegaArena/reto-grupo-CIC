@@ -22,6 +22,7 @@ export class ListaFormatoComponent implements OnInit {
   tiposDeItem: { tipoItemNombre: string, formatos: any[] }[] = [];
 
   selectedFormato: Formato = {} as Formato;
+  isEditMode = false;
   isModalOpen = false;
   titleModal = 'Agregar Formato'; 
 
@@ -81,12 +82,32 @@ export class ListaFormatoComponent implements OnInit {
   }
 
   abrirModalAgregar() {
+    this.isEditMode = false;
+    this.titleModal = 'Agregar Formato'; 
     this.isModalOpen = true;
   }
 
-  cerrarModal() {
-    this.isModalOpen = false;
+  abrirModalEditar(id: number) {
+    // Buscar el formato dentro de los agrupados
+    for (let tipo of this.tiposDeItem) {
+      const encontrado = tipo.formatos.find(f => f.id === id);
+      if (encontrado) {
+        this.selectedFormato = { ...encontrado }; 
+        this.isEditMode = true;
+        this.titleModal = 'Editar Formato';
+        this.isModalOpen = true;
+        return;
+      }
+    }
   }
+
+  cerrarModal() {
+    this.isModalOpen = false;  // Cerrar el modal
+    this.isEditMode = false;  // Restablecer el modo de edición
+    this.selectedFormato = {} as Formato;  // Limpiar el formato seleccionado
+    this.titleModal = 'Agregar Formato';  // Resetear el título
+  }
+  
 
   onFormSubmitted() {
     this.cerrarModal();
