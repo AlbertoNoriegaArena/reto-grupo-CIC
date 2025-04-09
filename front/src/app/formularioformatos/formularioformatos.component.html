@@ -1,0 +1,61 @@
+<div class="container">
+    <form (ngSubmit)="onSubmit()" #form="ngForm">
+      <div class="row">
+        <!-- Nombre del Formato -->
+        <div class="form-group col-md-6">
+          <label for="nombre">Nombre:</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            class="form-control"
+            [(ngModel)]="formato.nombre"
+            required
+            #nombreRef="ngModel"
+          />
+          <div class="text-danger" *ngIf="nombreRef.invalid && nombreRef.touched">
+            El nombre es obligatorio
+          </div>
+          <div class="text-danger" *ngIf="erroresBackend?.nombre">
+            {{ erroresBackend.nombre }}
+          </div>
+        </div>
+  
+        <!-- Tipo de Ítem -->
+        <div class="form-group col-md-6">
+          <label for="tipoItem">Tipo de Ítem:</label>
+          <select
+            id="tipoItem"
+            name="tipoItem"
+            class="form-control"
+            [(ngModel)]="selectedTipoItemId"
+            required
+            #tipoItemRef="ngModel"
+          >
+            <option value="" disabled selected>Seleccione un tipo</option>
+            <option *ngFor="let tipo of tiposItem" [value]="tipo.id">
+              {{ tipo.nombre }}
+            </option>
+          </select>
+          <div class="text-danger" *ngIf="tipoItemRef.invalid && tipoItemRef.touched">
+            Debe seleccionar un tipo de ítem
+          </div>
+          <div class="text-danger" *ngIf="erroresBackend?.tipoItem">
+            {{ erroresBackend.tipoItem }}
+          </div>
+        </div>
+      </div>
+  
+      <!-- Error general del backend -->
+      <div class="alert alert-danger mt-3" *ngIf="erroresBackend?.general">
+        {{ erroresBackend.general }}
+      </div>
+  
+      <!-- Botones -->
+      <div class="mt-4">
+        <button type="submit" class="btn btn-primary me-2">Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+  

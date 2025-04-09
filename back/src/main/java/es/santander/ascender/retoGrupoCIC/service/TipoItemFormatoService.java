@@ -11,6 +11,7 @@ import es.santander.ascender.retoGrupoCIC.repository.FormatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.dao.EmptyResultDataAccessException; 
 
 import java.util.List;
 import java.util.Optional;
@@ -87,5 +88,35 @@ public class TipoItemFormatoService {
 
     public Set<TipoItemFormato> obtenerTipoItemFormatosPorTipoItem(TipoItem tipoItem) {
         return tipoItemFormatoRepository.findByTipoItem(tipoItem);
+    }
+
+     /**
+     * Elimina la relación entre un TipoItem y un Formato.
+     * Lanza IllegalArgumentException si la relación no existe.
+     *
+     * @param tipoItemId ID del TipoItem.
+     * @param formatoId ID del Formato.
+     * @throws IllegalArgumentException si la relación no se encuentra.
+     */
+    public void eliminarRelacion(Long tipoItemId, Long formatoId) {
+        TipoItemFormatoId id = new TipoItemFormatoId(tipoItemId, formatoId);
+        // Usamos existsById para una verificación más eficiente antes de intentar borrar
+        if (!tipoItemFormatoRepository.existsById(id)) {
+             throw new IllegalArgumentException("La relación TipoItemFormato entre TipoItem " + tipoItemId + " y Formato " + formatoId + " no existe.");
+        }
+        try {
+            tipoItemFormatoRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ex) {
+             throw new IllegalArgumentException("La relación TipoItemFormato entre TipoItem " + tipoItemId + " y Formato " + formatoId + " no existe (o fue eliminada concurrentemente).");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<TipoItemFormato> obtenerTipoItemFormatosPorFormatoId(Long formatoId) {
+        // Validar que el formato exista podría ser una buena adición
+        if (!formatoRepository.existsById(formatoId)) {
+             throw new IllegalArgumentException("Formato no encontrado con ID: " + formatoId);
+        }
+        return tipoItemFormatoRepository.findByFormatoId(formatoId);
     }
 }

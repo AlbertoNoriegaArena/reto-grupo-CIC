@@ -10,6 +10,7 @@ import es.santander.ascender.retoGrupoCIC.repository.TipoItemFormatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.dao.EmptyResultDataAccessException; 
 
 import java.util.List;
 import java.util.Optional;
@@ -72,13 +73,17 @@ public class FormatoService {
         return null;
     }
 
-    public String deleteFormato(Long id) {
-        Optional<Formato> formato = formatoRepository.findById(id);
-        if (formato.isPresent()) {
-            formatoRepository.deleteById(id);
-            return "Formato eliminado con éxito";
+    public void deleteFormato(Long id) {
+    
+        if (!formatoRepository.existsById(id)) {
+            throw new FormatoNotFoundException(id);
         }
-        throw new FormatoNotFoundException(id);
+        try {
+            formatoRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ex) {
+            // Captura por si acaso existe una condición de carrera
+             throw new FormatoNotFoundException(id, "El formato no existe o fue eliminado concurrentemente");
+        }
     }
 
     // Método para obtener los formatos válidos para un TipoItem específico

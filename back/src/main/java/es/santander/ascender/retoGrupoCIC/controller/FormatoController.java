@@ -7,6 +7,8 @@ import es.santander.ascender.retoGrupoCIC.service.FormatoService;
 import es.santander.ascender.retoGrupoCIC.service.TipoItemService;
 import jakarta.validation.Valid;
 
+import es.santander.ascender.retoGrupoCIC.config.FormatoNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,12 +66,18 @@ public class FormatoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFormato(@PathVariable Long id) {
-        String resultado = formatoService.deleteFormato(id);
-        if (resultado.equals("Formato eliminado con éxito")) {
-            return ResponseEntity.ok(resultado);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultado);
+    public ResponseEntity<Void> deleteFormato(@PathVariable Long id) { 
+        try {
+            formatoService.deleteFormato(id);
+            // Si la eliminación es exitosa, devolver 204 No Content
+            return ResponseEntity.noContent().build();
+        } catch (FormatoNotFoundException e) {
+            // Si el formato no existe, devolver 404 Not Found
+            return ResponseEntity.notFound().build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (Exception e) {
+             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

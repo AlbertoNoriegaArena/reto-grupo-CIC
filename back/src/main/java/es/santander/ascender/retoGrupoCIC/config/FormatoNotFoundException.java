@@ -7,6 +7,9 @@ public class FormatoNotFoundException extends RuntimeException {
         super("No se encontró el formato con ID: " + formatoId);
         this.formatoId = formatoId;
     }
+    public FormatoNotFoundException(Long id, String mensaje) {
+        super("Formato con id " + id + ": " + mensaje);
+    }
 
     public Long getFormatoId() {
         return formatoId;

@@ -33,4 +33,8 @@ export class VistaprincipalComponent {
         this.router.navigate(['/listaprestamos']);  // Asegúrate de tener configurada la ruta '/prestamos'
     }
 
+    goToFormatos() {
+        this.router.navigate(['/listaformatos']); 
+    }
+
 }

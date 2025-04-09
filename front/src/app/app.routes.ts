@@ -14,6 +14,7 @@ import { DetalleMusicaComponent } from './detalle-musica/detalle-musica.componen
 import { DetalleLibroComponent } from './detalle-libro/detalle-libro.component'
 import { ListaprestamosComponent } from './listaprestamos/listaprestamos.component';
 import { DetallePrestamoComponent } from './detalle-prestamo/detalle-prestamo.component'
+import { ListaFormatoComponent } from './listaformatos/listaformatos.component';
 
 
 
@@ -33,5 +34,6 @@ export const routes: Routes = [
     { path: 'detallemusica/:id', component: DetalleMusicaComponent, data: { breadcrumb: 'Detalles Música' } },
     { path: 'detallelibro/:id', component: DetalleLibroComponent, data: { breadcrumb: 'Detalles Libro' } },
     { path: 'listaprestamos', component: ListaprestamosComponent, data: { breadcrumb: 'Lista de Préstamos' } },
-    { path: 'detalleprestamo/:id', component: DetallePrestamoComponent, data: { breadcrumb: 'Detalles Préstamo' } }
+    { path: 'detalleprestamo/:id', component: DetallePrestamoComponent, data: { breadcrumb: 'Detalles Préstamo' } },
+    { path: 'listaformatos', component: ListaFormatoComponent, data: { breadcrumb: 'Lista de Formatos' } },
   ];
