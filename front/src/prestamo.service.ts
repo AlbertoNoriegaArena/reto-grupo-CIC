@@ -39,6 +39,26 @@ export class PrestamoService {
   );
 }
 
+// Ultimos 5 préstamos por item
+getUltimosPrestamosPorItem(itemId: number, count: number = 5): Observable<Prestamo[]> {
+  const url = `${this.apiUrl}/item/${itemId}/ultimos/${count}`;
+  return this.http.get<Prestamo[]>(url).pipe(
+    map(prestamos => prestamos.map(p => ({
+      ...p,
+      nombreItem: p.item?.nombre ?? '',
+      formato: p.item?.formato?.nombre ?? '',
+      tipoItem: p.item?.tipo?.nombre ?? '',
+      ubicacion: p.item?.ubicacion ?? '',
+      estadoItem: p.item?.estado ?? '',
+      nombrePersona: p.persona?.nombre ?? '',
+      emailPersona: p.persona?.email ?? '',
+      telefonoPersona: p.persona?.telefono ?? '',
+      direccionPersona: p.persona?.direccion ?? '',
+    }))),
+    catchError(this.handleError) 
+  );
+}
+
   // Obtener préstamos por persona
   getPrestamosPorPersona(personaId: number): Observable<Prestamo[]> {
     return this.http.get<Prestamo[]>(`${this.apiUrl}/personas/${personaId}`);

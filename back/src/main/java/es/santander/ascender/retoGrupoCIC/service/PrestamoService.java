@@ -17,6 +17,9 @@ import es.santander.ascender.retoGrupoCIC.repository.PrestamoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.PageRequest; 
+import org.springframework.data.domain.Pageable;   
+import org.springframework.data.domain.Sort;      
 
 import java.time.LocalDate;
 import java.util.List;
@@ -226,4 +229,10 @@ public class PrestamoService {
         return prestamos;
     }
 
+    @Transactional(readOnly = true)
+    public List<Prestamo> findUltimosPorItem(Long itemId, int count) {
+        Pageable pageable = PageRequest.of(0, count, Sort.by(Sort.Direction.DESC, "fechaPrestamo"));
+        return prestamoRepository.findRecentPrestamosByItem(itemId, pageable);
+    }
+    
 }

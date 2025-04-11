@@ -7,6 +7,9 @@ import es.santander.ascender.retoGrupoCIC.model.Prestamo;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -41,4 +44,9 @@ public interface PrestamoRepository extends JpaRepository<Prestamo, Long> {
     // préstamos que no se han devuelto filtrados por persona y fecha
     List<Prestamo> findByPersonaIdAndFechaDevolucionIsNullAndFechaPrevistaDevolucion(Long personaId,
             LocalDate fechaPrevistaDevolucion);
+
+    @Query("SELECT p FROM Prestamo p WHERE p.item.id = :itemId ORDER BY p.fechaPrestamo DESC")
+    List<Prestamo> findRecentPrestamosByItem(@Param("itemId") Long itemId, Pageable pageable);
+            
+            
 }

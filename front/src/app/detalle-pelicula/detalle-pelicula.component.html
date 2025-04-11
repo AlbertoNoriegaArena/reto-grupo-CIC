@@ -1,48 +1,74 @@
 <div class="contenedorDetalle d-flex">
-     <!-- Sección principal -->
-    <div class="main-content">
-        <div class="user-card">
-            <h3>{{ pelicula?.item?.nombre }}</h3>
-            <div class="user-info">
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <p><strong>Director:</strong> {{ pelicula?.director }}</p>
-                        <p><strong>Duración:</strong> {{ pelicula?.duracion }} minutos</p>
-                        <p><strong>Fecha de estreno:</strong> {{ pelicula?.fechaEstreno | date: 'dd/MM/yyyy' }}</p>
-                        <p><strong>Género:</strong> {{ pelicula?.genero }}</p>
-                    </div>
+  <!-- Sección principal -->
+  <div class="main-content">
+    <div class="user-card">
+      <h3>{{ pelicula?.item?.nombre }}</h3>
+      <div class="user-info">
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <p><strong>Director:</strong> {{ pelicula?.director }}</p>
+            <p><strong>Duración:</strong> {{ pelicula?.duracion }} minutos</p>
+            <p><strong>Fecha de estreno:</strong> {{ pelicula?.fechaEstreno | date: 'dd/MM/yyyy' }}</p>
+            <p><strong>Género:</strong> {{ pelicula?.genero }}</p>
+          </div>
 
-                    <div class="col-md-6">
-                        <p><strong>Formato:</strong> {{ pelicula?.item?.formato?.nombre }}</p>
-                        <p><strong>Ubicación:</strong> {{ pelicula?.item?.ubicacion}}</p>
-                        <p><strong>Fecha:</strong> {{ pelicula?.item?.fecha | date: 'dd/MM/yyyy'}}</p>
-                        <p><strong>Estado:</strong> {{ pelicula?.item?.estado}}</p>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <button (click)="actualizarRegistro(pelicula?.item?.id ?? 0)" class="btn btn-info w-100 mt-2">
-                            Editar película
-                        </button>
-                    </div>
-                    <div class="col-md-6 ml-1">
-                        <!-- Botón para ir al préstamo si el pelicula está prestado -->
-                        <button *ngIf="pelicula?.item?.estado === 'PRESTADO'"
-                                (click)="irAlPrestamo(pelicula?.item?.id ?? 0)" 
-                                class="btn btn-warning w-100 mt-2">
-                            Ver préstamo
-                        </button>
-                    </div>
-                </div>
-            </div>
+          <div class="col-md-6">
+            <p><strong>Formato:</strong> {{ pelicula?.item?.formato?.nombre }}</p>
+            <p><strong>Ubicación:</strong> {{ pelicula?.item?.ubicacion}}</p>
+            <p><strong>Fecha:</strong> {{ pelicula?.item?.fecha | date: 'dd/MM/yyyy'}}</p>
+            <p><strong>Estado:</strong> {{ pelicula?.item?.estado}}</p>
+          </div>
         </div>
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <button (click)="actualizarRegistro(pelicula?.item?.id ?? 0)" class="btn btn-info w-100 mt-2">
+              Editar película
+            </button>
+          </div>
+          <div class="col-md-6 ml-1">
+            <!-- Botón para ir al préstamo si el pelicula está prestado -->
+            <button *ngIf="prestamoActivo" (click)="irAlPrestamo(prestamoActivo.id)" class="btn btn-warning w-100 mt-2">
+              Ver préstamo activo
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
-        <app-formulariopeliculas
-        [isEditMode]="isEditMode"
-        [pelicula]="peliculaSeleccionada!"
-        (formSubmitted)="onFormSubmitted()"
-        (formClosed)="cerrarModal()"
-      ></app-formulariopeliculas>
-    </app-modal>
+    <div class="prestamosRecientes mt-4" *ngIf="ultimosPrestamos.length > 0">
+      <h5>Últimos préstamos</h5>
+      <table class="table table-striped text-center">
+        <thead>
+          <tr>
+            <th>Persona</th>
+            <th>Correo</th>
+            <th>Fecha préstamo</th>
+            <th>Fecha prevista de devolución</th>
+            <th>Fecha devolución</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prestamo of ultimosPrestamos">
+            <td>{{ prestamo.persona.nombre }}</td>
+            <td>{{ prestamo.persona.email }}</td>
+            <td>{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ prestamo.fechaPrevistaDevolucion | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              <span *ngIf="prestamo.fechaDevolucion; else enPrestamo">
+                {{ prestamo.fechaDevolucion | date: 'dd/MM/yyyy' }}
+              </span>
+              <ng-template #enPrestamo>
+                <span class="text-warning fw-bold">
+                  <i class="fas fa-clock"></i> En préstamo
+                </span>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
+    <app-formulariopeliculas [isEditMode]="isEditMode" [pelicula]="peliculaSeleccionada!"
+      (formSubmitted)="onFormSubmitted()" (formClosed)="cerrarModal()"></app-formulariopeliculas>
+  </app-modal>
 </div>

@@ -27,15 +27,45 @@
                     </div>
                     <div class="col-md-6 ml-1">
                         <!-- Botón para ir al préstamo si el musica está prestado -->
-                        <button *ngIf="musica?.item?.estado === 'PRESTADO'"
-                                (click)="irAlPrestamo(musica?.item?.id ?? 0)" 
-                                class="btn btn-warning w-100 mt-2">
-                            Ver préstamo
-                        </button>
+                        <button *ngIf="prestamoActivo" (click)="irAlPrestamo(prestamoActivo.id)" class="btn btn-warning w-100 mt-2">
+                            Ver préstamo activo
+                          </button>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="prestamosRecientes mt-4" *ngIf="ultimosPrestamos.length > 0">
+            <h5>Últimos préstamos</h5>
+            <table class="table table-striped text-center">
+              <thead>
+                <tr>
+                  <th>Persona</th>
+                  <th>Correo</th>
+                  <th>Fecha préstamo</th>
+                  <th>Fecha prevista de devolución</th>
+                  <th>Fecha devolución</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let prestamo of ultimosPrestamos">
+                  <td>{{ prestamo.persona.nombre }}</td>
+                  <td>{{ prestamo.persona.email }}</td>
+                  <td>{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ prestamo.fechaPrevistaDevolucion | date: 'dd/MM/yyyy' }}</td>
+                  <td>
+                    <span *ngIf="prestamo.fechaDevolucion; else enPrestamo">
+                      {{ prestamo.fechaDevolucion | date: 'dd/MM/yyyy' }}
+                    </span>
+                    <ng-template #enPrestamo>
+                      <span class="text-warning fw-bold">
+                        <i class="fas fa-clock"></i> En préstamo
+                      </span>
+                    </ng-template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
     </div>
     <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
         <app-formulariomusica

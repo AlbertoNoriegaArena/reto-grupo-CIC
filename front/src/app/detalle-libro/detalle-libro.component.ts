@@ -25,6 +25,8 @@ export class DetalleLibroComponent implements OnInit {
   isEditMode = true;
   libroSeleccionado: Libro = { item: { formato: {} } } as Libro;
   prestamos: Prestamo[] = [];
+  ultimosPrestamos: Prestamo[] = [];
+  prestamoActivo: Prestamo | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,10 +40,22 @@ export class DetalleLibroComponent implements OnInit {
     if (id) {
       this.libroService.buscarUno(id).subscribe((libro) => {
         this.libro = libro;
+  
+        const itemId = libro?.item?.id;
+        if (itemId) {
+          this.prestamoService.getUltimosPrestamosPorItem(itemId).subscribe(
+            (prestamos) => {
+              this.ultimosPrestamos = prestamos;
+              this.prestamoActivo = this.ultimosPrestamos.find(p => !p.fechaDevolucion) || null;
+            },
+            (error) => {
+              console.error('Error al obtener los últimos préstamos:', error);
+            }
+          );
+        }
       });
     }
-
-    // Llamada para cargar los préstamos disponibles
+  
     this.prestamoService.getPrestamos().subscribe((prestamos) => {
       this.prestamos = prestamos;
     });
@@ -56,14 +70,11 @@ export class DetalleLibroComponent implements OnInit {
   }
 
   irAlPrestamo(id: number) {
-    const prestamo = this.prestamos.find((p) => p.item.id === id);
+    this.router.navigate([`/detalleprestamo/${id}`]);
+  }
 
-    if (prestamo) {
-      // Si se encuentra el préstamo, redirige al detalle del préstamo
-      this.router.navigate([`/detalleprestamo/${prestamo.id}`]);
-    } else {
-      console.error('No se encontró un préstamo para este libro.');
-    }
+  getPrestamoActivo(): Prestamo | null {
+    return this.ultimosPrestamos.find(p => !p.fechaDevolucion) || null;
   }
 
   actualizarRegistro(id: number) {
