@@ -16,6 +16,9 @@ import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
 import es.santander.ascender.retoGrupoCIC.repository.ItemRepository;
 import es.santander.ascender.retoGrupoCIC.repository.PrestamoRepository;
+import es.santander.ascender.retoGrupoCIC.repository.MusicaRepository;
+import es.santander.ascender.retoGrupoCIC.repository.LibroRepository;
+import es.santander.ascender.retoGrupoCIC.repository.PeliculaRepository;
 import jakarta.validation.ConstraintViolation;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,15 @@ public class ItemService {
 
     @Autowired
     private TipoItemService tipoItemService;
+
+    @Autowired
+    private MusicaRepository musicaRepository;
+
+    @Autowired
+    private LibroRepository libroRepository;
+
+    @Autowired
+    private PeliculaRepository peliculaRepository;
 
     @Autowired
     private Validator validator;
@@ -117,23 +129,24 @@ public class ItemService {
     public void deleteItem(Long id) {
         Optional<Item> itemOpcional = itemRepository.findById(id);
 
-        // Si el ítem no existe, lanzamos una excepción
         if (itemOpcional.isEmpty()) {
             throw new ItemNotFoundException(id);
         }
 
         Item item = itemOpcional.get();
 
-        Optional<Prestamo> prestamoOpcional = prestamoRepository.findByItem(item);
-
-        if (item.getEstado() == EstadoItem.PRESTADO) {
-            throw new ItemPrestadoException(item.getNombre());
-        }
-
-        if (prestamoOpcional.isPresent()) {
+        // Verifica si tiene préstamos activos
+        if (item.getEstado() == EstadoItem.PRESTADO ||
+                prestamoRepository.findByItem(item).isPresent()) {
             throw new ItemAsociadoAPrestamoException(item.getNombre());
         }
 
+        // Eliminar entidades asociadas
+        musicaRepository.findByItemId(id).ifPresent(musicaRepository::delete);
+        libroRepository.findByItemId(id).ifPresent(libroRepository::delete);
+        peliculaRepository.findByItemId(id).ifPresent(peliculaRepository::delete);
+
+        // Finalmente, eliminar el ítem
         itemRepository.deleteById(id);
     }
 

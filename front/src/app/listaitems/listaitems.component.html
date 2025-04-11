@@ -1,0 +1,17 @@
+<div class="contenedor">
+    <header class="my-4">
+      <div class="botonesHeader d-flex justify-content-between align-items-center">
+        <button class="btn btn-success" (click)="abrirModalAgregar()">Añadir artículo</button>
+      </div>
+    </header>
+      <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns"
+        [deleteCallback]="delete.bind(this)" [editCallback]="abrirModalEditar.bind(this)"
+        [viewDetailsCallback]="verDetalles"  [columnDefinitions]="columnDefinitions" [tipoTabla]="'items'">
+      </app-tabla-generica>
+  
+    <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
+      <app-formularioitems [item]="selectedItem" [isEditMode]="isEditMode" (formSubmitted)="onFormSubmitted()"
+        (formClosed)="cerrarModal()"></app-formularioitems>
+    </app-modal>
+  
+  </div>

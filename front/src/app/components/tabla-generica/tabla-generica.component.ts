@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule, DatePipe } from '@angular/common';
 import { CustomPaginator } from '../../custom-paginator';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';  
 
 @Component({
   selector: 'app-tabla-generica',
@@ -23,6 +24,7 @@ import { Router } from '@angular/router';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    FormsModule,
   ],
   templateUrl: './tabla-generica.component.html',
   styleUrls: ['./tabla-generica.component.scss'],
@@ -41,6 +43,7 @@ export class TablaGenericaComponent implements OnInit {
   @Input() viewDetailsCallback!: (id: number) => void;
   @Input() devolverCallback!: (id: number) => void;
   @Input() tipoTabla!: string;  
+  searchQuery: string = '';
   
   constructor(private router: Router,) { }
 
@@ -54,6 +57,20 @@ export class TablaGenericaComponent implements OnInit {
     this.sort.disableClear = true; // Esto evita que vuelva al estado original
     this.dataSource.paginator = this.paginator;
   }
+
+  clearSearch() {
+    // Limpia el valor del filtro
+    this.searchQuery = ''; // Asegúrate de tener una propiedad 'searchQuery' vinculada a tu input
+  
+    // Restaura el filtro de la tabla
+    this.dataSource.filter = '';
+  
+    // Si tienes un paginator, vuelve a la primera página
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();

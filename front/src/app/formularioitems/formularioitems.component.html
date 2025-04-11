@@ -1,0 +1,73 @@
+<form (ngSubmit)="onSubmit()" #form="ngForm">
+  <div class="row">
+    <div class="form-group col-md-6">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" class="form-control" [(ngModel)]="item.nombre" required
+        #nombreRef="ngModel" />
+      <div *ngIf="nombreRef.invalid && nombreRef.touched" class="text-danger">
+        El nombre es obligatorio
+      </div>
+      <!-- Error de validación del backend -->
+      <div class="text-danger" *ngIf="erroresBackend?.nombre">
+        {{ erroresBackend.nombre }}
+      </div>
+    </div>
+
+    <div class="form-group col-md-6">
+      <label for="ubicacion">Ubicación:</label>
+      <input type="text" id="ubicacion" name="ubicacion" class="form-control" [(ngModel)]="item.ubicacion" />
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Tipo -->
+    <div class="form-group col-md-6">
+      <label for="tipo">Tipo:</label>
+      <select id="tipo" name="tipo" class="form-control" [(ngModel)]="item.tipo.id" (change)="onTipoChange()" required
+        #tipoRef="ngModel">
+        <option [value]="0" disabled selected>-- Seleccione un Tipo --</option>
+        <option *ngFor="let tipo of tipos" [value]="tipo.id">
+          {{ tipo.nombre }}
+        </option>
+      </select>
+      <div *ngIf="tipoRef.invalid && tipoRef.touched" class="text-danger">
+        El tipo es obligatorio.
+      </div>
+    </div>
+
+    <!-- Formato -->
+    <div class="form-group col-md-6">
+      <label for="formato">Formato:</label>
+      <select id="formato" name="formato" class="form-control" [(ngModel)]="item.formato.id" [disabled]="!item.tipo.id"
+        required #formatoRef="ngModel">
+        <option [value]="0" disabled>-- Seleccione un Formato --</option>
+        <option *ngFor="let formato of formatos" [value]="formato.id">
+          {{ formato.nombre }}
+        </option>
+      </select>
+      <div *ngIf="formatoRef.invalid && formatoRef.touched" class="text-danger">
+        El formato es obligatorio.
+      </div>
+      <div *ngIf="item.tipo?.id && formatos.length === 0" class="text-warning mt-1 small">
+        No hay formatos disponibles para este tipo.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-md-6">
+      <label for="fecha">Fecha:</label>
+      <input type="date" id="fecha" name="fecha" class="form-control" [(ngModel)]="item.fecha" />
+    </div>
+  </div>
+
+  <!-- Error general -->
+  <div *ngIf="erroresBackend?.general" class="alert alert-danger mt-2">
+    {{ erroresBackend.general }}
+  </div>
+
+  <div class="buttons-container mt-3 d-flex justify-content-center">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="button" class="btn btn-secondary mx-2" (click)="closeForm()">Cancelar</button>
+  </div>
+</form>

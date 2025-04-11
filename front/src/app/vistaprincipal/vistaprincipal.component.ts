@@ -14,6 +14,10 @@ export class VistaprincipalComponent {
 
     constructor(private router: Router) { }
 
+    goToListaItems() {
+        this.router.navigate(['/listaitems']);
+    }
+
     goToListaLibros() {
         this.router.navigate(['/listalibros']);
     }

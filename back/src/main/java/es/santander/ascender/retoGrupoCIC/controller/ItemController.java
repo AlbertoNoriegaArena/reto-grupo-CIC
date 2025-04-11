@@ -7,6 +7,7 @@ import es.santander.ascender.retoGrupoCIC.service.ItemService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class ItemController {
     @PostMapping
     public ResponseEntity<?> crearItem(@Valid @RequestBody ItemDTO itemDTO) {
         try {
-            Item nuevoItem = itemService.createItem(itemDTO);
+            Item nuevoItem = itemService.createItem(itemDTO); // El itemDTO tiene los ids de tipo y formato
             return new ResponseEntity<>(nuevoItem, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -62,8 +63,12 @@ public class ItemController {
     // Eliminar un ítem
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteItem(@PathVariable Long id) {
-        itemService.deleteItem(id);
-        return ResponseEntity.ok("Ítem borrado con éxito");
+        try {
+            itemService.deleteItem(id);
+            return ResponseEntity.ok(""); // 200 OK con un cuerpo vacío
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/buscar")

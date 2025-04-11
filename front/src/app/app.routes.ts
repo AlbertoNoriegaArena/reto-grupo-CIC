@@ -15,6 +15,7 @@ import { DetalleLibroComponent } from './detalle-libro/detalle-libro.component'
 import { ListaprestamosComponent } from './listaprestamos/listaprestamos.component';
 import { DetallePrestamoComponent } from './detalle-prestamo/detalle-prestamo.component'
 import { ListaFormatoComponent } from './listaformatos/listaformatos.component';
+import { ListaitemsComponent } from './listaitems/listaitems.component';
 
 
 
@@ -36,4 +37,5 @@ export const routes: Routes = [
     { path: 'listaprestamos', component: ListaprestamosComponent, data: { breadcrumb: 'Lista de Préstamos' } },
     { path: 'detalleprestamo/:id', component: DetallePrestamoComponent, data: { breadcrumb: 'Detalles Préstamo' } },
     { path: 'listaformatos', component: ListaFormatoComponent, data: { breadcrumb: 'Lista de Formatos' } },
+    { path: 'listaitems', component: ListaitemsComponent, data: { breadcrumb: 'Lista de Artículos' } },
   ];

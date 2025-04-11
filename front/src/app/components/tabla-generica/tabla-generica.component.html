@@ -1,9 +1,11 @@
 <div class="table-container">
   <div class="filtroTabla ml-3">
-    <mat-form-field class="w-50">
-      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar..." />
+    <mat-form-field class="w-50" appearance="outline" >
+      <input matInput [(ngModel)]="searchQuery" (keyup)="applyFilter($event)" placeholder="Buscar..." />
       <mat-icon matPrefix>search</mat-icon>
-    </mat-form-field>
+      <!-- Botón de borrar (clear) -->
+      <mat-icon *ngIf="searchQuery" matSuffix (click)="clearSearch()">clear</mat-icon>
+    </mat-form-field>    
   </div>
 
   <div class="mat-elevation-z8 mt-4 tablaDatos" [ngClass]="{ 'prestamos': tipoTabla === 'prestamos' }">
@@ -40,22 +42,22 @@
           <div class="acciones-buttons">
             <!-- Si es una tabla de préstamos, usa row.id; si no, usa row.item?.id -->
             <button mat-icon-button color="primary" matTooltip="Ver detalles" 
-              (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas') ? onVerDetalles(row.id) : onVerDetalles(row.item?.id)">
+              (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas' || tipoTabla === 'items') ? onVerDetalles(row.id) : onVerDetalles(row.item?.id)">
               <mat-icon>visibility</mat-icon>
             </button>
       
             <button mat-icon-button color="accent" matTooltip="Editar" 
-              (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas') ? onEdit(row.id) : onEdit(row.item?.id)">
+              (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas' || tipoTabla === 'items') ? onEdit(row.id) : onEdit(row.item?.id)">
               <mat-icon>edit</mat-icon>
             </button>
       
             <button mat-icon-button color="warn" matTooltip="Eliminar" 
-              (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas') ? onDelete(row.id) : onDelete(row.item?.id)">
+              (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas' || tipoTabla === 'items') ? onDelete(row.id) : onDelete(row.item?.id)">
               <mat-icon>delete</mat-icon>
             </button>
       
             <!-- Botón "Devolver" solo en la tabla de préstamos cuando el préstamo sigue activo -->
-            <button *ngIf="tipoTabla === 'prestamos' && (row.fechaDevolucion === null || row.fechaDevolucion === 'EN PRESTAMO')" 
+            <button *ngIf="(tipoTabla === 'prestamos' || tipoTabla === 'items') && (row.fechaDevolucion === null || row.fechaDevolucion === 'EN PRESTAMO')" 
               mat-icon-button color="primary" matTooltip="Devolver" 
               (click)="onDevolver(row.id)" class="botonDevolver">
               <span class="devolver">Devolver</span>
@@ -66,7 +68,12 @@
       
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      [ngClass]="{
+        'prestado': (tipoTabla === 'prestamos' || tipoTabla === 'items') && (row.fechaDevolucion === null || row.fechaDevolucion === 'EN PRESTAMO'),
+        'disponible': (tipoTabla === 'prestamos' || tipoTabla === 'items') && !(row.fechaDevolucion === null || row.fechaDevolucion === 'EN PRESTAMO')
+      }">
+  </tr>
     </table>
   </div>
 
