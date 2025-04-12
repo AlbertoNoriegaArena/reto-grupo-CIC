@@ -10,6 +10,7 @@ import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.annotation.Lazy;
 
 import es.santander.ascender.retoGrupoCIC.config.CustomValidationException;
 import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
@@ -26,6 +27,7 @@ public class PeliculaService {
     @Autowired
     private PeliculaRepository peliculaRepository;
 
+    @Lazy
     @Autowired
     private PrestamoService prestamoService;
 

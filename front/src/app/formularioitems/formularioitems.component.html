@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row mt-3">
     <!-- Tipo -->
     <div class="form-group col-md-6">
       <label for="tipo">Tipo:</label>
@@ -46,18 +46,138 @@
         </option>
       </select>
       <div *ngIf="formatoRef.invalid && formatoRef.touched" class="text-danger">
-        El formato es obligatorio.
+        El formato es obligatorio
       </div>
       <div *ngIf="item.tipo?.id && formatos.length === 0" class="text-warning mt-1 small">
-        No hay formatos disponibles para este tipo.
+        No hay formatos disponibles para este tipo
       </div>
     </div>
   </div>
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="form-group col-md-6">
       <label for="fecha">Fecha:</label>
       <input type="date" id="fecha" name="fecha" class="form-control" [(ngModel)]="item.fecha" />
+    </div>
+  </div> -->
+
+  <!-- CAMPOS ESPECÍFICOS PARA LIBRO -->
+  <div *ngIf="esDeTipo('libro')">
+    <div class="row mt-3">
+      <div class="form-group col-md-6">
+        <label for="autor">Autor:</label>
+        <input type="text" id="autor" name="autor" class="form-control" [(ngModel)]="item.autor" />
+        <div class="text-danger" *ngIf="erroresBackend?.autor">
+          {{ erroresBackend.autor }}
+        </div>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" class="form-control" [(ngModel)]="item.isbn" />
+        <div class="text-danger" *ngIf="erroresBackend?.isbn">
+          {{ erroresBackend.isbn }}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="editorial">Editorial:</label>
+        <input type="text" id="editorial" name="editorial" class="form-control" [(ngModel)]="item.editorial" />
+        <div class="text-danger" *ngIf="erroresBackend?.editorial">
+          {{ erroresBackend.editorial }}
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="numeroPaginas">Nº Páginas:</label>
+        <input type="number" id="numeroPaginas" name="numeroPaginas" class="form-control"
+          [(ngModel)]="item.numeroPaginas" />
+        <div class="text-danger" *ngIf="erroresBackend?.numeroPaginas">
+          {{ erroresBackend.numeroPaginas }}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="fechaPublicacion">Fecha Publicación:</label>
+        <input type="date" id="fechaPublicacion" name="fechaPublicacion" class="form-control"
+          [(ngModel)]="item.fechaPublicacion" />
+      </div>
+    </div>
+  </div>
+
+  <!-- CAMPOS ESPECÍFICOS PARA PELÍCULA -->
+  <div *ngIf="esDeTipo('pelicula')">
+    <div class="row mt-3">
+      <div class="form-group col-md-6">
+        <label for="director">Director:</label>
+        <input type="text" id="director" name="director" class="form-control" [(ngModel)]="item.director" />
+        <div class="text-danger" *ngIf="erroresBackend?.director">
+          {{ erroresBackend.director }}
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="duracionPelicula">Duración (min):</label>
+        <input type="number" id="duracionPelicula" name="duracionPelicula" class="form-control"
+          [(ngModel)]="item.duracionPelicula" />
+          <div class="text-danger" *ngIf="erroresBackend?.duracion">
+            {{ erroresBackend.duracion }}
+          </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="form-group col-md-6">
+        <label for="generoPelicula">Género:</label>
+        <input type="text" id="generoPelicula" name="generoPelicula" class="form-control"
+          [(ngModel)]="item.generoPelicula"/>
+          <div class="text-danger" *ngIf="erroresBackend?.genero">
+            {{ erroresBackend.genero }}
+          </div>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="fechaEstreno">Fecha de Estreno:</label>
+        <input type="date" id="fechaEstreno" name="fechaEstreno" class="form-control" [(ngModel)]="item.fechaEstreno" />
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CAMPOS ESPECÍFICOS PARA MÚSICA -->
+  <div *ngIf="esDeTipo('musica')">
+    <div class="row mt-3">
+      <div class="form-group col-md-6">
+        <label for="cantante">Cantante:</label>
+        <input type="text" id="cantante" name="cantante" class="form-control" [(ngModel)]="item.cantante" />
+        <div class="text-danger" *ngIf="erroresBackend?.cantante">
+          {{ erroresBackend.cantante }}
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="album">Álbum:</label>
+        <input type="text" id="album" name="album" class="form-control" [(ngModel)]="item.album" />
+        <div class="text-danger" *ngIf="erroresBackend?.album">
+          {{ erroresBackend.album }}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="generoMusica">Género:</label>
+        <input type="text" id="generoMusica" name="generoMusica" class="form-control" [(ngModel)]="item.generoMusica" />
+        <div class="text-danger" *ngIf="erroresBackend?.genero">
+          {{ erroresBackend.genero }}
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="duracionMusica">Duración:</label>
+        <input type="text" id="duracionMusica" name="duracionMusica" class="form-control"
+          [(ngModel)]="item.duracionMusica" />
+          <div class="text-danger" *ngIf="erroresBackend?.duracion">
+            {{ erroresBackend.duracion }}
+          </div>
+      </div>
     </div>
   </div>
 

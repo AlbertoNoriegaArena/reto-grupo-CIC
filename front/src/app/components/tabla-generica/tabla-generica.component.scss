@@ -4,8 +4,14 @@
     justify-content: center;
 }
 
+::ng-deep .filtro .mat-mdc-text-field-wrapper{
+  background-color: #e3e3e3;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
 .tablaDatos {
-    border: 2px solid #000;
+    // border: 2px solid #000;
     border-collapse: collapse;
     width: 100%;
 }
@@ -13,21 +19,21 @@
 
 .tablaDatos td,
 .tablaDatos th {
-    border-right: 1px solid black !important;
+    // border-right: 1px solid black !important;
 }
 
 .tablaDatos tr:nth-child(odd) {
-    background-color: #ccc;
+    background-color: #f9f9f9 ;
 }
 
 .tablaDatos tr:nth-child(even) {
-    background-color: #dfdbdb;
+    background-color: #f4f4f4 ;
 }
 
 ::ng-deep .tablaDatos table thead th {
     text-align: center !important;
-    background-color: lightblue !important;
-    border-bottom: 2px solid #000 !important;
+    background-color: #e3e3e3 !important;
+    // border-bottom: 2px solid #000 !important;
 }
 
 ::ng-deep .tablaDatos td {
@@ -47,7 +53,7 @@
 }
 
 .paginacion>* {
-    background-color: #ccc;
+    background-color: #e3e3e3;
     border: 2px solid black;
     border-radius: 10px;
     font-weight: 600;

@@ -97,12 +97,45 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
     // Preparamos el objeto que se enviará al backend en formato ItemDTO
     const itemAEnviarCreate: ItemDTO = {
       nombre: this.item.nombre,
-      tipoId: this.item.tipo.id,      // Solo enviamos el id del tipo
-      formatoId: this.item.formato.id, // Solo enviamos el id del formato
+      tipoId: this.item.tipo.id,      
+      formatoId: this.item.formato.id, 
       ubicacion: this.item.ubicacion,
       fecha: this.item.fecha,
       estado: this.item.estado
     };
+
+    const tipoSeleccionado = this.tipos.find(t => t.id === Number(this.item.tipo.id));
+    const nombreTipo = tipoSeleccionado?.nombre.toLowerCase();
+
+    switch (nombreTipo) {
+      case 'libro':
+        Object.assign(itemAEnviarCreate, {
+          autor: this.item.autor,
+          isbn: this.item.isbn,
+          editorial: this.item.editorial,
+          numeroPaginas: this.item.numeroPaginas ? Number(this.item.numeroPaginas) : undefined,
+          fechaPublicacion: this.item.fechaPublicacion
+        });
+        break;
+
+      case 'pelicula':
+        Object.assign(itemAEnviarCreate, {
+          director: this.item.director,
+          duracionPelicula: this.item.duracionPelicula ? Number(this.item.duracionPelicula) : undefined,
+          generoPelicula: this.item.generoPelicula,
+          fechaEstreno: this.item.fechaEstreno
+        });
+        break;
+
+      case 'musica':
+        Object.assign(itemAEnviarCreate, {
+          generoMusica: this.item.generoMusica,
+          cantante: this.item.cantante,
+          album: this.item.album,
+          duracionMusica: this.item.duracionMusica
+        });
+        break;
+    }
 
     // Preparamos el objeto que se enviará al backend
     const itemAEnviarUpdate: Item = {
@@ -158,7 +191,42 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
       fecha: '',
       estado: '',
       tipo: { id: 0, nombre: '' },
-      formato: { id: 0, nombre: '' }
+      formato: { id: 0, nombre: '' },
+
+      // libro
+      autor: '',
+      isbn: '',
+      editorial: '',
+      numeroPaginas: 0,
+      fechaPublicacion: '',
+
+      // película
+      director: '',
+      duracionPelicula: 0,
+      generoPelicula: '',
+      fechaEstreno: '',
+
+      // música
+      generoMusica: '',
+      cantante: '',
+      album: '',
+      duracionMusica: ''
     };
   }
+
+
+  esDeTipo(nombre: string): boolean {
+    // Verifica que haya un tipo seleccionado (item.tipo y item.tipo.id no sean nulos/undefined/0)
+    if (!this.item?.tipo?.id) {
+      return false;
+    }
+    const selectedIdAsNumber = Number(this.item.tipo.id);
+
+    // Busca el objeto 'tipo' completo usando el id numérico
+    const tipoSeleccionado = this.tipos.find(t => t.id === selectedIdAsNumber);
+
+    // Si se encontró el tipo, compara su nombre (en minúsculas) con el nombre buscado (en minúsculas)
+    return tipoSeleccionado ? tipoSeleccionado.nombre.toLowerCase() === nombre.toLowerCase() : false;
+  }
+
 }

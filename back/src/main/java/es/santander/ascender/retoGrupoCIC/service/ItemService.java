@@ -14,6 +14,9 @@ import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.model.Prestamo;
 import es.santander.ascender.retoGrupoCIC.model.TipoItem;
 import es.santander.ascender.retoGrupoCIC.model.TipoItemFormato;
+import es.santander.ascender.retoGrupoCIC.model.Libro;
+import es.santander.ascender.retoGrupoCIC.model.Musica;
+import es.santander.ascender.retoGrupoCIC.model.Pelicula;
 import es.santander.ascender.retoGrupoCIC.repository.ItemRepository;
 import es.santander.ascender.retoGrupoCIC.repository.PrestamoRepository;
 import es.santander.ascender.retoGrupoCIC.repository.MusicaRepository;
@@ -59,6 +62,15 @@ public class ItemService {
     private PeliculaRepository peliculaRepository;
 
     @Autowired
+    private LibroService libroService;
+
+    @Autowired
+    private PeliculaService peliculaService;
+
+    @Autowired
+    private MusicaService musicaService;
+
+    @Autowired
     private Validator validator;
 
     public Item createItem(ItemDTO itemDTO) {
@@ -93,7 +105,42 @@ public class ItemService {
             throw new CustomValidationException(violations);
         }
 
-        return itemRepository.save(item);
+        Item savedItem = itemRepository.save(item);
+
+        // Crear entidad específica según el tipo
+        String tipoNombre = tipoItem.getNombre().toLowerCase();
+        switch (tipoNombre) {
+            case "libro":
+                Libro libro = new Libro();
+                libro.setItem(savedItem);
+                libro.setAutor(itemDTO.getAutor());
+                libro.setIsbn(itemDTO.getIsbn());
+                libro.setEditorial(itemDTO.getEditorial());
+                libro.setNumeroPaginas(itemDTO.getNumeroPaginas());
+                libro.setFechaPublicacion(itemDTO.getFechaPublicacion());
+                libroService.createLibro(libro);
+                break;
+            case "pelicula":
+                Pelicula pelicula = new Pelicula();
+                pelicula.setItem(savedItem);
+                pelicula.setDirector(itemDTO.getDirector());
+                pelicula.setDuracion(itemDTO.getDuracionPelicula());
+                pelicula.setGenero(itemDTO.getGeneroPelicula());
+                pelicula.setFechaEstreno(itemDTO.getFechaEstreno());
+                peliculaService.createPelicula(pelicula);
+                break;
+            case "musica":
+                Musica musica = new Musica();
+                musica.setItem(savedItem);
+                musica.setGenero(itemDTO.getGeneroMusica());
+                musica.setCantante(itemDTO.getCantante());
+                musica.setAlbum(itemDTO.getAlbum());
+                musica.setDuracion(itemDTO.getDuracionMusica());
+                musicaService.createMusica(musica);
+                break;
+        }
+
+        return savedItem;
     }
 
     @Transactional(readOnly = true)
