@@ -102,6 +102,55 @@ button:hover {
   margin: 0;
 }
 
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  margin: 2rem 0;
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .card.resumen {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    border: 4px solid lightblue;
+    padding: 1.5rem;
+    width: 180px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon {
+      font-size: 2rem;
+      color: #6c757d;
+      margin-bottom: 0.5rem;
+    }
+
+    h3 {
+      margin-bottom: 0.3rem;
+      font-size: 1.1rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  }
+}
+
 @media (max-width: 768px) {
 
   .buttons-container{

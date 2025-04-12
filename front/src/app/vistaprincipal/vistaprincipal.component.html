@@ -2,41 +2,55 @@
   <!-- Título de la página -->
   <h1 class="title text-center">COLECCIÓN PERSONAL</h1>
 
-  <!-- Contenedor de botones -->
-  <div class="buttons-container">
+<!-- Tarjetas resumen -->
+<div class="cards-container">
 
-     <!-- Botón Artículos -->
-     <button class="btn btn-secondary btn-custom" (click)="goToListaItems()">
-      <i class="fas fa-file-alt"></i> Artículos
-    </button>
-    <!-- Botón Libros -->
-    <button class="btn btn-success btn-custom" (click)="goToListaLibros()">
-      <i class="fas fa-book"></i> Libros
-    </button>
+  <!-- Primera fila -->
+  <div class="row">
+    <div class="card resumen" (click)="goToListaItems()">
+      <i class="fas fa-file-alt icon"></i>
+      <h3>Artículos</h3>
+      <p>{{ totalItems }} en total</p>
+    </div>
 
-    <!-- Botón Películas -->
-    <button class="btn btn-primary btn-custom" (click)="goToListaPeliculas()">
-      <i class="fas fa-film"></i> Películas
-    </button>
+    <div class="card resumen" (click)="goToListausuarios()">
+      <i class="fas fa-users icon"></i>
+      <h3>Usuarios</h3>
+      <p>{{ totalUsuarios }} registrados</p>
+    </div>
 
-    <!-- Botón Música -->
-    <button class="btn btn-warning btn-custom" (click)="goToListaMusica()">
-      <i class="fas fa-music"></i> Música
-    </button>
+    <div class="card resumen" (click)="goToPrestamos()">
+      <i class="fas fa-hand-holding-usd icon"></i>
+      <h3>Préstamos</h3>
+      <p>{{ prestamosActivos }} activos</p>
+    </div>
+  </div>
 
-    <!-- Botón Usuarios -->
-    <button class="btn btn-info btn-custom" (click)="goToListausuarios()">
-      <i class="fas fa-users"></i> Usuarios
-    </button>
+  <!-- Segunda fila -->
+  <div class="row">
+    <div class="card resumen" (click)="goToListaLibros()">
+      <i class="fas fa-book icon"></i>
+      <h3>Libros</h3>
+      <p>{{ totalLibros }} libros</p>
+    </div>
 
-    <!-- Botón Préstamos -->
-    <button class="btn btn-danger btn-custom" (click)="goToPrestamos()">
-      <i class="fas fa-hand-holding-usd"></i> Préstamos
-    </button>
+    <div class="card resumen" (click)="goToListaPeliculas()">
+      <i class="fas fa-film icon"></i>
+      <h3>Películas</h3>
+      <p>{{ totalPeliculas }} películas</p>
+    </div>
 
-    <button class="btn btn-dark btn-custom" (click)="goToFormatos()">
-      <i class="fas fa-clipboard"></i> Formatos
-    </button>
+    <div class="card resumen" (click)="goToListaMusica()">
+      <i class="fas fa-music icon"></i>
+      <h3>Música</h3>
+      <p>{{ totalMusica }} canciones</p>
+    </div>
+
+    <div class="card resumen" (click)="goToFormatos()">
+      <i class="fas fa-clipboard icon"></i>
+      <h3>Formatos</h3>
+      <p>{{ totalFormatos }} formatos</p>
+    </div>
   </div>
 </div>
 
