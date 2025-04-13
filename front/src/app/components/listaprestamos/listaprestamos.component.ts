@@ -57,7 +57,7 @@ export class ListaprestamosComponent implements OnInit {
   ];
 
   // Sin "fechaDevolucion" (para activos y vencidos)
-  reducedDisplayedColumns: string[] = ['nombreItem', 'nombrePersona', 'fechaPrestamo', 'fechaPrevistaDevolucion'];
+  reducedDisplayedColumns: string[] = ['nombreItem', 'nombrePersona', 'fechaPrestamo', 'fechaPrevistaDevolucion', 'acciones'];
   reducedColumnDefinitions = [
     { key: 'nombreItem', label: 'Artículo' },
     { key: 'nombrePersona', label: 'Prestado a' },
