@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet, NavigationEnd, RouterModule } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { PrestamoService } from '../prestamo.service';
-import { PeliculaService } from '../pelicula.service';
-import { MusicaService } from '../musica.service';
-import { LibroService } from '../libro.service';
-import { PersonaService } from '../persona.service';
+import { PrestamoService } from './services/prestamo.service';
+import { PeliculaService } from './services/pelicula.service';
+import { MusicaService } from './services/musica.service';
+import { LibroService } from './services/libro.service';
+import { PersonaService } from './services/persona.service';
 
 @Component({
   selector: 'app-root',
