@@ -36,7 +36,7 @@ export class ListalibrosComponent implements OnInit {
   dataSource: MatTableDataSource<Libro> = new MatTableDataSource();
   isEditMode = false;
   isModalOpen = false;
-  titleModal = 'Agregar Libro'; //Variable para el título dinámico
+  titleModal = 'Crear libro'; //Variable para el título dinámico
 
   selectedLibro: Libro = { item: { formato: {} } } as Libro;
 
@@ -74,7 +74,7 @@ export class ListalibrosComponent implements OnInit {
   abrirModalAgregar() {
 
     this.isEditMode = false;
-    this.titleModal = 'Agregar Libro'; //Cambiar el título
+    this.titleModal = 'Crear libro'; //Cambiar el título
     this.isModalOpen = true;
   }
 
@@ -83,14 +83,14 @@ export class ListalibrosComponent implements OnInit {
     if (libro) {
       this.selectedLibro = { ...libro }; //Clonamos la película
       this.isEditMode = true;
-      this.titleModal = 'Editar Libro'; //Cambiar el título
+      this.titleModal = 'Editar libro'; //Cambiar el título
       this.isModalOpen = true;
     }
   }
 
   cerrarModal() {
     this.isModalOpen = false;
-    this.titleModal = 'Agregar Libro'; //Resetear el título
+    this.titleModal = 'Crear libro'; //Resetear el título
   }
 
   onFormSubmitted() {

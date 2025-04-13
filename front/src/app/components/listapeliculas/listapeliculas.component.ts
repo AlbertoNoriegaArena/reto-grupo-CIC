@@ -33,7 +33,7 @@ export class ListapeliculasComponent implements OnInit {
   dataSource: MatTableDataSource<Pelicula> = new MatTableDataSource();
   isEditMode = false;
   isModalOpen = false;
-  titleModal = 'Agregar Película'; //Variable para el título dinámico
+  titleModal = 'Crear película'; //Variable para el título dinámico
 
   selectedPelicula: Pelicula = { item: { formato: {} } } as Pelicula;
 
@@ -71,7 +71,7 @@ export class ListapeliculasComponent implements OnInit {
   abrirModalAgregar() {
     
     this.isEditMode = false;
-    this.titleModal = 'Agregar Película'; //Cambiar el título
+    this.titleModal = 'Crear película'; //Cambiar el título
     this.isModalOpen = true;
   }
 
@@ -80,14 +80,14 @@ export class ListapeliculasComponent implements OnInit {
     if (pelicula) {
       this.selectedPelicula = { ...pelicula }; //Clonamos la película
       this.isEditMode = true;
-      this.titleModal = 'Editar Película'; //Cambiar el título
+      this.titleModal = 'Editar película'; //Cambiar el título
       this.isModalOpen = true;
     }
   }
 
   cerrarModal() {
     this.isModalOpen = false;
-    this.titleModal = 'Agregar Película'; //Resetear el título
+    this.titleModal = 'Crear película'; //Resetear el título
   }
 
   onFormSubmitted() {

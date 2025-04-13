@@ -23,7 +23,7 @@ export class DetalleMusicaComponent implements OnInit {
 
   musica: Musica | undefined;
   isModalOpen = false;
-  titleModal = 'Editar Préstamo';
+  titleModal = 'Editar música';
   isEditMode = true;
   musicaSeleccionada: Musica = { item: { formato: {} } } as Musica;
   prestamos: Prestamo[] = [];

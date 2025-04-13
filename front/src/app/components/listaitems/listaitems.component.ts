@@ -34,7 +34,7 @@ export class ListaitemsComponent implements OnInit {
   dataSource: MatTableDataSource<Item & { tipoNombre?: string; formatoNombre?: string }> = new MatTableDataSource();
   isEditMode = false;
   isModalOpen = false;
-  titleModal = 'Agregar Música';
+  titleModal = 'Añadir Música';
 
   selectedItem: Item = {formato: {}, tipo: {}} as Item;
 
@@ -97,7 +97,7 @@ export class ListaitemsComponent implements OnInit {
   abrirModalAgregar() {
     
     this.isEditMode = false;
-    this.titleModal = 'Agregar artículo';
+    this.titleModal = 'Añadir artículo';
     this.isModalOpen = true;
   }
 
@@ -113,7 +113,7 @@ export class ListaitemsComponent implements OnInit {
 
   cerrarModal() {
     this.isModalOpen = false;
-    this.titleModal = 'Agregar artículo'; //Resetear el título
+    this.titleModal = 'Añadir artículo'; //Resetear el título
   }
 
   onFormSubmitted() {

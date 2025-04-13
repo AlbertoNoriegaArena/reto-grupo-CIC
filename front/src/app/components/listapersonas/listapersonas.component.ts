@@ -36,7 +36,7 @@ export class ListapersonasComponent implements OnInit {
   dataSource: MatTableDataSource<Persona> = new MatTableDataSource();
     isEditMode = false;
     isModalOpen = false;
-    titleModal = 'Agregar Usuario'; 
+    titleModal = 'Crear Usuario'; 
   
     selectedPersona: Persona = {} as Persona;
   
@@ -69,7 +69,7 @@ export class ListapersonasComponent implements OnInit {
 
   abrirModalAgregar() {
     this.isEditMode = false;
-    this.titleModal = 'Agregar usuario'; 
+    this.titleModal = 'Crear usuario'; 
     this.isModalOpen = true;
   }
 
@@ -85,7 +85,7 @@ export class ListapersonasComponent implements OnInit {
 
   cerrarModal() {
     this.isModalOpen = false;
-    this.titleModal = 'Agregar usuario'; 
+    this.titleModal = 'Crear usuario'; 
   }
 
   onFormSubmitted() {

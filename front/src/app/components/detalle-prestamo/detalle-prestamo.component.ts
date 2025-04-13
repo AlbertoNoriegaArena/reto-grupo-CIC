@@ -22,7 +22,7 @@ export class DetallePrestamoComponent implements OnInit {
 
   prestamo: Prestamo | undefined;
   isModalOpen = false;
-  titleModal = 'Editar Préstamo';
+  titleModal = 'Editar préstamo';
   isEditMode = true;
   prestamoSeleccionado: Prestamo = {} as Prestamo; // Asegura que nunca sea undefined
 

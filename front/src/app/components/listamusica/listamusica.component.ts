@@ -34,7 +34,7 @@ export class ListamusicaComponent implements OnInit {
   dataSource: MatTableDataSource<Musica> = new MatTableDataSource();
   isEditMode = false;
   isModalOpen = false;
-  titleModal = 'Agregar Música';
+  titleModal = 'Crear música';
 
   selectedMusica: Musica = { item: { formato: {} } } as Musica;
 
@@ -73,7 +73,7 @@ export class ListamusicaComponent implements OnInit {
   abrirModalAgregar() {
 
     this.isEditMode = false;
-    this.titleModal = 'Agregar Música'; //Cambiar el título
+    this.titleModal = 'Crear música'; //Cambiar el título
     this.isModalOpen = true;
   }
 
@@ -82,14 +82,14 @@ export class ListamusicaComponent implements OnInit {
     if (musica) {
       this.selectedMusica = { ...musica };
       this.isEditMode = true;
-      this.titleModal = 'Editar Música'; //Cambiar el título
+      this.titleModal = 'Editar música'; //Cambiar el título
       this.isModalOpen = true;
     }
   }
 
   cerrarModal() {
     this.isModalOpen = false;
-    this.titleModal = 'Agregar Música'; //Resetear el título
+    this.titleModal = 'Crear música'; //Resetear el título
   }
 
   onFormSubmitted() {

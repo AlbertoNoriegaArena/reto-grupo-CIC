@@ -35,7 +35,7 @@ export class ListaprestamosComponent implements OnInit {
   dataSource: MatTableDataSource<Prestamo> = new MatTableDataSource();
   isEditMode = false;
   isModalOpen = false;
-  titleModal = 'Agregar Prestamo'; //Variable para el título dinámico
+  titleModal = 'Crear prestamo'; //Variable para el título dinámico
 
   prestamosFiltrados: 'todos' | 'activos' | 'vencidos' = 'todos';
 
@@ -94,7 +94,7 @@ export class ListaprestamosComponent implements OnInit {
   abrirModalAgregar() {
 
     this.isEditMode = false;
-    this.titleModal = 'Agregar Préstamo'; //Cambiar el título
+    this.titleModal = 'Crear préstamo'; //Cambiar el título
     this.isModalOpen = true;
   }
 
@@ -103,14 +103,14 @@ export class ListaprestamosComponent implements OnInit {
     if (prestamo) {
       this.selectedPrestamo = { ...prestamo }; //Clonamos la película
       this.isEditMode = true;
-      this.titleModal = 'Editar Préstamo'; //Cambiar el título
+      this.titleModal = 'Editar préstamo'; //Cambiar el título
       this.isModalOpen = true;
     }
   }
 
   cerrarModal() {
     this.isModalOpen = false;
-    this.titleModal = 'Agregar Préstamo'; //Resetear el título
+    this.titleModal = 'Crear préstamo'; //Resetear el título
   }
 
   onFormSubmitted() {

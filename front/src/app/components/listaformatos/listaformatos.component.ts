@@ -24,7 +24,7 @@ export class ListaFormatoComponent implements OnInit {
   selectedFormato: Formato = {} as Formato;
   isEditMode = false;
   isModalOpen = false;
-  titleModal = 'Agregar Formato'; 
+  titleModal = 'Crear formato'; 
 
 
   constructor(private formatoService: FormatoService) { }
@@ -83,7 +83,7 @@ export class ListaFormatoComponent implements OnInit {
 
   abrirModalAgregar() {
     this.isEditMode = false;
-    this.titleModal = 'Agregar Formato'; 
+    this.titleModal = 'Crear formato'; 
     this.isModalOpen = true;
   }
 
@@ -94,7 +94,7 @@ export class ListaFormatoComponent implements OnInit {
       if (encontrado) {
         this.selectedFormato = { ...encontrado }; 
         this.isEditMode = true;
-        this.titleModal = 'Editar Formato';
+        this.titleModal = 'Editar formato';
         this.isModalOpen = true;
         return;
       }
@@ -105,7 +105,7 @@ export class ListaFormatoComponent implements OnInit {
     this.isModalOpen = false;  // Cerrar el modal
     this.isEditMode = false;  // Restablecer el modo de edición
     this.selectedFormato = {} as Formato;  // Limpiar el formato seleccionado
-    this.titleModal = 'Agregar Formato';  // Resetear el título
+    this.titleModal = 'Crear formato';  // Resetear el título
   }
   
 
