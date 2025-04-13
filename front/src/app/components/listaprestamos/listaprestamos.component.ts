@@ -99,7 +99,7 @@ export class ListaprestamosComponent implements OnInit {
   }
 
   abrirModalEditar(id: number) {
-    const prestamo = this.dataSource.data.find(p => p.item.id === id);
+    const prestamo = this.dataSource.data.find(p => p.id === id);
     if (prestamo) {
       this.selectedPrestamo = { ...prestamo }; //Clonamos la película
       this.isEditMode = true;

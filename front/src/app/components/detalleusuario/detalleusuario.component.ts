@@ -24,7 +24,7 @@ export class DetalleUsuarioComponent implements OnInit {
   tipoRepositorio: string = '';
   personaSeleccionada: Persona = {} as Persona;
   isModalOpen = false;
-  titleModal = 'Editar película';
+  titleModal = 'Editar usuario';
   isEditMode = true;
 
   prestamosAsociados: 'todos' | 'pelicula' | 'musica' | 'libro' = 'todos';
