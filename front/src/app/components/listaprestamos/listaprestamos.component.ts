@@ -47,17 +47,17 @@ export class ListaprestamosComponent implements OnInit {
   selectedPrestamo: Prestamo = { item: { formato: {} } } as Prestamo;
 
   // Todas las columnas (para "Todos")
-  todosDisplayedColumns: string[] = ['nombreItem', 'nombrePersona', 'fechaPrestamo', 'fechaPrevistaDevolucion', 'fechaDevolucion', 'acciones'];
+  todosDisplayedColumns: string[] = ['nombreItem', 'nombrePersona', 'fechaPrestamo', 'fechaPrevistaDevolucion', 'fechaDevolucion'];
   todosColumnDefinitions = [
     { key: 'nombreItem', label: 'Artículo' },
     { key: 'nombrePersona', label: 'Prestado a' },
     { key: 'fechaPrestamo', label: 'Fecha de préstamo' },
     { key: 'fechaPrevistaDevolucion', label: 'Fecha prevista de devolución' },
-    { key: 'fechaDevolucion', label: 'Fecha de Devolución' },
+    { key: 'fechaDevolucion', label: 'Fecha de Devolución' }
   ];
 
   // Sin "fechaDevolucion" (para activos y vencidos)
-  reducedDisplayedColumns: string[] = ['nombreItem', 'nombrePersona', 'fechaPrestamo', 'fechaPrevistaDevolucion', 'acciones'];
+  reducedDisplayedColumns: string[] = ['nombreItem', 'nombrePersona', 'fechaPrestamo', 'fechaPrevistaDevolucion'];
   reducedColumnDefinitions = [
     { key: 'nombreItem', label: 'Artículo' },
     { key: 'nombrePersona', label: 'Prestado a' },
@@ -72,18 +72,24 @@ export class ListaprestamosComponent implements OnInit {
   }
 
   loadPrestamos() {
+    // Si deseas poder filtrar entre los préstamos
     this.prestamosFiltrados = 'todos';
     this.displayedColumns = this.todosDisplayedColumns;
     this.columnDefinitions = this.todosColumnDefinitions;
-
+  
     this.prestamoService.getPrestamos().subscribe({
       next: (prestamos) => {
-        this.prestamos = prestamos;
-        this.dataSource.data = prestamos;
+        // Si 'fechaDevolucion' es null, lo dejamos como 'EN PRESTAMO'
+        this.prestamos = prestamos.map(p => ({
+          ...p,
+          fechaDevolucion: p.fechaDevolucion || 'EN PRESTAMO' // Esto maneja los valores nulos
+        }));
+        this.dataSource.data = this.prestamos;
       },
       error: (error) => console.error('Error al cargar los préstamos:', error),
     });
   }
+  
 
   abrirModalAgregar() {
 

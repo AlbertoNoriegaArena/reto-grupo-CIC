@@ -1,12 +1,12 @@
 <div class="contenedor">
   <header class="my-4">
     <div class="botonesHeader">
-      <button class="btn btn-success w-40 mx-5" (click)="abrirModalAgregar()">Añadir Libro</button>
+      <button class="btn botonCrear w-40 mx-5" (click)="abrirModalAgregar()">Añadir Libro</button>
     </div>
   </header>
   <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns"
     [deleteCallback]="delete.bind(this)" [editCallback]="abrirModalEditar.bind(this)"
-    [viewDetailsCallback]="verDetalles" [columnDefinitions]="columnDefinitions">
+    [viewDetailsCallback]="verDetalles" [columnDefinitions]="columnDefinitions" [tipoTabla]="'libros'">
   </app-tabla-generica>
 
   <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">

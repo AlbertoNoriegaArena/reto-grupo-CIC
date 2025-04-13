@@ -135,4 +135,10 @@ export class ListaFormatoComponent implements OnInit {
           }
         });
   }
+
+  formatearNombre(nombre: string): string {
+    if (nombre.toLowerCase() === 'musica') return 'Música';
+    if (nombre.toLowerCase() === 'pelicula') return 'Película';
+    return nombre.charAt(0).toUpperCase() + nombre.slice(1);
+  }
 }

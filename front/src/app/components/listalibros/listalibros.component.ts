@@ -40,7 +40,7 @@ export class ListalibrosComponent implements OnInit {
 
   selectedLibro: Libro = { item: { formato: {} } } as Libro;
 
-  displayedColumns: string[] = ['nombre', 'formato', 'autor', 'isbn', 'editorial', 'acciones'];
+  displayedColumns: string[] = ['nombre', 'formato', 'autor', 'isbn', 'editorial'];
 
   columnDefinitions = [
     { key: 'nombre', label: 'Nombre' },
@@ -59,14 +59,17 @@ export class ListalibrosComponent implements OnInit {
   loadLibros() {
     this.libroService.getLibros().subscribe({
       next: (libros) => {
-        this.libros = libros;
+        this.libros = libros.map(l => ({
+          ...l,
+          estado: l.item?.estado ?? ''
+        }));
         this.dataSource.data = this.libros;
       },
       error: (error) => {
         console.error('Error al cargar los libros:', error);
       }
     });
-  }
+  } 
 
   abrirModalAgregar() {
 

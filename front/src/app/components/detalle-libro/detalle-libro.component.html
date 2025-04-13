@@ -17,59 +17,68 @@
                         <p><strong>Formato:</strong> {{ libro?.item?.formato?.nombre }}</p>
                         <p><strong>Ubicación:</strong> {{ libro?.item?.ubicacion}}</p>
                         <p><strong>Fecha:</strong> {{ libro?.item?.fecha | date: 'dd/MM/yyyy'}}</p>
-                        <p><strong>Estado:</strong> {{ libro?.item?.estado}}</p>
+                        <p><strong>Estado:</strong>
+                            <span [ngClass]="{
+                              'text-success fw-bold': libro?.item?.estado === 'DISPONIBLE',
+                              'text-warning fw-bold': libro?.item?.estado === 'PRESTADO'
+                            }">
+                                &nbsp; <i class="fas fa-check-circle" *ngIf="libro?.item?.estado === 'DISPONIBLE'"></i>
+                                {{ libro?.item?.estado }}
+                            </span>
+                        </p>
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-6">
-                        <button (click)="actualizarRegistro(libro?.item?.id ?? 0)" class="btn btn-info w-100 mt-2">
-                            Editar libro
+                        <button (click)="actualizarRegistro(libro?.item?.id ?? 0)" class="btn botonCrear w-50 mt-2">
+                            Editar
                         </button>
                     </div>
                     <div class="col-md-6 ml-1">
                         <!-- Botón para ir al préstamo si el libro está prestado -->
                         <button *ngIf="prestamoActivo" (click)="irAlPrestamo(prestamoActivo.id)"
-                            class="btn btn-warning w-100 mt-2">
-                            Ver préstamo activo
+                            class="btn btn-warning w-50 mt-2">
+                            Ir al préstamo
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="prestamosRecientes mt-4" *ngIf="ultimosPrestamos.length > 0">
-                <h5>Últimos préstamos</h5>
-                <table class="table table-striped text-center">
-                    <thead>
-                        <tr>
-                            <th>Persona</th>
-                            <th>Correo</th>
-                            <th>Fecha préstamo</th>
-                            <th>Fecha prevista de devolución</th>
-                            <th>Fecha devolución</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let prestamo of ultimosPrestamos">
-                            <td>{{ prestamo.persona.nombre }}</td>
-                            <td>{{ prestamo.persona.email }}</td>
-                            <td>{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy' }}</td>
-                            <td>{{ prestamo.fechaPrevistaDevolucion | date: 'dd/MM/yyyy' }}</td>
-                            <td>
-                                <span *ngIf="prestamo.fechaDevolucion; else enPrestamo">
-                                    {{ prestamo.fechaDevolucion | date: 'dd/MM/yyyy' }}
-                                </span>
-                                <ng-template #enPrestamo>
-                                    <span class="text-warning fw-bold">
-                                        <i class="fas fa-clock"></i> En préstamo
-                                    </span>
-                                </ng-template>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
-        <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
-            <app-formulariolibros [isEditMode]="isEditMode" [libro]="libroSeleccionado!"
-                (formSubmitted)="onFormSubmitted()" (formClosed)="cerrarModal()"></app-formulariolibros>
-        </app-modal>
+        <div class="prestamosRecientes mt-4" *ngIf="ultimosPrestamos.length > 0">
+            <h5>Últimos 5 préstamos del artículo</h5>
+            <table class="table table-striped text-center mt-3">
+                <thead>
+                    <tr>
+                        <th>Persona</th>
+                        <th>Correo</th>
+                        <th>Fecha préstamo</th>
+                        <th>Fecha prevista de devolución</th>
+                        <th>Fecha devolución</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prestamo of ultimosPrestamos">
+                        <td>{{ prestamo.persona.nombre }}</td>
+                        <td>{{ prestamo.persona.email }}</td>
+                        <td>{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ prestamo.fechaPrevistaDevolucion | date: 'dd/MM/yyyy' }}</td>
+                        <td>
+                            <span *ngIf="prestamo.fechaDevolucion; else enPrestamo">
+                                {{ prestamo.fechaDevolucion | date: 'dd/MM/yyyy' }}
+                            </span>
+                            <ng-template #enPrestamo>
+                                <span class="text-warning fw-bold">
+                                    <i class="fas fa-clock"></i> En préstamo
+                                </span>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+    <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
+        <app-formulariolibros [isEditMode]="isEditMode" [libro]="libroSeleccionado!" (formSubmitted)="onFormSubmitted()"
+            (formClosed)="cerrarModal()"></app-formulariolibros>
+    </app-modal>
+</div>

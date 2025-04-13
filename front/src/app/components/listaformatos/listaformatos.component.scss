@@ -2,14 +2,54 @@
 
 /* Contenedor principal */
 .contenedor {
-    width: 90%;
-    margin: 0 auto;
-    padding: 20px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Card de formato */
+.cardFormato {
+  background: linear-gradient(145deg, #e0f7fa, #ffffff); /* Fondo suave */
+  border: 2px solid #17a2b8;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
   }
-  
- .cardFormato{
-  background-color: lightblue;
-  border: 2px solid black;
-  font-size: 1.5em;
- }
-  
+
+  .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.botonesAcciones button {
+  transition: all 0.2s ease;
+}
+
+.botonesAcciones button:hover {
+  transform: scale(1.1);
+}
+
+h3.titulo {
+  border-left: 4px solid #17a2b8;
+  padding-left: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.boton-editar {
+  background-color: #17a2b8; 
+  color: white;
+  border: none;
+
+  &:hover {
+    background-color: #5a6268;
+  }
+}

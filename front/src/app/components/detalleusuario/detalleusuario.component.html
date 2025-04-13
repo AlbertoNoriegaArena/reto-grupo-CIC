@@ -3,14 +3,14 @@
     <div class="main-content">
         <!-- Información del Usuario -->
         <div class="user-card">
-            <h3>{{ persona.nombre }}</h3>
+            <h2>{{ persona.nombre }}</h2>
             <div class="user-info">
                 <p><strong>Dirección:</strong> {{ persona.direccion }}</p>
                 <p><strong>Email:</strong> {{ persona.email }}</p>
                 <p><strong>Teléfono:</strong> {{ persona.telefono }}</p>
                 <div class="col-md-6">
-                    <button (click)="actualizarRegistro(persona.id)" class="btn btn-info w-100 mt-2">
-                        Editar usuario
+                    <button (click)="actualizarRegistro(persona.id)" class="btn botonCrear w-50 mt-2">
+                        Editar
                     </button>
                 </div>
             </div>
@@ -42,7 +42,7 @@
         <div *ngIf="mostrarTabla">
             <h4>Préstamos de {{ tipoRepositorio }}</h4>
             <table class="table table-bordered">
-                <thead class="table-dark">
+                <thead class="fondoCabeceraTabla">
                     <tr>
                         <th class="w-30">Nombre</th>
                         <th class="w-10">Tipo</th>
@@ -60,7 +60,7 @@
                         <td class="w-20">{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy'}}</td>
                         <td class="w-20">{{ prestamo.fechaPrevistaDevolucion | date: 'dd/MM/yyyy'}}</td>
                         <td class="w-10">
-                            <button class="btn btn-dark" (click)="verDetallePrestamo(prestamo.item.id)">Ir al préstamo</button>
+                            <button class="btn boton" (click)="verDetallePrestamo(prestamo.item.id)">Ir al préstamo</button>
                         </td>
                     </tr>
                 </tbody>
@@ -69,9 +69,9 @@
 
         <!-- Mostrar todos los préstamos -->
         <div *ngIf="verTodosTabla">
-            <h4>Todos los Préstamos</h4>
+            <h4 class="my-3">Todos los Préstamos</h4>
             <table class="table table-bordered">
-                <thead class="table-dark">
+                <thead class="fondoCabeceraTabla">
                     <tr>
                         <th class="w-30">Nombre</th>
                         <th class="w-10">Tipo</th>
@@ -89,7 +89,7 @@
                         <td class="w-20">{{ prestamo.fechaPrestamo | date: 'dd/MM/yyyy'}}</td>
                         <td class="w-20">{{ prestamo.fechaPrevistaDevolucion | date: 'dd/MM/yyyy' }}</td>
                         <td class="w-10">
-                            <button class="btn btn-dark" (click)="verDetallePrestamo(prestamo.item.id)">Ir al préstamo</button>
+                            <button class="btn boton" (click)="verDetallePrestamo(prestamo.item.id)">Ir al préstamo</button>
                         </td>
                     </tr>
                 </tbody>

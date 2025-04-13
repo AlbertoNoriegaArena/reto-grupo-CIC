@@ -23,70 +23,6 @@
   text-shadow: 2px 2px 4px #000000;
 }
 
-.buttons-container {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap; /* Permite que los botones se envuelvan a la siguiente línea si no caben */
-  justify-content: center; /* Centra los botones horizontalmente */
-}
-
-button {
-  padding: 30px 60px; /* Aumenta el padding para hacer el botón más grande */
-  border: none;
-  border-radius: 10px; /* Aumenta el radio del borde */
-  cursor: pointer;
-  font-size: 1.5em; /* Aumenta el tamaño de la fuente */
-  transition: transform 0.2s ease-in-out;
-  box-shadow: 0px 4px 8px rgba(104, 81, 81, 0.3); /* Aumenta la sombra */
-  min-width: 200px; /* Establece un ancho mínimo */
-  min-height: 80px; /* Establece una altura mínima */
-}
-
-button:hover {
-  transform: scale(1.08); /* Aumenta el efecto de escala al pasar el ratón */
-}
-
-.green-button {
-  background-color: #4CAF50; /* Green */
-  color: white;
-}
-
-.blue-button {
-  background-color: #2196F3; /* Blue */
-  color: white;
-}
-
-.yellow-button {
-  background-color: #FFEB3B; /* Yellow */
-  color: black;
-}
-
-/* Estilo personalizado */
-.title {
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: #e9e2e2;
-}
-
-.buttons-container {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  margin-bottom: 30px;
-}
-
-.btn-custom {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 1.1rem;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s;
-}
-
 .footer {
   background-color: #343a40;
   color: white;
@@ -119,7 +55,7 @@ button:hover {
   .card.resumen {
     background-color: #f8f9fa;
     border-radius: 12px;
-    border: 4px solid lightblue;
+    border: 4px solid #17a2b8;
     padding: 1.5rem;
     width: 180px;
     text-align: center;

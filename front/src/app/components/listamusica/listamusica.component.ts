@@ -38,7 +38,7 @@ export class ListamusicaComponent implements OnInit {
 
   selectedMusica: Musica = { item: { formato: {} } } as Musica;
 
-  displayedColumns: string[] = ['nombre', 'formato', 'album', 'cantante', 'duracion', 'acciones'];
+  displayedColumns: string[] = ['nombre', 'formato', 'album', 'cantante', 'duracion'];
 
   columnDefinitions = [
     { key: 'nombre', label: 'Nombre' },
@@ -58,7 +58,10 @@ export class ListamusicaComponent implements OnInit {
   loadMusica() {
     this.musicaService.getMusica().subscribe({
       next: (musicas) => {
-        this.musicas = musicas;
+        this.musicas = musicas.map(m => ({
+          ...m,
+          estado: m.item?.estado ?? ''
+        }));
         this.dataSource.data = this.musicas;
       },
       error: (error) => {

@@ -37,7 +37,7 @@ export class ListapeliculasComponent implements OnInit {
 
   selectedPelicula: Pelicula = { item: { formato: {} } } as Pelicula;
 
-  displayedColumns: string[] = ['nombre', 'formato', 'director', 'duracion', 'fechaEstreno', 'acciones'];
+  displayedColumns: string[] = ['nombre', 'formato', 'director', 'duracion', 'fechaEstreno'];
 
   columnDefinitions = [
     { key: 'nombre', label: 'Nombre' },
@@ -56,10 +56,15 @@ export class ListapeliculasComponent implements OnInit {
   loadPeliculas() {
     this.peliculaService.getPeliculas().subscribe({
       next: (peliculas) => {
-        this.peliculas = peliculas;
-        this.dataSource.data = peliculas;
+        this.peliculas = peliculas.map(p => ({
+          ...p,
+          estado: p.item?.estado ?? ''
+        }));
+        this.dataSource.data = this.peliculas;
       },
-      error: (error) => console.error('Error al cargar las películas:', error),
+      error: (error) => {
+        console.error('Error al cargar las películas:', error);
+      }
     });
   }
 

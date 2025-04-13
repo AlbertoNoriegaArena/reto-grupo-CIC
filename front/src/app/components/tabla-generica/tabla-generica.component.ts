@@ -50,7 +50,23 @@ export class TablaGenericaComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    // Si displayedColumns está vacío, generamos columnas por defecto
+    if (!this.displayedColumns || this.displayedColumns.length === 0) {
+      this.displayedColumns = this.columnDefinitions.map(col => col.key);
+    }
+  
+    // Agregar columna de estado según el tipo de tabla
+    if (this.tipoTabla === 'items' || this.tipoTabla === 'libros' || this.tipoTabla === 'peliculas' || this.tipoTabla === 'musica') {
+      this.displayedColumns.push('estado');
+    }
+ 
+    // Siempre agregamos la columna de acciones
+    if (!this.displayedColumns.includes('acciones')) {
+      this.displayedColumns.push('acciones');
+    }
+  }
+  
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;

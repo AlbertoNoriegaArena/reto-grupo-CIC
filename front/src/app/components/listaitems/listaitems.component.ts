@@ -38,14 +38,13 @@ export class ListaitemsComponent implements OnInit {
 
   selectedItem: Item = {formato: {}, tipo: {}} as Item;
 
-  displayedColumns: string[] = ['nombre', 'tipoNombre', 'ubicacion', 'formatoNombre', 'estado', 'acciones'];
+  displayedColumns: string[] = ['nombre', 'tipoNombre', 'ubicacion', 'formatoNombre'];
 
   columnDefinitions = [
     { key: 'nombre', label: 'Nombre' },
     { key: 'tipoNombre', label: 'Tipo' },
     { key: 'ubicacion', label: 'Ubicación' },
     { key: 'formatoNombre', label: 'Formato' },
-    { key: 'estado', label: 'Estado' },
   ];
 
   constructor(private itemService: ItemService, private router: Router) { }

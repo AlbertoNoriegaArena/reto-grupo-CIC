@@ -1,152 +1,220 @@
-.filtroTabla{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.filtroTabla {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-::ng-deep .filtro .mat-mdc-text-field-wrapper{
-  background-color: #e3e3e3;
-  border: 2px solid black;
-  border-radius: 10px;
+::ng-deep .mat-mdc-text-field-wrapper {
+  background-color: none;
+  border-radius: 20px;
+  transition: box-shadow 0.3s ease;
+}
+
+::ng-deep .filtrotabla .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+  box-shadow: 0 0 5px #999;
 }
 
 .tablaDatos {
-    // border: 2px solid #000;
-    border-collapse: collapse;
-    width: 100%;
+  // border: 2px solid #000;
+  border-collapse: collapse;
+  border: 2px solid #17a2b8;
+  width: 100%;
 }
 
 
 .tablaDatos td,
 .tablaDatos th {
-    // border-right: 1px solid black !important;
+  // border-right: 1px solid black !important;
 }
 
 .tablaDatos tr:nth-child(odd) {
-    background-color: #f9f9f9 ;
+  background-color: #f9f9f9;
 }
 
 .tablaDatos tr:nth-child(even) {
-    background-color: #f4f4f4 ;
+  background-color: #f4f4f4;
 }
 
 ::ng-deep .tablaDatos table thead th {
-    text-align: center !important;
-    background-color: #e3e3e3 !important;
-    // border-bottom: 2px solid #000 !important;
+  text-align: center !important;
+  background-color: #e3e3e3 !important;
+  // border-bottom: 2px solid #000 !important;
 }
 
 ::ng-deep .tablaDatos td {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 ::ng-deep .tablaDatos th div {
-    text-align: center !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
+  text-align: center !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 
 .paginacion {
-    margin-top: 1%;
-    margin-bottom: 1%;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
 
 .paginacion>* {
-    background-color: #e3e3e3;
-    border: 2px solid black;
-    border-radius: 10px;
-    font-weight: 600;
+  background-color: #e3e3e3;
+  border: 2px solid #17a2b8;
+  border-radius: 10px;
+  font-weight: 600;
 }
 
 /* Asegurar que la tabla ocupe todo el ancho disponible */
 .mat-table {
-    width: 100%;
-  }
-  
-  /* Clases de ancho genéricas aplicables a cualquier tabla */
-  .col-1 { width: 25%; } /* Primera columna */
-  .col-2 { width: 10%; } /* Segunda columna */
-  .col-3 { width: 25%; } /* Tercera columna */
-  .col-4 { width: 10%; } /* Cuarta columna */
-  .col-5 { width: 12.5%; } /* Quinta columna */
-  .col-6 { width: 17.5%; } /* Sexta columna */
+  width: 100%;
+}
 
-  .tablaDatos.prestamos {
-    .col-1 { width: 25%; }
-    .col-2 { width: 20%; }
-    .col-3 { width: 10%; }
-    .col-4 { width: 10%; }
-    .col-5 { width: 10%; }
-    .col-6 { width: 25%; }
+/* Clases de ancho genéricas aplicables a cualquier tabla */
+.col-1 {
+  width: 25%;
+}
+
+/* Primera columna */
+.col-2 {
+  width: 10%;
+}
+
+/* Segunda columna */
+.col-3 {
+  width: 25%;
+}
+
+/* Tercera columna */
+.col-4 {
+  width: 10%;
+}
+
+/* Cuarta columna */
+.col-5 {
+  width: 12.5%;
+}
+
+/* Quinta columna */
+.col-6 {
+  width: 17.5%;
+}
+
+/* Sexta columna */
+
+.tablaDatos.prestamos {
+  .col-1 {
+    width: 20%;
   }
 
-  .modal-body {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-  
-    form {
+  .col-2 {
+    width: 15%;
+  }
+
+  .col-3 {
+    width: 10%;
+  }
+
+  .col-4 {
+    width: 10%;
+  }
+
+  .col-5 {
+    width: 10%;
+  }
+
+  .col-6 {
+    width: 10%;
+  }
+
+  .col-7 {
+    width: 25%;
+  }
+}
+
+.modal-body {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
       display: flex;
       flex-direction: column;
-      gap: 20px;
-  
-      .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
+      gap: 8px;
+
+      label {
+        font-weight: bold;
+        font-size: 14px;
+        color: #333;
       }
-  
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-  
-        label {
-          font-weight: bold;
-          font-size: 14px;
-          color: #333;
-        }
-  
-        input {
-          padding: 10px;
-          border-radius: 5px;
-          border: 1px solid #ccc;
-          font-size: 14px;
-          width: 100%;
-        }
-      }
-  
-      button {
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
+
+      input {
+        padding: 10px;
         border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-  
-        &:hover {
-          background-color: #0056b3;
-        }
+        border: 1px solid #ccc;
+        font-size: 14px;
+        width: 100%;
+      }
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+
+      &:hover {
+        background-color: #0056b3;
       }
     }
   }
-  
-  .modal .modal-dialog {
-    max-width: 90%;
-    width: auto;
-  }
-  
-  .modal-backdrop {
-    background-color: rgba(0, 0, 0, 0.4);
-  }
-  
+}
+
+.modal .modal-dialog {
+  max-width: 90%;
+  width: auto;
+}
+
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
 /* Asegurarse de que todos los botones tengan el mismo tamaño y alineación */
 button.mat-icon-button {
   display: flex;
-  align-items: center; /* Alinea verticalmente el contenido (ícono y texto) */
-  justify-content: center; /* Centra los elementos si es necesario */
+  align-items: center;
+  /* Alinea verticalmente el contenido (ícono y texto) */
+  justify-content: center;
+  /* Centra los elementos si es necesario */
+}
+
+.botonDevolver {
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  height: auto !important;
+  width: auto !important;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.botonDevolver:hover {
+  background-color: #e3e3e3;
+
 }
 
 .botonDevolver .devolver {
@@ -156,17 +224,47 @@ button.mat-icon-button {
 /* Contenedor de los botones */
 .acciones-buttons {
   display: flex;
-  justify-content: flex-start; 
-  gap: 10px; /* Espacio entre los botones */
-  align-items: center; /* Alinea verticalmente los botones */
-  width: 100%; 
-}
-
-.acciones-buttons:first-child{
-  margin-left: 20% !important;
+  justify-content: flex-start;
+  gap: 10px;
+  /* Espacio entre los botones */
+  align-items: center;
+  /* Alinea verticalmente los botones */
+  width: 100%;
 }
 
 .acciones-buttons button {
   height: 40px;
   width: 40px;
+}
+
+/* Columna Estado*/
+.badge {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: white;
+}
+
+.badge-prestado {
+  background-color: #fbc02d;
+}
+
+.badge-disponible {
+  background-color: #43a047;
+}
+
+.badgeFechaDevolucion.badge-prestado {
+  background-color: #fbc02d;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: white;
 }

@@ -1,11 +1,11 @@
 <div class="table-container">
   <div class="filtroTabla ml-3">
-    <mat-form-field class="w-50" appearance="outline" >
+    <mat-form-field class="w-50" appearance="outline">
       <input matInput [(ngModel)]="searchQuery" (keyup)="applyFilter($event)" placeholder="Buscar..." />
       <mat-icon matPrefix>search</mat-icon>
       <!-- Botón de borrar (clear) -->
       <mat-icon *ngIf="searchQuery" matSuffix (click)="clearSearch()">clear</mat-icon>
-    </mat-form-field>    
+    </mat-form-field>
   </div>
 
   <div class="mat-elevation-z8 mt-4 tablaDatos" [ngClass]="{ 'prestamos': tipoTabla === 'prestamos' }">
@@ -27,9 +27,31 @@
             {{ row[column.key] | number: '1.0-0' }}
           </span>
 
-          <!-- Si no es fecha ni número, muestra el valor directamente -->
+          <!-- Si no es fecha ni número, muestra el valor directamente o con estilos -->
           <span *ngIf="!(isNumber(row[column.key]) || isDate(row[column.key]))">
-            {{ row[column.key] }}
+            <ng-container *ngIf="column.key === 'fechaDevolucion'">
+              <span class="badge" [ngClass]="{
+                'badge-prestado': row[column.key] === 'EN PRESTAMO',
+                'badge-devuelto': row[column.key] !== 'EN PRESTAMO'
+                   }">
+                {{ row[column.key] === 'EN PRESTAMO' ? 'EN PRESTAMO' : (row[column.key] | date: 'dd/MM/yyyy') }}
+              </span>
+            </ng-container>
+            <ng-container *ngIf="column.key !== 'fechaDevolucion'">
+              {{ row[column.key] }}
+            </ng-container>
+            </span>
+        </td>
+      </ng-container>
+      <!-- Columna de Estado (solo para items, libros, peliculas y musica) -->
+      <ng-container *ngIf="[ 'libros', 'peliculas', 'musica', 'items' ].includes(tipoTabla)" matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-5">Estado</th>
+        <td mat-cell *matCellDef="let row" class="col-5">
+          <span class="badge" [ngClass]="{
+            'badge-prestado': (row.item ? row.item.estado : row.estado) === 'PRESTADO',
+            'badge-disponible': (row.item ? row.item.estado : row.estado) === 'DISPONIBLE'
+              }">
+            {{ row.item ? row.item.estado : row.estado }}
           </span>
         </td>
       </ng-container>
@@ -41,39 +63,38 @@
           <!-- Contenedor flex para los botones -->
           <div class="acciones-buttons">
             <!-- Si es una tabla de préstamos, usa row.id; si no, usa row.item?.id -->
-            <button mat-icon-button color="primary" matTooltip="Ver detalles" 
+            <button mat-icon-button color="primary" matTooltip="Ver detalles"
               (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas' || tipoTabla === 'items') ? onVerDetalles(row.id) : onVerDetalles(row.item?.id)">
               <mat-icon>visibility</mat-icon>
             </button>
-      
-            <button mat-icon-button color="accent" matTooltip="Editar" 
+
+            <button mat-icon-button color="accent" matTooltip="Editar"
               (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas' || tipoTabla === 'items') ? onEdit(row.id) : onEdit(row.item?.id)">
               <mat-icon>edit</mat-icon>
             </button>
-      
-            <button mat-icon-button color="warn" matTooltip="Eliminar" 
+
+            <button mat-icon-button color="warn" matTooltip="Eliminar"
               (click)="(tipoTabla === 'prestamos' || tipoTabla === 'personas' || tipoTabla === 'items') ? onDelete(row.id) : onDelete(row.item?.id)">
               <mat-icon>delete</mat-icon>
             </button>
-      
+
             <!-- Botón "Devolver" solo en la tabla de préstamos cuando el préstamo sigue activo -->
-            <button *ngIf="(tipoTabla === 'prestamos' || tipoTabla === 'items') && (row.fechaDevolucion === null || row.fechaDevolucion === 'EN PRESTAMO')" 
-              mat-icon-button color="primary" matTooltip="Devolver" 
-              (click)="onDevolver(row.id)" class="botonDevolver">
-              <span class="devolver">Devolver</span>
+            <button
+              *ngIf="(tipoTabla === 'prestamos' || tipoTabla === 'items') && (row.fechaDevolucion === null || row.fechaDevolucion === 'EN PRESTAMO')"
+              mat-icon-button color="primary" matTooltip="Devolver" (click)="onDevolver(row.id)" class="botonDevolver">
+              <mat-icon>assignment_return</mat-icon><span>Devolver</span>
             </button>
           </div>
         </td>
       </ng-container>
-      
+
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-      [ngClass]="{
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{
         'prestado': (tipoTabla === 'prestamos' || tipoTabla === 'items') && (row.fechaDevolucion === null || row.fechaDevolucion === 'EN PRESTAMO'),
         'disponible': (tipoTabla === 'prestamos' || tipoTabla === 'items') && !(row.fechaDevolucion === null || row.fechaDevolucion === 'EN PRESTAMO')
       }">
-  </tr>
+      </tr>
     </table>
   </div>
 

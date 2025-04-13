@@ -1,12 +1,12 @@
 <div class="contenedor">
   <header class="my-4">
     <div class="botonesHeader d-flex justify-content-between align-items-center">
-      <button class="btn btn-success" (click)="abrirModalAgregar()">Añadir Música</button>
+      <button class="btn botonCrear w-40 mx-5" (click)="abrirModalAgregar()">Añadir Música</button>
     </div>
   </header>
     <app-tabla-generica [dataSource]="dataSource" [displayedColumns]="displayedColumns"
       [deleteCallback]="delete.bind(this)" [editCallback]="abrirModalEditar.bind(this)"
-      [viewDetailsCallback]="verDetalles" [columnDefinitions]="columnDefinitions">
+      [viewDetailsCallback]="verDetalles" [columnDefinitions]="columnDefinitions" [tipoTabla]="'musica'">
     </app-tabla-generica>
 
   <app-modal [isOpen]="isModalOpen" [title]="titleModal" (closeEvent)="cerrarModal()">
