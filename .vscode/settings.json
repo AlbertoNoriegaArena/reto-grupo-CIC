@@ -1,3 +1,6 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/ffb4b2ef-1e59-4cd7-911a-dd57f9be04da/resourceGroups/App/providers/Microsoft.Web/sites/Appequipo1",
+    "appService.deploySubpath": "."
 }
