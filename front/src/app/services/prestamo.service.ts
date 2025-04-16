@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 })
 export class PrestamoService {
   private apiUrl = `${environment.apiUrl}/prestamos`;
-  private itemsUrl = `${environment.apiUrl}/ietms/disponibles`; 
+  private itemsUrl = `${environment.apiUrl}/items/disponibles`; 
 
   constructor(private http: HttpClient) {}
 
