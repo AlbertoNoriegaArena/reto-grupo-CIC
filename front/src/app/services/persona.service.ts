@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { Persona } from '../models/persona';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonaService {
-  private url = 'http://localhost:4200/api/personas'; // Corrected URL
+  private url = `${environment.apiUrl}/personas`;
 
   constructor(private http: HttpClient) { }
 

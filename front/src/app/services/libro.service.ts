@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Libro } from '../models/libro';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment'; 
 
 @Injectable({
     providedIn: 'root'
 })
 export class LibroService {
-    private url = 'http://localhost:4200/api/libros';
-    private formatosUrl = 'http://localhost:4200/api/TipoItemFormatos';
+    private url = `${environment.apiUrl}/libros`;
+    private formatosUrl = `${environment.apiUrl}/TipoItemFormatos`;
     constructor(private httpClient: HttpClient) { }
 
     insertar(libro: Libro): Observable<Libro> {

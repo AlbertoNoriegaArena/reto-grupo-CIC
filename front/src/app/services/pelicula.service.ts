@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Pelicula } from '../models/pelicula'; // Import the Pelicula interface
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeliculaService {
-  private url = 'http://localhost:4200/api/pelicula'; // Reemplaza esto con la URL de tu backend
-  private formatosUrl = 'http://localhost:4200/api/TipoItemFormatos';
+  private url = `${environment.apiUrl}/pelicula`;
+  private formatosUrl = `${environment.apiUrl}/TipoItemFormatos`;
 
   constructor(private httpClient: HttpClient) { }
 

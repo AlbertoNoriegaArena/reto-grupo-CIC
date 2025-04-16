@@ -89,11 +89,12 @@
 
 @media (max-width: 768px) {
 
-  .buttons-container{
+  .cards-container{
     gap: 10px;
   }
 
   .contenedorPaginaInicio{
+    height: max-content;
     justify-content: center;
   }
 }

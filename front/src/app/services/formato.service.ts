@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable, throwError } from 'rxjs';
 import { Formato } from '../models/formato';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
-
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment'; 
 @Injectable({
   providedIn: 'root',
 })
 export class FormatoService {
-  private url = 'http://localhost:4200/api/formatos';
-  private urltipoFormatos = 'http://localhost:4200/api/TipoItemFormatos';
-  private urltipoItem = 'http://localhost:4200/api/tipoItems';
-  private urlItem = 'http://localhost:4200/api/items';
+  private url = `${environment.apiUrl}/formatos`;
+  private urltipoFormatos = `${environment.apiUrl}/TipoItemFormatos`;
+  private urltipoItem = `${environment.apiUrl}/tipoItems`;
+  private urlItem = `${environment.apiUrl}/items`;
 
   constructor(private http: HttpClient) { }
 

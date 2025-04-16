@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Prestamo } from '../models/prestamo';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrestamoService {
-  private apiUrl = 'http://localhost:4200/api/prestamos'; // Asegúrate de que esta sea la URL de tu backend
-  private itemsUrl = 'http://localhost:4200/api/items/disponibles';
+  private apiUrl = `${environment.apiUrl}/prestamos`;
+  private itemsUrl = `${environment.apiUrl}/ietms/disponibles`; 
 
   constructor(private http: HttpClient) {}
 

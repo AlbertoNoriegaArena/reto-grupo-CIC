@@ -4,13 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Musica } from '../models/musica'; // Import the Musica interface
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class MusicaService {
-  private url = 'http://localhost:4200/api/musica'; // Replace with your actual backend URL
-  private formatosUrl = 'http://localhost:4200/api/TipoItemFormatos';
+  private url = `${environment.apiUrl}/musica`;
+  private formatosUrl = `${environment.apiUrl}/TipoItemFormatos`;
 
   constructor(private httpClient: HttpClient) { }
 

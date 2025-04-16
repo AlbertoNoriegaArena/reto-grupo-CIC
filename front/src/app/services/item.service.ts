@@ -4,14 +4,14 @@ import { Observable, throwError } from 'rxjs';
 import { Item } from '../models/item';
 import { ItemDTO } from '../models/itemDTO';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemService {
-
-  private url = 'http://localhost:4200/api/items'; 
-  private formatosUrl = 'http://localhost:4200/api/TipoItemFormatos';
+  private url = `${environment.apiUrl}/items`;
+  private formatosUrl = `${environment.apiUrl}/TipoItemFormatos`;
 
   constructor(private http: HttpClient) {}
 
