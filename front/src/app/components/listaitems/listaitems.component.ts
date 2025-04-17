@@ -160,7 +160,7 @@ export class ListaitemsComponent implements OnInit {
       if (result.isConfirmed) {
         this.itemService.borrar(id).subscribe({
           next: () => {
-            Swal.fire('Eliminado', 'Artículo eliminada correctamente');
+            Swal.fire('Eliminado', 'Artículo eliminado correctamente');
             this.loadItems();
           },
           error: (error) => Swal.fire('Error', error.message),

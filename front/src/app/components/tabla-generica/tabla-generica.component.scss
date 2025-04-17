@@ -15,15 +15,19 @@
 }
 
 .tablaDatos {
-  // border: 2px solid #000;
   border-collapse: collapse;
   border: 2px solid #17a2b8;
   overflow-x: auto; 
   width: 100%;
+  border-radius: 10px; 
 }
 
 .tablaDatos table{
+  width: 100%;
   min-width: 1000px;
+  table-layout: fixed;
+  border-collapse: collapse; 
+  border-spacing: 0; 
 }
 
 .tablaDatos tr:nth-child(odd) {
@@ -49,6 +53,18 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+}
+
+/* Cambia el color del borde grueso del mat-form-field de búsqueda cuando está enfocado */
+::ng-deep .filtroTabla .mat-mdc-form-field:focus {
+  color: #17a2b8 !important; /* Tu color deseado */
+  border-color: #17a2b8 !important; 
+}
+
+/* Opcional: Cambiar también el color de la etiqueta flotante (placeholder) cuando está enfocado */
+::ng-deep .filtroTabla .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: #17a2b8 !important; /* Tu color deseado */
+  border-color: #17a2b8 !important; 
 }
 
 .paginacion {
@@ -110,24 +126,21 @@
   }
 
   .col-3 {
-    width: 10%;
+    width: 12%;
   }
 
   .col-4 {
-    width: 10%;
+    width: 12%;
   }
 
   .col-5 {
-    width: 10%;
+    width: 12%;
   }
 
   .col-6 {
-    width: 10%;
+    width: 26%;
   }
 
-  .col-7 {
-    width: 25%;
-  }
 }
 
 .modal-body {
@@ -266,4 +279,31 @@ button.mat-icon-button {
   align-items: center;
   gap: 5px;
   color: white;
+}
+
+.table-container{
+  padding-bottom: 30px !important;
+}
+
+@media screen and (max-width: 768px) {
+
+  .paginacion {
+    margin-top: 3%;
+  }
+
+  .paginacion ::ng-deep .mat-mdc-paginator-page-size {
+    margin: 0 auto !important;
+    margin-top: 15px !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .paginacion ::ng-deep .mat-mdc-paginator-range-actions{
+    margin: 0 auto !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
 }

@@ -101,3 +101,22 @@ ON CONFLICT (id) DO NOTHING;
 -- Actualizar el estado de los Items prestados
 UPDATE item SET estado = 'PRESTADO' WHERE id IN (1, 2, 3, 4, 5, 6, 7, 8, 9);
 
+
+-- ---------------------------------------------------------------------------
+-- IMPORTANTE: Reiniciar las secuencias IDENTITY después de insertar IDs manualmente
+-- ---------------------------------------------------------------------------
+-- Esto asegura que la próxima vez que la aplicación inserte un registro nuevo,
+-- la base de datos genere un ID que no entre en conflicto con los insertados aquí.
+-- (Los nombres de secuencia suelen ser nombreTabla_nombreColumna_seq en PostgreSQL)
+
+SELECT setval('"public"."tipo_item_id_seq"', COALESCE((SELECT MAX(id) FROM tipo_item), 1), true);
+SELECT setval('"public"."formato_id_seq"', COALESCE((SELECT MAX(id) FROM formato), 1), true);
+SELECT setval('"public"."item_id_seq"', COALESCE((SELECT MAX(id) FROM item), 1), true);
+SELECT setval('"public"."persona_id_seq"', COALESCE((SELECT MAX(id) FROM persona), 1), true);
+SELECT setval('"public"."prestamo_id_seq"', COALESCE((SELECT MAX(id) FROM prestamo), 1), true);
+
+-- Nota: COALESCE(..., 1) maneja el caso de tablas vacías, empezando en 1.
+-- El 'false' como tercer argumento de setval hace que el *próximo* valor generado
+-- sea MAX(id) + 1. Si fuera 'true', el próximo valor sería MAX(id).
+-- ---------------------------------------------------------------------------
+

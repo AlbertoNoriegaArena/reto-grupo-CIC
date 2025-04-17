@@ -3,17 +3,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-evenly; // Ajusta según necesites (flex-start en móvil)
   width: 100%;
-  height: 100vh;
+  // height: 100vh; // Cambiado a min-height
+  min-height: 100vh; // Asegura altura mínima, permite crecer
   text-align: center;
   padding: 20px;
-  margin-top: -50px;
+  margin-top: -50px; // Considera si esto es necesario o causa problemas
   position: relative;
+  box-sizing: border-box; // Importante para que el padding se incluya en el cálculo del tamaño
 
   /* --- Linear Gradient Background (Dark Blue to Dark Gray) --- */
   background-image: linear-gradient(to bottom, #678baf, #34495e) !important; /* Dark blue to dark gray */
-  /* #2c3e50 is a dark blue, #34495e is a dark gray */
 }
 
 .title {
@@ -31,7 +32,9 @@
   font-size: 1rem;
   position: fixed;
   bottom: 0;
+  left: 0; // Asegura que ocupe todo el ancho
   width: 100%;
+  z-index: 1000; // Asegura que esté por encima de otros elementos
 }
 
 .footer p {
@@ -44,12 +47,14 @@
   gap: 2rem;
   align-items: center;
   margin: 2rem 0;
+  width: 100%; // Asegura que use el ancho disponible
 
   .row {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
+    width: 100%; // Asegura que la fila use el ancho disponible
   }
 
   .card.resumen {
@@ -57,11 +62,14 @@
     border-radius: 12px;
     border: 4px solid #17a2b8;
     padding: 1.5rem;
-    width: 180px;
+    width: clamp(150px, 40%, 200px); // Ancho flexible inicial
+    max-width: 200px;
+    min-width: 150px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 
     &:hover {
       transform: translateY(-4px);
@@ -87,14 +95,85 @@
   }
 }
 
-@media (max-width: 768px) {
+/* --- Media Queries para Responsividad --- */
 
-  .cards-container{
-    gap: 10px;
+/* Para tablets y móviles grandes en horizontal (ej. < 992px) */
+@media (max-width: 991.98px) {
+  .cards-container {
+    .card.resumen {
+       width: clamp(160px, 30%, 220px);
+    }
+  }
+}
+
+
+/* Para tablets en vertical y móviles grandes (ej. < 768px) */
+@media (max-width: 767.98px) {
+  .contenedorPaginaInicio {
+    height: auto; // Permite que la altura se ajuste al contenido
+    justify-content: flex-start; // Alinear contenido arriba
+    padding-top: 60px; // Espacio arriba (ajusta según tu header/nav)
+    padding-bottom: 50px; // Más espacio para separar del footer fijo
   }
 
-  .contenedorPaginaInicio{
-    height: max-content;
-    justify-content: center;
+  .title {
+    font-size: 2em;
+    margin-bottom: 20px;
   }
+
+  .cards-container {
+    gap: 1rem;
+    margin: 1rem 0;
+
+    .row {
+      gap: 0.8rem;
+    }
+
+    .card.resumen {
+      padding: 1rem;
+      max-width: 180px;
+
+      .icon {
+        font-size: 1.8rem;
+      }
+
+      h3 {
+        font-size: 1rem;
+      }
+
+      p {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .footer {
+    font-size: 0.9rem;
+    padding: 8px 0;
+  }
+}
+
+/* Para móviles pequeños (ej. < 480px) */
+@media (max-width: 479.98px) {
+  
+  .title {
+    font-size: 1.8em;
+  }
+
+   .cards-container {
+     .row {
+       flex-direction: column;
+       align-items: center;
+       gap: 1rem;
+     }
+
+     .card.resumen {
+       width: clamp(200px, 80%, 280px);
+       max-width: 280px;
+     }
+   }
+
+   .footer {
+     font-size: 0.8rem;
+   }
 }
