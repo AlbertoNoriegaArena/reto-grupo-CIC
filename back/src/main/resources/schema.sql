@@ -24,11 +24,11 @@ CREATE TABLE formato (
 
 -- Tabla de unión TipoItemFormato (Relación muchos a muchos)
 CREATE TABLE tipo_item_formato (
-    tipo_item BIGINT NOT NULL,
-    formato BIGINT NOT NULL,
-    PRIMARY KEY (tipo_item, formato),
-    FOREIGN KEY (tipo_item) REFERENCES tipo_item(id),
-    FOREIGN KEY (formato) REFERENCES formato(id)
+    tipo_item_id BIGINT NOT NULL,
+    formato_id BIGINT NOT NULL,
+    PRIMARY KEY (tipo_item_id, formato_id),
+    FOREIGN KEY (tipo_item_id) REFERENCES tipo_item(id),
+    FOREIGN KEY (formato_id) REFERENCES formato(id)
 );
 
 -- Tabla Item

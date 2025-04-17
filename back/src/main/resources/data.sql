@@ -18,11 +18,11 @@ INSERT INTO formato (id, nombre) VALUES
 ON CONFLICT (id) DO NOTHING;
 
 -- Insertar Relaciones TipoItemFormato
-INSERT INTO tipo_item_formato (tipo_item, formato) VALUES
+INSERT INTO tipo_item_formato (tipo_item_id, formato_id) VALUES
 (1, 1), (1, 2), (1, 3), -- Musica: CD, Cassette, Vinilo
 (3, 5), (3, 6), (3, 4), -- Pelicula: DVD, Blu-ray, VHS
 (2, 7), (2, 8)          -- Libro: Fisico, Digital
-ON CONFLICT (tipo_item, formato) DO NOTHING;
+ON CONFLICT (tipo_item_id, formato_id) DO NOTHING;
 
 -- Insertar Items (Asumiendo IDs 1-15)
 -- Nota: El estado se actualizará a PRESTADO para los items que se presten más abajo
