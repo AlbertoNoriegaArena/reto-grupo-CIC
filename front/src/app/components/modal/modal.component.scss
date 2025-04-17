@@ -11,10 +11,12 @@
   }
   .modal.show {
     display: block;
+    width: 100%;
   }
   .modal-dialog {
-    margin: 2% auto;
-    width: 100%;
+    margin: 0 auto;
+    margin-top: 2%;
+    width: 95%;
     max-width: 1200px;
   }
   .modal-header {

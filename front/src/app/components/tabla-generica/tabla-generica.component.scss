@@ -18,13 +18,12 @@
   // border: 2px solid #000;
   border-collapse: collapse;
   border: 2px solid #17a2b8;
+  overflow-x: auto; 
   width: 100%;
 }
 
-
-.tablaDatos td,
-.tablaDatos th {
-  // border-right: 1px solid black !important;
+.tablaDatos table{
+  min-width: 1000px;
 }
 
 .tablaDatos tr:nth-child(odd) {
