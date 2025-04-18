@@ -20,7 +20,18 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
   @Output() formClosed = new EventEmitter<void>();
 
   @Input() isEditMode: boolean = false;
-  @Input() item: Item = this.createEmptyItem();
+  // Hacemos una copia profunda al recibir el Input para no modificar el original directamente
+  _item: Item = this.createEmptyItem();
+  @Input() set item(value: Item) {
+    this._item = value ? { ...value, tipo: { ...value.tipo }, formato: { ...value.formato } } : this.createEmptyItem();
+    // Si estamos en modo edición y hay un tipo, cargamos los formatos correspondientes
+    if (this.isEditMode && this._item.tipo?.id) {
+       this.updateFormatosSegunTipo(this._item.tipo.id);
+    }
+  }
+  get item(): Item {
+    return this._item;
+  }
 
   tipos: { id: number; nombre: string }[] = [];
   formatos: { id: number; nombre: string }[] = [];
@@ -37,11 +48,19 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['item'] && this.item?.tipo?.id) {
-      this.updateFormatosSegunTipo(this.item.tipo.id);
+    // Si el item cambia (por ejemplo, al abrir el modal de edición)
+    // y estamos en modo edición con un tipo válido, actualizamos los formatos.
+    if (changes['item'] && this.isEditMode && this.item?.tipo?.id) {
+        // Asegurarnos que las relaciones ya están cargadas antes de actualizar formatos
+        if (this.relaciones.length > 0) {
+             this.updateFormatosSegunTipo(this.item.tipo.id);
+        }
+    }
+     // Si cambiamos de modo edición a añadir o viceversa
+     if (changes['isEditMode'] && !this.isEditMode) {
+        this.resetForm(); // Resetea si pasamos a modo 'añadir'
     }
   }
-
   loadTiposYRelaciones() {
     forkJoin({
       tipos: this.formatoService.getTipoItems(),
@@ -74,34 +93,50 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
   }
 
   updateFormatosSegunTipo(tipoId: number) {
+    // Aseguramos que tipoId sea un número para la comparación estricta
+    const tipoIdNumerico = Number(tipoId);
     this.formatos = this.relaciones
-      .filter(rel => Number(rel.tipoItem?.id) === Number(tipoId))
+      .filter(rel => Number(rel.tipoItem?.id) === tipoIdNumerico) // Comparamos como números
       .map(rel => rel.formato)
-      .filter((formato, index, self) =>
+      .filter(formato => formato && typeof formato.id !== 'undefined' && formato.nombre) // Filtramos formatos inválidos
+      .filter((formato, index, self) => // Eliminamos duplicados por id
         index === self.findIndex(f => f.id === formato.id)
       );
+
+     // Opcional: Si el formato actual del item no está en la nueva lista, resetearlo
+     if (this.item.formato?.id && !this.formatos.some(f => f.id === this.item.formato.id)) {
+        this.item.formato = { id: 0, nombre: '' };
+     }
   }
 
-
   onSubmit() {
+    this.erroresBackend = {}; // Limpiar errores previos
+
     if (!this.item.tipo?.id || !this.item.formato?.id) {
       this.erroresBackend = { general: 'Debe seleccionar un tipo y un formato válidos.' };
       return;
     }
 
-    // Verifica si el campo estado está vacío y asigna el valor por defecto
+    // Asigna 'DISPONIBLE' si el estado está vacío
     if (!this.item.estado) {
-      this.item.estado = 'DISPONIBLE'; // Asigna el valor predeterminado de la enumeración EstadoItem
+      this.item.estado = 'DISPONIBLE';
     }
 
-    // Preparamos el objeto que se enviará al backend en formato ItemDTO
-    const itemAEnviarCreate: ItemDTO = {
-      nombre: this.item.nombre,
-      tipoId: this.item.tipo.id,      
-      formatoId: this.item.formato.id, 
-      ubicacion: this.item.ubicacion,
-      fecha: this.item.fecha,
-      estado: this.item.estado
+    // --- Construcción del objeto a enviar ---
+    // Usaremos una estructura flexible que funcione para ambos casos (crear/editar)
+    // Podrías refinar ItemDTO para incluir todos los campos opcionales si lo prefieres.
+    const itemParaEnviar: any = {
+        // Campos comunes siempre presentes
+        nombre: this.item.nombre,
+        ubicacion: this.item.ubicacion,
+        fecha: this.item.fecha,
+        estado: this.item.estado,
+        // Para creación usamos Ids, para actualización podríamos necesitar objetos completos
+        // dependiendo del backend, pero enviar Ids suele ser más común y robusto.
+        tipoId: Number(this.item.tipo.id),
+        formatoId: Number(this.item.formato.id),
+        // Añadimos el ID solo si estamos en modo edición
+        ...(this.isEditMode && { id: this.item.id })
     };
 
     const tipoSeleccionado = this.tipos.find(t => t.id === Number(this.item.tipo.id));
@@ -109,7 +144,7 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
 
     switch (nombreTipo) {
       case 'libro':
-        Object.assign(itemAEnviarCreate, {
+        Object.assign(itemParaEnviar, {
           autor: this.item.autor,
           isbn: this.item.isbn,
           editorial: this.item.editorial,
@@ -119,7 +154,8 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
         break;
 
       case 'pelicula':
-        Object.assign(itemAEnviarCreate, {
+      case 'película': // Considerar acentos
+        Object.assign(itemParaEnviar, {
           director: this.item.director,
           duracionPelicula: this.item.duracionPelicula ? Number(this.item.duracionPelicula) : undefined,
           generoPelicula: this.item.generoPelicula,
@@ -128,35 +164,30 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
         break;
 
       case 'musica':
-        Object.assign(itemAEnviarCreate, {
+      case 'música': // Considerar acentos
+        Object.assign(itemParaEnviar, {
           generoMusica: this.item.generoMusica,
           cantante: this.item.cantante,
           album: this.item.album,
-          duracionMusica: this.item.duracionMusica
+          duracionMusica: this.item.duracionMusica // Asumiendo que es string, si no Number()
         });
         break;
     }
 
-    // Preparamos el objeto que se enviará al backend
-    const itemAEnviarUpdate: Item = {
-      id: this.isEditMode ? this.item.id : 0,  // Solo se incluye el id para la actualización
-      nombre: this.item.nombre,
-      ubicacion: this.item.ubicacion,
-      fecha: this.item.fecha,
-      estado: this.item.estado,
-      tipo: this.item.tipo,  // Enviamos el objeto completo tipo
-      formato: this.item.formato  // Enviamos el objeto completo formato
-    };
-
+    // --- Llamada al servicio ---
+    // Nota: Asegúrate que ItemService.actualizar espera un objeto compatible con itemParaEnviar.
+    // Si ItemService.actualizar espera un objeto Item completo (con tipo y formato como objetos),
+    // necesitarás ajustar itemParaEnviar o el método del servicio.
+    // Asumiendo que el backend (y por tanto el servicio) puede manejar este DTO para actualizar:
     const llamada = this.isEditMode
-      ? this.itemService.actualizar(itemAEnviarUpdate)  // En la edición ya pasamos el objeto con el id
-      : this.itemService.insertar(itemAEnviarCreate);  // Para la creación, pasamos el objeto sin id
+      ? this.itemService.actualizar(itemParaEnviar as ItemDTO) 
+      : this.itemService.insertar(itemParaEnviar as ItemDTO);
 
     llamada.subscribe({
       next: () => {
         this.resetForm();
-        this.formSubmitted.emit();
-        this.formClosed.emit();
+        this.formSubmitted.emit(); // Avisa al padre que se completó
+        // No necesitas emitir formClosed aquí si formSubmitted ya cierra el modal
       },
       error: (error) => this.handleBackendErrors(error)
     });
@@ -197,12 +228,12 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
       autor: '',
       isbn: '',
       editorial: '',
-      numeroPaginas: 0,
+      numeroPaginas: undefined,
       fechaPublicacion: '',
 
       // película
       director: '',
-      duracionPelicula: 0,
+      duracionPelicula: undefined,
       generoPelicula: '',
       fechaEstreno: '',
 
@@ -213,7 +244,6 @@ export class FormularioItemsComponent implements OnInit, OnChanges {
       duracionMusica: ''
     };
   }
-
 
   esDeTipo(nombre: string): boolean {
     // Verifica que haya un tipo seleccionado (item.tipo y item.tipo.id no sean nulos/undefined/0)

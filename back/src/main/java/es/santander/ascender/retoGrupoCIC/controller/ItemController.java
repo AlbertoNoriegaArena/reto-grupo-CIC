@@ -1,10 +1,17 @@
 package es.santander.ascender.retoGrupoCIC.controller;
 
 import es.santander.ascender.retoGrupoCIC.dto.ItemDTO;
+import es.santander.ascender.retoGrupoCIC.dto.ItemCompletoDTO;
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Item;
 import es.santander.ascender.retoGrupoCIC.service.ItemService;
 import jakarta.validation.Valid;
+
+import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.TipoItemNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.FormatoNotFoundException;
+import es.santander.ascender.retoGrupoCIC.config.FormatoNoValidoException;
+import es.santander.ascender.retoGrupoCIC.config.CustomValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +47,11 @@ public class ItemController {
         return itemService.obtenerItems();
     }
 
+    @GetMapping("/completos")
+    public List<ItemCompletoDTO> obtenerTodosCompletos() { 
+        return itemService.obtenerItemsCompletos(); 
+    }
+
     // Obtener un ítem por ID
     @GetMapping("/{id}")
     public ResponseEntity<Item> obtenerPorId(@PathVariable Long id) {
@@ -49,15 +61,16 @@ public class ItemController {
 
     // Actualizar un ítem existente
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateItem(@PathVariable Long id, @Valid @RequestBody Item item) {
+    public ResponseEntity<?> updateItem(@PathVariable Long id, @Valid @RequestBody ItemDTO itemDTO) { 
         try {
-            Item itemActualizado = itemService.updateItem(id, item);
-            if (itemActualizado != null) {
-                return ResponseEntity.ok(itemActualizado);
-            }
-            return ResponseEntity.notFound().build();
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            Item itemActualizado = itemService.updateItem(id, itemDTO);
+            return ResponseEntity.ok(itemActualizado);
+        } catch (ItemNotFoundException | TipoItemNotFoundException | FormatoNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); // 404 si no se encuentra Item, Tipo o Formato
+        } catch (FormatoNoValidoException | IllegalArgumentException | CustomValidationException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // 400 para otros errores de validación
+        } catch (Exception e) { 
+            return new ResponseEntity<>("Error interno al actualizar el item.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

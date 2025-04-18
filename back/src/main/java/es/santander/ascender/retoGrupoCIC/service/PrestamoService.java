@@ -50,9 +50,12 @@ public class PrestamoService {
 
         validacionFechaPrevistaDevolucion(prestamo);
 
-        Item item = itemService.obtenerItemPorId(prestamo.getItemId()).get();
-        item.setEstado(EstadoItem.PRESTADO);
-        itemService.updateItem(item.getId(), item);
+    
+       Item item = itemRepository.findById(prestamo.getItemId()) 
+       .orElseThrow(() -> new ItemNotFoundException(prestamo.getItemId()));
+        
+        itemService.updateItemEstado(item.getId(), EstadoItem.PRESTADO);
+
 
         prestamo.setItem(item);
         prestamo.setPersona(personaService.getPersonaById(prestamo.getPersona().getId()));
@@ -103,7 +106,7 @@ public class PrestamoService {
 
             Item itemDevuelto = itemOptional.get();
             itemDevuelto.setEstado(EstadoItem.DISPONIBLE);
-            itemService.updateItem(itemDevuelto.getId(), itemDevuelto);
+            itemService.updateItemEstado(itemDevuelto.getId(), EstadoItem.DISPONIBLE);
         }
 
         // Guardar los cambios
@@ -141,9 +144,13 @@ public class PrestamoService {
                 throw new IllegalArgumentException("El item ya ha sido devuelto");
             }
             prestamo.setFechaDevolucion(LocalDate.now());
-            Item item = itemService.obtenerItemPorId(prestamo.getItemId()).get();
-            item.setEstado(EstadoItem.DISPONIBLE);
-            itemService.updateItem(item.getId(), item);
+            Item item = prestamo.getItem(); 
+            if (item == null) { 
+                 item = itemRepository.findById(prestamo.getItemId())
+                            .orElseThrow(() -> new ItemNotFoundException(prestamo.getItemId()));
+            }
+            itemService.updateItemEstado(item.getId(), EstadoItem.DISPONIBLE); 
+    
             return prestamoRepository.save(prestamo);
         }
         throw new PrestamoNotFoundException(id);

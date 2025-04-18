@@ -1,4 +1,5 @@
 export interface ItemDTO {
+  id?: number;
   nombre: string;
   tipoId: number;
   formatoId: number;

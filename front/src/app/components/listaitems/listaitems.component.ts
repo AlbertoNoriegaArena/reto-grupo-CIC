@@ -54,7 +54,7 @@ export class ListaitemsComponent implements OnInit {
   }
 
   loadItems() {
-    this.itemService.getItems().subscribe({
+    this.itemService.getItemsCompletos().subscribe({
       next: (items) => {
         // Transforma los datos aquí
         const itemsParaTabla = items.map(item => {
@@ -102,12 +102,19 @@ export class ListaitemsComponent implements OnInit {
   }
 
   abrirModalEditar(id: number) {
-    const item = this.dataSource.data.find(i => i.id === id);
-    if (item) {
-      this.selectedItem = { ...item };
+    // Busca el ítem en la lista ORIGINAL (this.items)
+    const originalItem = this.items.find(i => i.id === id);
+
+    if (originalItem) {
+      // Hacemos una copia profunda para el modal
+      this.selectedItem = JSON.parse(JSON.stringify(originalItem));
+    
       this.isEditMode = true;
       this.titleModal = 'Editar artículo';
       this.isModalOpen = true;
+    } else {
+      console.error(`No se encontró el ítem original con ID: ${id}`);
+      Swal.fire('Error', 'No se pudo encontrar el ítem para editar.', 'error');
     }
   }
 

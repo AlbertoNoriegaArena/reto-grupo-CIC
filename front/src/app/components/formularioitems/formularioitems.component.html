@@ -24,7 +24,7 @@
       <!-- Tipo -->
       <div class="form-group col-md-6">
         <label for="tipo">Tipo:</label>
-        <select id="tipo" name="tipo" class="form-control" [(ngModel)]="item.tipo.id" (change)="onTipoChange()" required
+        <select id="tipo" name="tipo" class="form-control" [(ngModel)]="item.tipo.id" (change)="onTipoChange()" required [disabled]="isEditMode" 
           #tipoRef="ngModel">
           <option [value]="0" disabled selected>-- Seleccione un Tipo --</option>
           <option *ngFor="let tipo of tipos" [value]="tipo.id">

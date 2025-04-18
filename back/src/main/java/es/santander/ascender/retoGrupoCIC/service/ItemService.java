@@ -8,6 +8,7 @@ import es.santander.ascender.retoGrupoCIC.config.ItemNotFoundException;
 import es.santander.ascender.retoGrupoCIC.config.ItemPrestadoException;
 import es.santander.ascender.retoGrupoCIC.config.TipoItemNotFoundException;
 import es.santander.ascender.retoGrupoCIC.dto.ItemDTO;
+import es.santander.ascender.retoGrupoCIC.dto.ItemCompletoDTO;
 import es.santander.ascender.retoGrupoCIC.model.EstadoItem;
 import es.santander.ascender.retoGrupoCIC.model.Formato;
 import es.santander.ascender.retoGrupoCIC.model.Item;
@@ -22,12 +23,19 @@ import es.santander.ascender.retoGrupoCIC.repository.PrestamoRepository;
 import es.santander.ascender.retoGrupoCIC.repository.MusicaRepository;
 import es.santander.ascender.retoGrupoCIC.repository.LibroRepository;
 import es.santander.ascender.retoGrupoCIC.repository.PeliculaRepository;
+import es.santander.ascender.retoGrupoCIC.repository.TipoItemRepository;
+import es.santander.ascender.retoGrupoCIC.repository.FormatoRepository;
+import es.santander.ascender.retoGrupoCIC.repository.TipoItemFormatoRepository;
+
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -153,24 +161,197 @@ public class ItemService {
         return itemRepository.findById(id);
     }
 
-    public Item updateItem(Long id, Item itemActualizado) {
-        Optional<Item> itemOpcional = itemRepository.findById(id);
-        if (itemOpcional.isPresent()) {
-            Item itemExistente = itemOpcional.get();
+    @Transactional(readOnly = true)
+    public List<ItemCompletoDTO> obtenerItemsCompletos() {
+        List<Item> items = itemRepository.findAll();
+        List<ItemCompletoDTO> dtos = new ArrayList<>();
 
-            // Primero validamos que el tipo y el formato cumplan
-            validateTipoItemFormato(itemActualizado.getTipo(), itemActualizado.getFormato());
+        for (Item item : items) {
+            ItemCompletoDTO dto = new ItemCompletoDTO();
 
-            // Actualizar los campos menos el estado
-            itemExistente.setNombre(itemActualizado.getNombre());
-            itemExistente.setTipo(itemActualizado.getTipo());
-            itemExistente.setFormato(itemActualizado.getFormato());
-            itemExistente.setUbicacion(itemActualizado.getUbicacion());
-            itemExistente.setFecha(itemActualizado.getFecha());
+            // Mapear campos comunes
+            dto.setId(item.getId());
+            dto.setNombre(item.getNombre());
+            dto.setUbicacion(item.getUbicacion());
+            dto.setFecha(item.getFecha()); // Mantiene LocalDate
+            dto.setEstado(item.getEstado());
+            dto.setTipo(item.getTipo()); // Copia objeto completo
+            dto.setFormato(item.getFormato()); // Copia objeto completo
 
-            return itemRepository.save(itemExistente);
+            // Mapear campos específicos buscando en repositorios correspondientes
+            if (item.getTipo() != null) {
+                String tipoNombre = item.getTipo().getNombre().toLowerCase();
+                switch (tipoNombre) {
+                    case "libro":
+                        libroRepository.findByItemId(item.getId()).ifPresent(libro -> {
+                            dto.setAutor(libro.getAutor());
+                            dto.setIsbn(libro.getIsbn());
+                            dto.setEditorial(libro.getEditorial());
+                            dto.setNumeroPaginas(libro.getNumeroPaginas());
+                            dto.setFechaPublicacion(libro.getFechaPublicacion());
+                        });
+                        break;
+                    case "pelicula":
+                    case "película":
+                        peliculaRepository.findByItemId(item.getId()).ifPresent(pelicula -> {
+                            dto.setDirector(pelicula.getDirector());
+                            dto.setDuracionPelicula(pelicula.getDuracion());
+                            dto.setGeneroPelicula(pelicula.getGenero());
+                            dto.setFechaEstreno(pelicula.getFechaEstreno());
+                        });
+                        break;
+                    case "musica":
+                    case "música":
+                        musicaRepository.findByItemId(item.getId()).ifPresent(musica -> {
+                            dto.setGeneroMusica(musica.getGenero());
+                            dto.setCantante(musica.getCantante());
+                            dto.setAlbum(musica.getAlbum());
+                            dto.setDuracionMusica(musica.getDuracion());
+                        });
+                        break;
+                }
+            }
+            dtos.add(dto);
         }
-        return null;
+        return dtos;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<ItemCompletoDTO> obtenerItemCompletoPorId(Long id) {
+        Optional<Item> itemOptional = itemRepository.findById(id);
+        if (itemOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Item item = itemOptional.get();
+        ItemCompletoDTO dto = new ItemCompletoDTO();
+
+        // Mapear campos comunes
+        dto.setId(item.getId());
+        dto.setNombre(item.getNombre());
+        dto.setUbicacion(item.getUbicacion());
+        dto.setFecha(item.getFecha());
+        dto.setEstado(item.getEstado());
+        dto.setTipo(item.getTipo());
+        dto.setFormato(item.getFormato());
+
+        // Mapear campos específicos
+        if (item.getTipo() != null) {
+            String tipoNombre = item.getTipo().getNombre().toLowerCase();
+            switch (tipoNombre) {
+                case "libro":
+                    libroRepository.findByItemId(item.getId()).ifPresent(libro -> {
+                        dto.setAutor(libro.getAutor());
+                        dto.setIsbn(libro.getIsbn());
+                        dto.setEditorial(libro.getEditorial());
+                        dto.setNumeroPaginas(libro.getNumeroPaginas());
+                        dto.setFechaPublicacion(libro.getFechaPublicacion());
+                    });
+                    break;
+                case "pelicula":
+                case "película":
+                    peliculaRepository.findByItemId(item.getId()).ifPresent(pelicula -> {
+                        dto.setDirector(pelicula.getDirector());
+                        dto.setDuracionPelicula(pelicula.getDuracion());
+                        dto.setGeneroPelicula(pelicula.getGenero());
+                        dto.setFechaEstreno(pelicula.getFechaEstreno());
+                    });
+                    break;
+                case "musica":
+                case "música":
+                    musicaRepository.findByItemId(item.getId()).ifPresent(musica -> {
+                        dto.setGeneroMusica(musica.getGenero());
+                        dto.setCantante(musica.getCantante());
+                        dto.setAlbum(musica.getAlbum());
+                        dto.setDuracionMusica(musica.getDuracion());
+                    });
+                    break;
+            }
+        }
+        return Optional.of(dto);
+    }
+
+    public Item updateItem(Long id, ItemDTO itemDTO) {
+        // Buscar el Item existente por ID
+        Item itemExistente = itemRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException(id));
+
+        // Obtener TipoItem y Formato desde el DTO usando repositorios
+        TipoItem tipoItem = tipoItemService.obtenerTipoItemPorId(itemDTO.getTipoId())
+                .orElseThrow(() -> new TipoItemNotFoundException(itemDTO.getTipoId()));
+        Formato formato = formatoService.obtenerFormatoPorId(itemDTO.getFormatoId())
+                .orElseThrow(() -> new FormatoNotFoundException(itemDTO.getFormatoId()));
+
+        // Validar que el TipoItem y Formato son una combinación válida
+        validateTipoItemFormato(tipoItem, formato);
+
+        // Actualizar los campos del Item existente con datos del DTO
+        itemExistente.setNombre(itemDTO.getNombre());
+        itemExistente.setTipo(tipoItem);
+        itemExistente.setFormato(formato);
+        itemExistente.setUbicacion(itemDTO.getUbicacion());
+        itemExistente.setFecha(itemDTO.getFecha());
+        // Actualizar estado si viene en el DTO
+        if (itemDTO.getEstado() != null) {
+            itemExistente.setEstado(itemDTO.getEstado());
+        }
+
+        // Validar el Item base actualizado antes de guardar
+        Set<ConstraintViolation<Item>> violations = validator.validate(itemExistente);
+        if (!violations.isEmpty()) {
+            throw new CustomValidationException(violations);
+        }
+
+        // Guardar el Item base actualizado (no es estrictamente necesario si las
+        // relaciones no cambian,
+        // pero asegura que los campos base se persistan)
+        Item savedItem = itemRepository.save(itemExistente);
+
+        // Actualizar la entidad específica (Libro, Pelicula, Musica)
+        String tipoNombre = tipoItem.getNombre().toLowerCase();
+        switch (tipoNombre) {
+            case "libro":
+                Libro libroExistente = libroRepository.findByItemId(savedItem.getId())
+                        .orElseThrow(() -> new RuntimeException(
+                                "Error interno: Libro asociado no encontrado para item ID: " + savedItem.getId()));
+                libroExistente.setAutor(itemDTO.getAutor());
+                libroExistente.setIsbn(itemDTO.getIsbn());
+                libroExistente.setEditorial(itemDTO.getEditorial());
+                libroExistente.setNumeroPaginas(itemDTO.getNumeroPaginas());
+                libroExistente.setFechaPublicacion(itemDTO.getFechaPublicacion());
+                // Validar libroExistente si es necesario
+                libroRepository.save(libroExistente); // Guardar cambios específicos
+                break;
+            case "pelicula":
+            case "película":
+                Pelicula peliculaExistente = peliculaRepository.findByItemId(savedItem.getId())
+                        .orElseThrow(() -> new RuntimeException(
+                                "Error interno: Pelicula asociada no encontrada para item ID: " + savedItem.getId()));
+                peliculaExistente.setDirector(itemDTO.getDirector());
+                peliculaExistente.setDuracion(itemDTO.getDuracionPelicula());
+                peliculaExistente.setGenero(itemDTO.getGeneroPelicula());
+                peliculaExistente.setFechaEstreno(itemDTO.getFechaEstreno());
+                // Validar peliculaExistente si es necesario
+                peliculaRepository.save(peliculaExistente); // Guardar cambios específicos
+                break;
+            case "musica":
+            case "música":
+                Musica musicaExistente = musicaRepository.findByItemId(savedItem.getId())
+                        .orElseThrow(() -> new RuntimeException(
+                                "Error interno: Musica asociada no encontrada para item ID: " + savedItem.getId()));
+                musicaExistente.setGenero(itemDTO.getGeneroMusica());
+                musicaExistente.setCantante(itemDTO.getCantante());
+                musicaExistente.setAlbum(itemDTO.getAlbum());
+                musicaExistente.setDuracion(itemDTO.getDuracionMusica());
+                // Validar musicaExistente si es necesario
+                musicaRepository.save(musicaExistente); // Guardar cambios específicos
+                break;
+            default:
+                System.err.println("Advertencia: Tipo de item '" + tipoNombre
+                        + "' no tiene una entidad específica asociada para actualizar.");
+                break;
+        }
+        return savedItem;
     }
 
     public void deleteItem(Long id) {
@@ -295,4 +476,20 @@ public class ItemService {
     public List<Item> getBorrowedItems() {
         return itemRepository.findByEstado(EstadoItem.PRESTADO);
     }
+
+    public Item updateItemEstado(Long id, EstadoItem nuevoEstado) {
+        Item itemExistente = itemRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException(id));
+
+        // Validar si el nuevo estado es nulo (opcional, pero recomendable)
+        if (nuevoEstado == null) {
+            throw new IllegalArgumentException("El nuevo estado no puede ser nulo.");
+        }
+
+        itemExistente.setEstado(nuevoEstado);
+        // No es necesario validar toda la entidad Item aquí si solo cambia el estado,
+        // a menos que tengas reglas específicas sobre transiciones de estado.
+        return itemRepository.save(itemExistente);
+    }
+
 }
